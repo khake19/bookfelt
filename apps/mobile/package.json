@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "eas-build-post-install": "cd ../../ && node tools/scripts/eas-build-post-install.mjs . apps/mobile"
+    "eas-build-post-install": "cd ../../ && node tools/scripts/eas-build-post-install.mjs . apps/mobile",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo/metro-config": "*",
@@ -15,10 +17,18 @@
     "jest-expo": "*",
     "metro-config": "*",
     "metro-resolver": "*",
+    "nativewind": "^4.2.2",
     "react": "*",
     "react-native": "*",
+    "react-native-reanimated": "^4.2.2",
+    "react-native-safe-area-context": "^5.6.2",
     "react-native-svg": "*",
     "react-native-svg-transformer": "*",
     "react-native-web": "*"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "~54.0.10",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.4.19"
   }
 }
