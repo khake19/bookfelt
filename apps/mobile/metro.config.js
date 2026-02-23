@@ -2,6 +2,7 @@ const { withNxMetro } = require('@nx/expo');
 const { getDefaultConfig } = require('@expo/metro-config');
 const { mergeConfig } = require('metro-config');
 const { withNativeWind } = require('nativewind/metro');
+const path = require('path');
 
 const defaultConfig = getDefaultConfig(__dirname);
 const { assetExts, sourceExts } = defaultConfig.resolver;
@@ -27,7 +28,7 @@ const customConfig = {
 const nxConfig = withNxMetro(mergeConfig(defaultConfig, customConfig), {
   debug: false,
   extensions: [],
-  watchFolders: [],
+  // watchFolders: [path.resolve(__dirname, '../../packages/ui')],
 });
 
 // Save Nx's resolver, then remove it so NativeWind doesn't capture it
