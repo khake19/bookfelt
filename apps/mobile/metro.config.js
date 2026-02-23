@@ -41,7 +41,7 @@ nxConfig.projectRoot = __dirname;
 
 // Apply NativeWind (originalResolver will be undefined,
 // so it uses context.resolveRequest as fallback)
-const finalConfig = withNativeWind(nxConfig, { input: './global.css' });
+const finalConfig = withNativeWind(nxConfig, { input: './global.css', inlineRem: 16 });
 
 // Compose resolvers: NativeWind (CSS interception) → Nx (pnpm/tsconfig) → Metro default
 const nwResolveRequest = finalConfig.resolver.resolveRequest;
