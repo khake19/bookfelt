@@ -37,7 +37,7 @@ const BookCards = (props: BookCardsProps) => {
       </CardHeader>
       <CardContent className="gap-2">
         <View className="border-muted-foreground border-l-2 pl-3">
-          <Text className="text-foreground/70 text-sm italic">{snippet}</Text>
+          <Text className="text-foreground/70 text-sm font-serif-italic">{snippet}</Text>
         </View>
         <View>
           <Text>{reaction}</Text>

@@ -1,5 +1,5 @@
 import { Text } from 'react-native';
-import { ScreenWrapper } from '../../components/ScreenWrapper';
+import { ScreenWrapper } from '../../shared';
 
 export default function LibraryScreen() {
   return (

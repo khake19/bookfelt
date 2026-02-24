@@ -1,6 +1,6 @@
 import { Text, ScrollView } from "react-native";
-import BookCards from "../../components/BookCards";
-import { ScreenWrapper } from "../../components/ScreenWrapper";
+import { BookCards } from "../../features/books";
+import { ScreenWrapper } from "../../shared";
 
 export default function HomeScreen() {
   return (
