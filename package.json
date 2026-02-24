@@ -2,7 +2,10 @@
   "name": "@bookfelt/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
   "private": true,
   "dependencies": {
     "@expo/metro-config": "~54.0.9",

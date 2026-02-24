@@ -45,8 +45,29 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSUserActivityTypes</key>
+    <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+    </array>
     <key>RCTNewArchEnabled</key>
     <true/>
+    <key>UIAppFonts</key>
+    <array>
+      <string>Lora-Regular.ttf</string>
+      <string>Lora-Medium.ttf</string>
+      <string>Lora-SemiBold.ttf</string>
+      <string>Lora-Bold.ttf</string>
+      <string>Lora-Italic.ttf</string>
+      <string>CourierPrime-Regular.ttf</string>
+      <string>CourierPrime-Bold.ttf</string>
+      <string>CourierPrime-Italic.ttf</string>
+      <string>CourierPrime-BoldItalic.ttf</string>
+      <string>SourceSans3-Regular.ttf</string>
+      <string>SourceSans3-Light.ttf</string>
+      <string>SourceSans3-Medium.ttf</string>
+      <string>SourceSans3-SemiBold.ttf</string>
+      <string>SourceSans3-Bold.ttf</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

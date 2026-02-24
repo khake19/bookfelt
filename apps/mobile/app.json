@@ -17,7 +17,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.kerk.bookfeltmobile"
     },
     "web": {
       "bundler": "metro",
@@ -33,7 +34,28 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-router"
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Lora-Regular.ttf",
+            "./assets/fonts/Lora-Medium.ttf",
+            "./assets/fonts/Lora-SemiBold.ttf",
+            "./assets/fonts/Lora-Bold.ttf",
+            "./assets/fonts/Lora-Italic.ttf",
+            "./assets/fonts/CourierPrime-Regular.ttf",
+            "./assets/fonts/CourierPrime-Bold.ttf",
+            "./assets/fonts/CourierPrime-Italic.ttf",
+            "./assets/fonts/CourierPrime-BoldItalic.ttf",
+            "./assets/fonts/SourceSans3-Regular.ttf",
+            "./assets/fonts/SourceSans3-Light.ttf",
+            "./assets/fonts/SourceSans3-Medium.ttf",
+            "./assets/fonts/SourceSans3-SemiBold.ttf",
+            "./assets/fonts/SourceSans3-Bold.ttf"
+          ]
+        }
+      ]
     ]
   }
 }

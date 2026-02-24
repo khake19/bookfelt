@@ -1,0 +1,8 @@
+{
+  "android": {
+    "package": "com.kerk.bookfeltsource"
+  },
+  "ios": {
+    "bundleIdentifier": "com.kerk.bookfeltsource"
+  }
+}

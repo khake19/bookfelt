@@ -7,6 +7,15 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['Lora-Regular'],
+        'serif-italic': ['Lora-Italic'],
+        mono: ['CourierPrime-Regular'],
+        'mono-bold': ['CourierPrime-Bold'],
+        sans: ['SourceSans3-Regular'],
+        'sans-medium': ['SourceSans3-Medium'],
+        'sans-bold': ['SourceSans3-Bold'],
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
