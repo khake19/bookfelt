@@ -1,6 +1,6 @@
-import { Button } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
+import { Button } from "@bookfelt/ui";
 import Svg, { Path } from "react-native-svg";
 import { ScreenWrapper } from "../shared";
 
@@ -16,8 +16,8 @@ const EntryDetailScreen = () => {
           className="w-[30px] h-[30px] rounded-full bg-card items-center justify-center shrink-0"
         >
           <Svg
-            width={24}
-            height={24}
+            width={18}
+            height={18}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -30,12 +30,12 @@ const EntryDetailScreen = () => {
         </Pressable>
         <View className="flex-1 items-center">
           <Text className="text-primary text-xs">Camera capture</Text>
-          <Text className="text-foreground font-serif font-semibold">
+          <Text className="text-foreground font-serif font-medium">
             The Three-Body Problem
           </Text>
         </View>
-        <Button shape="pill">
-          <Text className="text-secondary font-medium">Save</Text>
+        <Button className="rounded-full">
+          <Text className="text-secondary">Save</Text>
         </Button>
       </View>
     </ScreenWrapper>
