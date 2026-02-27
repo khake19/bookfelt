@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Badge, Button, Input, Textarea } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import Svg, { Path } from "react-native-svg";
 import { FocusModeOverlay } from "../features/entries";
-import { ScreenWrapper } from "../shared";
+import { CloseButton, ScreenWrapper } from "../shared";
 
 const FEELINGS = [
   { label: "mind-blown", emoji: "🤯" },
@@ -28,23 +27,7 @@ const EntryDetailScreen = () => {
   return (
     <ScreenWrapper>
       <View className="flex-row items-center pt-[34px] pb-3 border-b border-border">
-        <Pressable
-          onPress={() => router.back()}
-          className="w-[30px] h-[30px] rounded-full bg-card items-center justify-center shrink-0"
-        >
-          <Svg
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <Path d="M15 18l-6-6 6-6" />
-          </Svg>
-        </Pressable>
+        <CloseButton onPress={() => router.back()} />
         <View className="flex-1 items-center">
           <Text className="text-primary text-xs">Camera capture</Text>
           <Text className="text-foreground font-serif font-semibold">
