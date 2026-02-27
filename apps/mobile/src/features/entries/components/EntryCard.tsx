@@ -6,7 +6,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@bookfelt/ui";
+import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 import { getEmotionByLabel } from "../constants/emotions";
 
 export interface EntryCardData {
@@ -28,6 +36,22 @@ const EntryCard = (props: EntryCardProps) => {
 
   const emotion = feeling ? getEmotionByLabel(feeling) : undefined;
   const color = emotion?.color;
+
+  const badgeScale = useSharedValue(1);
+  useEffect(() => {
+    if (emotion) {
+      badgeScale.value = withDelay(
+        600,
+        withSequence(
+          withTiming(1.08, { duration: 250 }),
+          withTiming(1, { duration: 200 })
+        )
+      );
+    }
+  }, []);
+  const badgeStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: badgeScale.value }],
+  }));
 
   return (
     <Pressable onPress={onPress}>
@@ -68,14 +92,16 @@ const EntryCard = (props: EntryCardProps) => {
         </CardContent>
         {emotion && (
           <CardFooter>
-            <Badge
-              style={{ backgroundColor: color + "25" }}
-              className="border-0"
-            >
-              <Text style={{ color }} className="text-xs font-medium">
-                {emotion.emoji} {emotion.label}
-              </Text>
-            </Badge>
+            <Animated.View style={badgeStyle}>
+              <Badge
+                style={{ backgroundColor: color + "25" }}
+                className="border-0"
+              >
+                <Text style={{ color }} className="text-xs font-medium">
+                  {emotion.emoji} {emotion.label}
+                </Text>
+              </Badge>
+            </Animated.View>
           </CardFooter>
         )}
       </Card>

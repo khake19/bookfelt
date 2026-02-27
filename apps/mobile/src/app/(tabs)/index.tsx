@@ -1,4 +1,12 @@
+import { useEffect } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import Animated, {
+  FadeInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 import { EntryCard, MOCK_ENTRIES } from "../../features/entries";
 import { ScreenWrapper } from "../../shared";
 import { useRouter } from "expo-router";
@@ -8,6 +16,27 @@ const CURRENT_BOOK = {
   author: "Liu Cixin",
   chapter: 12,
   totalChapters: 35,
+};
+
+const ProgressBar = ({ progress }: { progress: number }) => {
+  const width = useSharedValue(0);
+
+  useEffect(() => {
+    width.value = withDelay(400, withTiming(progress, { duration: 800 }));
+  }, [progress, width]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    width: `${width.value}%`,
+  }));
+
+  return (
+    <View className="flex-1 h-1 rounded-full bg-background/20 overflow-hidden">
+      <Animated.View
+        className="h-full rounded-full bg-background/70"
+        style={animatedStyle}
+      />
+    </View>
+  );
 };
 
 export default function HomeScreen() {
@@ -30,43 +59,50 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-6"
       >
-        <Text className="text-foreground font-mono-bold text-xl mt-2 mb-4">
+        <Animated.Text
+          entering={FadeInDown.duration(400)}
+          className="text-foreground font-mono-bold text-xl mt-2 mb-4"
+        >
           bookfelt
-        </Text>
+        </Animated.Text>
 
-        <Pressable className="bg-foreground rounded-2xl p-4 mb-5">
-          <Text className="text-xs font-medium uppercase tracking-widest text-background/50 mb-2">
-            Currently reading
-          </Text>
-          <Text className="text-background font-serif text-lg font-semibold">
-            {CURRENT_BOOK.title}
-          </Text>
-          <Text className="text-background/60 text-sm mb-3">
-            {CURRENT_BOOK.author}
-          </Text>
-          <View className="flex-row items-center gap-3">
-            <View className="flex-1 h-1 rounded-full bg-background/20 overflow-hidden">
-              <View
-                className="h-full rounded-full bg-background/70"
-                style={{ width: `${progress}%` }}
-              />
-            </View>
-            <Text className="text-xs text-background/50">
-              Ch. {CURRENT_BOOK.chapter}/{CURRENT_BOOK.totalChapters}
+        <Animated.View entering={FadeInDown.duration(500).delay(100)}>
+          <Pressable className="bg-foreground rounded-2xl p-4 mb-5">
+            <Text className="text-xs font-medium uppercase tracking-widest text-background/50 mb-2">
+              Currently reading
             </Text>
-          </View>
-        </Pressable>
+            <Text className="text-background font-serif text-lg font-semibold">
+              {CURRENT_BOOK.title}
+            </Text>
+            <Text className="text-background/60 text-sm mb-3">
+              {CURRENT_BOOK.author}
+            </Text>
+            <View className="flex-row items-center gap-3">
+              <ProgressBar progress={progress} />
+              <Text className="text-xs text-background/50">
+                Ch. {CURRENT_BOOK.chapter}/{CURRENT_BOOK.totalChapters}
+              </Text>
+            </View>
+          </Pressable>
+        </Animated.View>
 
-        <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-2">
+        <Animated.Text
+          entering={FadeInDown.duration(400).delay(250)}
+          className="text-xs font-medium uppercase tracking-widest text-muted mb-2"
+        >
           Recent reflections
-        </Text>
+        </Animated.Text>
         <View className="gap-2">
-          {MOCK_ENTRIES.map((entry) => (
-            <EntryCard
+          {MOCK_ENTRIES.map((entry, index) => (
+            <Animated.View
               key={entry.id}
-              {...entry}
-              onPress={() => handlePress(entry.id)}
-            />
+              entering={FadeInDown.duration(400).delay(350 + index * 100)}
+            >
+              <EntryCard
+                {...entry}
+                onPress={() => handlePress(entry.id)}
+              />
+            </Animated.View>
           ))}
         </View>
       </ScrollView>
