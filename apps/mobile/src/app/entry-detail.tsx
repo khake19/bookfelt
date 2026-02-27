@@ -1,16 +1,10 @@
 import { useState } from "react";
-import { Button, Input, Textarea } from "@bookfelt/ui";
+import { Button, Input } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { FocusModeOverlay } from "../features/entries";
 import { CloseButton, ScreenWrapper } from "../shared";
-
-const stripHtml = (html: string) =>
-  html
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/p>\s*<p>/gi, "\n")
-    .replace(/<[^>]*>/g, "")
-    .trim();
+import { RichTextPreview } from "../features/entries";
 
 const FEELINGS = [
   { label: "mind-blown", emoji: "🤯" },
@@ -80,10 +74,10 @@ const EntryDetailScreen = () => {
         <View className="h-px bg-border" />
         <View>
           <Text className="text-xs font-medium tracking-widest text-muted mb-1.5">
-            SNIPPET (Optional)
+            SNIPPET
           </Text>
-          <View className="bg-background border-l-[3px] border-foreground rounded-r-lg py-[9px] px-[11px] leading-[1.6]">
-            <Text className="font-serif-italic text-xs text-forground">
+          <View className="border-l-2 border-foreground/20 rounded-l pl-3">
+            <Text className="text-sm italic text-foreground/70 font-serif-italic leading-relaxed">
               "The universe is a dark forest. Every civilization is an armed
               hunter stalking through the trees..."
             </Text>
@@ -117,24 +111,21 @@ const EntryDetailScreen = () => {
           </View>
         </View>
         <View className="h-px bg-border" />
-        <View>
+        <Pressable
+          onPress={() => setIsFocusMode(true)}
+          className="py-3"
+        >
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
             Your Reflection
           </Text>
-          <Pressable onPress={() => setIsFocusMode(true)}>
-            <View pointerEvents="none">
-              <Textarea
-                placeholder="Tap to write what this made you feel.."
-                className="min-h-[120px] max-w-md"
-                value={stripHtml(reflection)}
-                editable={false}
-              />
-            </View>
-          </Pressable>
-          <Text className="text-xs text-muted text-right mt-1">
-            tap to enter focus mode ↑
-          </Text>
-        </View>
+          {reflection ? (
+            <RichTextPreview html={reflection} />
+          ) : (
+            <Text className="text-sm text-muted/60 italic">
+              Tap to write what this made you feel..
+            </Text>
+          )}
+        </Pressable>
       </ScrollView>
       {isFocusMode && <FocusModeOverlay snippet={`\u201CThe universe is a dark forest. Every civilization is an armed hunter stalking through the trees...\u201D`} reflection={reflection} onChangeReflection={setReflection} onDone={() => setIsFocusMode(false)} />}
     </ScreenWrapper>

@@ -42,8 +42,8 @@ const EntryCard = (props: EntryCardProps) => {
           </View>
         </CardHeader>
         <CardContent className="gap-2">
-          <View className="border-muted-foreground border-l-2 pl-3">
-            <Text className="text-foreground/70 text-sm font-serif-italic">
+          <View className="border-l-2 border-foreground/20 rounded-l pl-3">
+            <Text className="text-sm italic text-foreground/70 font-serif-italic leading-relaxed">
               {snippet}
             </Text>
           </View>
