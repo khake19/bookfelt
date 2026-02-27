@@ -3,6 +3,7 @@ import { Badge, Button, Input, Textarea } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { FocusModeOverlay } from "../features/entries";
 import { ScreenWrapper } from "../shared";
 
 const FEELINGS = [
@@ -21,6 +22,8 @@ const EntryDetailScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [selectedFeeling, setSelectedFeeling] = useState<string | null>(null);
+  const [reflection, setReflection] = useState("");
+  const [isFocusMode, setIsFocusMode] = useState(false);
 
   return (
     <ScreenWrapper>
@@ -128,12 +131,22 @@ const EntryDetailScreen = () => {
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
             Your Reflection
           </Text>
-          <Textarea placeholder="Tap to write what this made you feel.." className="min-h-[120px] max-w-md" />
+          <Pressable onPress={() => setIsFocusMode(true)}>
+            <View pointerEvents="none">
+              <Textarea
+                placeholder="Tap to write what this made you feel.."
+                className="min-h-[120px] max-w-md"
+                value={reflection}
+                editable={false}
+              />
+            </View>
+          </Pressable>
           <Text className="text-xs text-muted text-right mt-1">
             tap to enter focus mode ↑
           </Text>
         </View>
       </ScrollView>
+      {isFocusMode && <FocusModeOverlay reflection={reflection} onChangeReflection={setReflection} onDone={() => setIsFocusMode(false)} />}
     </ScreenWrapper>
   );
 };
