@@ -1,9 +1,16 @@
 import { useState } from "react";
-import { Badge, Button, Input, Textarea } from "@bookfelt/ui";
+import { Button, Input, Textarea } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { FocusModeOverlay } from "../features/entries";
 import { CloseButton, ScreenWrapper } from "../shared";
+
+const stripHtml = (html: string) =>
+  html
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>\s*<p>/gi, "\n")
+    .replace(/<[^>]*>/g, "")
+    .trim();
 
 const FEELINGS = [
   { label: "mind-blown", emoji: "🤯" },
@@ -75,8 +82,8 @@ const EntryDetailScreen = () => {
           <Text className="text-xs font-medium tracking-widest text-muted mb-1.5">
             SNIPPET (Optional)
           </Text>
-          <View className="bg-background border-l-[3px] border-foreground rounded-r-lg py-[9px] px-[11px] font-serif-italic text-xs text-foreground leading-[1.6]">
-            <Text className="italic">
+          <View className="bg-background border-l-[3px] border-foreground rounded-r-lg py-[9px] px-[11px] leading-[1.6]">
+            <Text className="font-serif-italic text-xs text-forground">
               "The universe is a dark forest. Every civilization is an armed
               hunter stalking through the trees..."
             </Text>
@@ -119,7 +126,7 @@ const EntryDetailScreen = () => {
               <Textarea
                 placeholder="Tap to write what this made you feel.."
                 className="min-h-[120px] max-w-md"
-                value={reflection}
+                value={stripHtml(reflection)}
                 editable={false}
               />
             </View>
@@ -129,7 +136,7 @@ const EntryDetailScreen = () => {
           </Text>
         </View>
       </ScrollView>
-      {isFocusMode && <FocusModeOverlay reflection={reflection} onChangeReflection={setReflection} onDone={() => setIsFocusMode(false)} />}
+      {isFocusMode && <FocusModeOverlay snippet={`\u201CThe universe is a dark forest. Every civilization is an armed hunter stalking through the trees...\u201D`} reflection={reflection} onChangeReflection={setReflection} onDone={() => setIsFocusMode(false)} />}
     </ScreenWrapper>
   );
 };
