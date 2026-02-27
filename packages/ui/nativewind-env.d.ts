@@ -1,16 +1,27 @@
 import "react-native";
 
-interface NativeWindProps {
-  className?: string;
-}
-
 declare module "react-native" {
-  interface ViewProps extends NativeWindProps {}
-  interface TextProps extends NativeWindProps {}
-  interface ImagePropsBase extends NativeWindProps {}
-  interface SwitchProps extends NativeWindProps {}
-  interface TouchableWithoutFeedbackProps extends NativeWindProps {}
+  interface ViewProps {
+    className?: string;
+  }
+  interface TextProps {
+    className?: string;
+  }
+  interface TextInputProps {
+    className?: string;
+    placeholderClassName?: string;
+  }
+  interface ImagePropsBase {
+    className?: string;
+  }
+  interface SwitchProps {
+    className?: string;
+  }
+  interface TouchableWithoutFeedbackProps {
+    className?: string;
+  }
   interface ScrollViewProps {
+    className?: string;
     contentContainerClassName?: string;
   }
 }
