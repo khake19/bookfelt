@@ -2,21 +2,8 @@ import { useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { FocusModeOverlay } from "../features/entries";
+import { EMOTIONS, FocusModeOverlay, RichTextPreview } from "../features/entries";
 import { CloseButton, ScreenWrapper } from "../shared";
-import { RichTextPreview } from "../features/entries";
-
-const FEELINGS = [
-  { label: "mind-blown", emoji: "🤯" },
-  { label: "confused", emoji: "😵" },
-  { label: "hopeful", emoji: "🌱" },
-  { label: "sad", emoji: "😢" },
-  { label: "happy", emoji: "😊" },
-  { label: "overwhelmed", emoji: "😰" },
-  { label: "serene", emoji: "🧘" },
-  { label: "inspired", emoji: "✨" },
-  { label: "melancholy", emoji: "🥀" },
-] as const;
 
 const EntryDetailScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -89,21 +76,23 @@ const EntryDetailScreen = () => {
             How Does it feel?
           </Text>
           <View className="flex-row flex-wrap gap-2">
-            {FEELINGS.map((feeling) => {
-              const isSelected = selectedFeeling === feeling.label;
+            {EMOTIONS.map((emotion) => {
+              const isSelected = selectedFeeling === emotion.label;
               return (
                 <Pressable
-                  key={feeling.label}
+                  key={emotion.label}
                   onPress={() =>
-                    setSelectedFeeling(isSelected ? null : feeling.label)
+                    setSelectedFeeling(isSelected ? null : emotion.label)
                   }
-                  className={`flex-row items-center gap-1.5 rounded-full border px-3 py-1.5 ${isSelected ? "bg-primary border-transparent" : "bg-secondary border-border"}`}
+                  className={`flex-row items-center gap-1.5 rounded-full px-3 py-1.5 ${isSelected ? "" : "bg-secondary border border-border"}`}
+                  style={isSelected ? { backgroundColor: emotion.color + "30" } : undefined}
                 >
-                  <Text>{feeling.emoji}</Text>
+                  <Text>{emotion.emoji}</Text>
                   <Text
-                    className={`text-xs font-medium ${isSelected ? "text-primary-foreground" : "text-foreground"}`}
+                    className={`text-xs font-medium ${isSelected ? "" : "text-foreground"}`}
+                    style={isSelected ? { color: emotion.color } : undefined}
                   >
-                    {feeling.label}
+                    {emotion.label}
                   </Text>
                 </Pressable>
               );
