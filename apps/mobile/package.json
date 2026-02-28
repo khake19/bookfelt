@@ -14,6 +14,7 @@
     "@bookfelt/ui": "workspace:*",
     "@expo/metro-config": "*",
     "@expo/vector-icons": "^15.0.3",
+    "@react-native-community/datetimepicker": "^8.6.0",
     "@rn-primitives/portal": "^1.3.0",
     "@rn-primitives/slot": "^1.2.0",
     "@shopify/flash-list": "^2.0.2",
