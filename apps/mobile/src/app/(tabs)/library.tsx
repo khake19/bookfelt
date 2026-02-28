@@ -4,6 +4,7 @@ import { Text, View, ScrollView } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import BookSearchInput from "../../features/books/components/BookSearchInput";
 import BookSearchResults from "../../features/books/components/BookSearchResults";
+import ManualBookForm from "../../features/books/components/ManualBookForm";
 import LibraryBookRow from "../../features/books/components/LibraryBookRow";
 import type {
   Book,
@@ -90,6 +91,7 @@ const STATUS_LABELS: Record<ReadingStatus, string> = {
 
 export default function LibraryScreen() {
   const [query, setQuery] = useState("");
+  const [showManualForm, setShowManualForm] = useState(false);
 
   const grouped = STATUS_ORDER.map((status) => ({
     status,
@@ -105,42 +107,42 @@ export default function LibraryScreen() {
       >
         Library
       </Animated.Text>
-      {/* <Animated.View */}
-      {/*   entering={FadeInDown.duration(500).delay(100)} */}
-      {/*   className="mb-3" */}
-      {/* > */}
-      {/*   <BookSearchInput */}
-      {/*     value={query} */}
-      {/*     onChangeText={setQuery} */}
-      {/*     onClear={() => setQuery("")} */}
-      {/*   /> */}
-      {/* </Animated.View> */}
-      {/* <View className="flex-1"> */}
-      {/*   <BookSearchResults */}
-      {/*     results={MOCK_RESULTS} */}
-      {/*     isLoading={false} */}
-      {/*     error={null} */}
-      {/*     query={query} */}
-      {/*     isInLibrary={(id) => ADDED_IDS.has(id)} */}
-      {/*     onSelectBook={() => undefined} */}
-      {/*     onManualCreate={() => undefined} */}
-      {/*   /> */}
-      {/* </View> */}
       <Animated.View
-        entering={FadeIn.duration(300)}
-        className="flex-1 items-center justify-center pb-20"
+        entering={FadeInDown.duration(500).delay(100)}
+        className="mb-3"
       >
-        <LottieView
-          source={require("../../assets/book.lottie")}
-          autoPlay
-          loop
-          renderMode="SOFTWARE"
-          style={{ width: 120, height: 120, backgroundColor: "transparent" }}
+        <BookSearchInput
+          value={query}
+          onChangeText={setQuery}
+          onClear={() => setQuery("")}
         />
-        <Text className="text-muted text-sm mt-4 text-center leading-relaxed">
-          Your library is empty. {"\n"}Search for a book to get started.
-        </Text>
       </Animated.View>
+      <View className="flex-1">
+        <BookSearchResults
+          results={[]}
+          isLoading={false}
+          error={null}
+          query={query}
+          isInLibrary={(id) => ADDED_IDS.has(id)}
+          onSelectBook={() => undefined}
+          onManualCreate={() => setShowManualForm(true)}
+        />
+      </View>
+      {/* <Animated.View */}
+      {/*   entering={FadeIn.duration(300)} */}
+      {/*   className="flex-1 items-center justify-center pb-20" */}
+      {/* > */}
+      {/*   <LottieView */}
+      {/*     source={require("../../assets/book.lottie")} */}
+      {/*     autoPlay */}
+      {/*     loop */}
+      {/*     renderMode="SOFTWARE" */}
+      {/*     style={{ width: 120, height: 120, backgroundColor: "transparent" }} */}
+      {/*   /> */}
+      {/*   <Text className="text-muted text-sm mt-4 text-center leading-relaxed"> */}
+      {/*     Your library is empty. {"\n"}Search for a book to get started. */}
+      {/*   </Text> */}
+      {/* </Animated.View> */}
       {/* <ScrollView */}
       {/*   showsVerticalScrollIndicator={false} */}
       {/*   contentContainerClassName="pb-6" */}
@@ -164,6 +166,17 @@ export default function LibraryScreen() {
       {/*     </Animated.View> */}
       {/*   ))} */}
       {/* </ScrollView> */}
+      {showManualForm && (
+        <ManualBookForm
+          initialTitle={query}
+          onSubmit={(book) => {
+            console.log("Manual book added:", book);
+            setShowManualForm(false);
+            setQuery("");
+          }}
+          onClose={() => setShowManualForm(false)}
+        />
+      )}
     </ScreenWrapper>
   );
 }
