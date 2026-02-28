@@ -55,37 +55,37 @@ export default function HomeScreen() {
 
   return (
     <ScreenWrapper>
+      <Animated.Text
+        entering={FadeInDown.duration(400)}
+        className="text-foreground font-mono-bold text-xl mt-2 mb-4"
+      >
+        bookfelt
+      </Animated.Text>
+
+      <Animated.View entering={FadeInDown.duration(500).delay(100)}>
+        <Pressable className="bg-foreground rounded-2xl p-4 mb-5">
+          <Text className="text-xs font-medium uppercase tracking-widest text-background/50 mb-2">
+            Currently reading
+          </Text>
+          <Text className="text-background font-serif text-lg font-semibold">
+            {CURRENT_BOOK.title}
+          </Text>
+          <Text className="text-background/60 text-sm mb-3">
+            {CURRENT_BOOK.author}
+          </Text>
+          <View className="flex-row items-center gap-3">
+            <ProgressBar progress={progress} />
+            <Text className="text-xs text-background/50">
+              Ch. {CURRENT_BOOK.chapter}/{CURRENT_BOOK.totalChapters}
+            </Text>
+          </View>
+        </Pressable>
+      </Animated.View>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-6"
       >
-        <Animated.Text
-          entering={FadeInDown.duration(400)}
-          className="text-foreground font-mono-bold text-xl mt-2 mb-4"
-        >
-          bookfelt
-        </Animated.Text>
-
-        <Animated.View entering={FadeInDown.duration(500).delay(100)}>
-          <Pressable className="bg-foreground rounded-2xl p-4 mb-5">
-            <Text className="text-xs font-medium uppercase tracking-widest text-background/50 mb-2">
-              Currently reading
-            </Text>
-            <Text className="text-background font-serif text-lg font-semibold">
-              {CURRENT_BOOK.title}
-            </Text>
-            <Text className="text-background/60 text-sm mb-3">
-              {CURRENT_BOOK.author}
-            </Text>
-            <View className="flex-row items-center gap-3">
-              <ProgressBar progress={progress} />
-              <Text className="text-xs text-background/50">
-                Ch. {CURRENT_BOOK.chapter}/{CURRENT_BOOK.totalChapters}
-              </Text>
-            </View>
-          </Pressable>
-        </Animated.View>
-
         <Animated.Text
           entering={FadeInDown.duration(400).delay(250)}
           className="text-xs font-medium uppercase tracking-widest text-muted mb-2"

@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Mobile",
-    "slug": "@bookfelt/mobile",
+    "name": "Bookfelt",
+    "slug": "bookfelt",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "@bookfelt/mobile",
+    "scheme": "bookfelt",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
