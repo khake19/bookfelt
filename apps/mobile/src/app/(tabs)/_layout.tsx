@@ -1,27 +1,34 @@
 import { Tabs } from 'expo-router';
-import Feather from '@expo/vector-icons/Feather';
+import { HomeIcon, BookOpenIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import { useThemeColors } from '../../shared';
 
 export default function TabLayout() {
+  const { primary, muted, background, border } = useThemeColors();
+
+  console.log('primary', primary)
+  console.log('muted', muted)
+  console.log('background', background)
+  console.log('border', border)
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#4A6741',
-        tabBarInactiveTintColor: '#9A8F85',
+        tabBarActiveTintColor: primary,
+        tabBarInactiveTintColor: muted,
         tabBarStyle: {
-          backgroundColor: '#F8F4EE',
-          borderTopColor: '#E8E2DA',
+          backgroundColor: background,
+          borderTopColor: border,
         },
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Home',
-        tabBarIcon: ({ color, size }) => <Feather name="home" size={size} color={color} />
+        tabBarIcon: ({ color, size }) => <HomeIcon size={size} color={color} />
       }} />
       <Tabs.Screen name="library" options={{ title: 'Library',
-        tabBarIcon: ({ color, size }) => <Feather name="book" size={size} color={color} />
+        tabBarIcon: ({ color, size }) => <BookOpenIcon size={size} color={color} />
       }} />
       <Tabs.Screen name="search" options={{ title: 'Search',
-        tabBarIcon: ({ color, size }) => <Feather name="search" size={size} color={color} />
+        tabBarIcon: ({ color, size }) => <MagnifyingGlassIcon size={size} color={color} />
       }} />
     </Tabs>
   );

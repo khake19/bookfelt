@@ -1,5 +1,6 @@
-import Feather from "@expo/vector-icons/Feather";
 import { Image, Pressable, Text, View } from "react-native";
+import { BookOpenIcon, PlusCircleIcon } from "react-native-heroicons/outline";
+import { useThemeColors } from "../../../shared";
 import type { Book } from "../types/book";
 
 interface BookSearchResultProps {
@@ -10,6 +11,7 @@ interface BookSearchResultProps {
 
 const BookSearchResult = (props: BookSearchResultProps) => {
   const { book, isInLibrary, onPress } = props;
+  const { muted, primary } = useThemeColors();
 
   return (
     <Pressable
@@ -24,7 +26,7 @@ const BookSearchResult = (props: BookSearchResultProps) => {
         />
       ) : (
         <View className="w-10 h-14 rounded bg-card border border-border items-center justify-center">
-          <Feather name="book" size={16} className="text-muted" />
+          <BookOpenIcon size={16} color={muted} />
         </View>
       )}
       <View className="flex-1">
@@ -48,7 +50,7 @@ const BookSearchResult = (props: BookSearchResultProps) => {
           <Text className="text-primary text-xs font-medium">Added</Text>
         </View>
       ) : (
-        <Feather name="plus-circle" size={20} className="text-primary" />
+        <PlusCircleIcon size={20} color={primary} />
       )}
     </Pressable>
   );

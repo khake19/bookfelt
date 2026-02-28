@@ -1,5 +1,6 @@
-import Feather from "@expo/vector-icons/Feather";
 import { Image, Pressable, Text, View } from "react-native";
+import { BookOpenIcon } from "react-native-heroicons/outline";
+import { useThemeColors } from "../../../shared";
 import { LibraryBook } from "../types/book";
 
 interface LibraryBookRowProps {
@@ -8,6 +9,7 @@ interface LibraryBookRowProps {
 }
 const LibraryBookRow = (props: LibraryBookRowProps) => {
   const { book, onSetReading } = props;
+  const { muted } = useThemeColors();
 
   return (
     <View className="flex-row items-center gap-3 py-3 px-1">
@@ -19,7 +21,7 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
         />
       ) : (
         <View>
-          <Feather name="book" size={16} className="text-muted" />
+          <BookOpenIcon size={16} color={muted} />
         </View>
       )}
       <View className="flex-1">
