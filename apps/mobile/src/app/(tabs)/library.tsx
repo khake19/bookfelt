@@ -1,45 +1,17 @@
 import LottieView from "lottie-react-native";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, View, ScrollView } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import BookSearchInput from "../../features/books/components/BookSearchInput";
 import BookSearchResults from "../../features/books/components/BookSearchResults";
 import ManualBookForm from "../../features/books/components/ManualBookForm";
 import LibraryBookRow from "../../features/books/components/LibraryBookRow";
+import { useSearchBooks } from "../../features/books/queries/use-search-books";
 import type {
-  Book,
   LibraryBook,
   ReadingStatus,
 } from "../../features/books/types/book";
 import { ScreenWrapper } from "../../shared";
-
-const MOCK_RESULTS: Book[] = [
-  {
-    id: "1",
-    title: "The Three-Body Problem",
-    authors: ["Liu Cixin"],
-    publishedDate: "2008",
-    coverUrl:
-      "https://books.google.com/books/content?id=ZrNzAwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-    source: "google",
-  },
-  {
-    id: "2",
-    title: "The Dark Forest",
-    authors: ["Liu Cixin"],
-    publishedDate: "2015",
-    source: "google",
-  },
-  {
-    id: "3",
-    title: "Death's End",
-    authors: ["Liu Cixin"],
-    publishedDate: "2016",
-    coverUrl:
-      "https://books.google.com/books/content?id=5qGJCwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-    source: "google",
-  },
-];
 
 const MOCK_LIBRARY: LibraryBook[] = [
   {
@@ -80,7 +52,8 @@ const MOCK_LIBRARY: LibraryBook[] = [
   },
 ];
 
-const ADDED_IDS = new Set(["3"]);
+// TODO: replace with zustand store
+const ADDED_IDS = new Set<string>();
 const STATUS_ORDER: ReadingStatus[] = ["reading", "want-to-read", "finished"];
 
 const STATUS_LABELS: Record<ReadingStatus, string> = {
@@ -91,7 +64,16 @@ const STATUS_LABELS: Record<ReadingStatus, string> = {
 
 export default function LibraryScreen() {
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [showManualForm, setShowManualForm] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const { data: searchResults = [], isLoading, error } = useSearchBooks(debouncedQuery);
+
+  useEffect(() => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setDebouncedQuery(query), 400);
+    return () => clearTimeout(timerRef.current);
+  }, [query]);
 
   const grouped = STATUS_ORDER.map((status) => ({
     status,
@@ -117,55 +99,59 @@ export default function LibraryScreen() {
           onClear={() => setQuery("")}
         />
       </Animated.View>
-      <View className="flex-1">
-        <BookSearchResults
-          results={[]}
-          isLoading={false}
-          error={null}
-          query={query}
-          isInLibrary={(id) => ADDED_IDS.has(id)}
-          onSelectBook={() => undefined}
-          onManualCreate={() => setShowManualForm(true)}
-        />
-      </View>
-      {/* <Animated.View */}
-      {/*   entering={FadeIn.duration(300)} */}
-      {/*   className="flex-1 items-center justify-center pb-20" */}
-      {/* > */}
-      {/*   <LottieView */}
-      {/*     source={require("../../assets/book.lottie")} */}
-      {/*     autoPlay */}
-      {/*     loop */}
-      {/*     renderMode="SOFTWARE" */}
-      {/*     style={{ width: 120, height: 120, backgroundColor: "transparent" }} */}
-      {/*   /> */}
-      {/*   <Text className="text-muted text-sm mt-4 text-center leading-relaxed"> */}
-      {/*     Your library is empty. {"\n"}Search for a book to get started. */}
-      {/*   </Text> */}
-      {/* </Animated.View> */}
-      {/* <ScrollView */}
-      {/*   showsVerticalScrollIndicator={false} */}
-      {/*   contentContainerClassName="pb-6" */}
-      {/* > */}
-      {/*   {grouped.map((group, groupIndex) => ( */}
-      {/*     <Animated.View */}
-      {/*       key={group.status} */}
-      {/*       entering={FadeInDown.duration(400).delay(groupIndex * 100)} */}
-      {/*     > */}
-      {/*       <Text className="text-xs fornt-medium uppercase tracking-widest text-muted mb-2 mt-4"> */}
-      {/*         {group.label} */}
-      {/*       </Text> */}
-      {/*       <View className="bg-card rounded-xl border border-border px-3"> */}
-      {/*         {group.items.map((book, index) => ( */}
-      {/*           <View key={book.id}> */}
-      {/*             {index > 0 && <View className="h-px bg-border" />} */}
-      {/*             <LibraryBookRow book={book} onSetReading={() => undefined} /> */}
-      {/*           </View> */}
-      {/*         ))} */}
-      {/*       </View> */}
-      {/*     </Animated.View> */}
-      {/*   ))} */}
-      {/* </ScrollView> */}
+      {debouncedQuery.trim().length > 0 ? (
+        <View className="flex-1">
+          <BookSearchResults
+            results={searchResults}
+            isLoading={isLoading}
+            error={error ? error.message : null}
+            query={debouncedQuery}
+            isInLibrary={(id) => ADDED_IDS.has(id)}
+            onSelectBook={() => undefined}
+            onManualCreate={() => setShowManualForm(true)}
+          />
+        </View>
+      ) : MOCK_LIBRARY.length === 0 ? (
+        <Animated.View
+          entering={FadeIn.duration(300)}
+          className="flex-1 items-center justify-center pb-20"
+        >
+          <LottieView
+            source={require("../../assets/book.lottie")}
+            autoPlay
+            loop
+            renderMode="SOFTWARE"
+            style={{ width: 120, height: 120, backgroundColor: "transparent" }}
+          />
+          <Text className="text-muted text-sm mt-4 text-center leading-relaxed">
+            Your library is empty. {"\n"}Search for a book to get started.
+          </Text>
+        </Animated.View>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerClassName="pb-6"
+        >
+          {grouped.map((group, groupIndex) => (
+            <Animated.View
+              key={group.status}
+              entering={FadeInDown.duration(400).delay(groupIndex * 100)}
+            >
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-2 mt-4">
+                {group.label}
+              </Text>
+              <View className="bg-card rounded-xl border border-border px-3">
+                {group.items.map((book, index) => (
+                  <View key={book.id}>
+                    {index > 0 && <View className="h-px bg-border" />}
+                    <LibraryBookRow book={book} onSetReading={() => undefined} />
+                  </View>
+                ))}
+              </View>
+            </Animated.View>
+          ))}
+        </ScrollView>
+      )}
       {showManualForm && (
         <ManualBookForm
           initialTitle={query}

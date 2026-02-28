@@ -174,6 +174,9 @@ importers:
       '@10play/tentap-editor':
         specifier: ^1.0.1
         version: 1.0.1(@floating-ui/dom@1.7.5)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-native-webview@13.15.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      '@bookfelt/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@bookfelt/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -192,6 +195,9 @@ importers:
       '@shopify/flash-list':
         specifier: ^2.0.2
         version: 2.0.2(@babel/runtime@7.27.6)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      '@tanstack/react-query':
+        specifier: ^5.90.21
+        version: 5.90.21(react@19.1.0)
       '@testing-library/react-native':
         specifier: '*'
         version: 13.2.2(jest@30.2.0(@types/node@20.19.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.1(@swc/core@1.15.11(@swc/helpers@0.5.18))(@types/node@20.19.9)(typescript@5.9.3)))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react-test-renderer@19.1.0(react@19.1.0))(react@19.1.0)
@@ -291,6 +297,15 @@ importers:
         version: 3.4.19(yaml@2.8.2)
 
   apps/mobile-e2e: {}
+
+  packages/core:
+    dependencies:
+      axios:
+        specifier: ^1.13.6
+        version: 1.13.6
+      tslib:
+        specifier: ^2.3.0
+        version: 2.8.1
 
   packages/ui:
     dependencies:
@@ -2922,6 +2937,14 @@ packages:
   '@swc/types@0.1.25':
     resolution: {integrity: sha512-iAoY/qRhNH8a/hBvm3zKj9qQ4oc2+3w1unPJa2XvTK3XjeLXtzcCingVPw/9e5mn1+0yPqxcBGp9Jf0pkfMb1g==}
 
+  '@tanstack/query-core@5.90.20':
+    resolution: {integrity: sha512-OMD2HLpNouXEfZJWcKeVKUgQ5n+n3A2JFmBaScpNDUqSrQSjiveC7dKMe53uJUg1nDG16ttFPz2xfilz6i2uVg==}
+
+  '@tanstack/react-query@5.90.21':
+    resolution: {integrity: sha512-0Lu6y5t+tvlTJMTO7oh5NSpJfpg/5D41LlThfepTixPYkJ0sE2Jj0m0f6yYqujBwIXlId87e234+MxG3D3g7kg==}
+    peerDependencies:
+      react: ^18 || ^19
+
   '@testing-library/react-native@13.2.2':
     resolution: {integrity: sha512-QALF+nZ4BSXBOtUs5ljLnaHKuyR+ykakYB3RYwciSrllhgZkbUjXeGkugCxrmEtQ2BUZnYVRY7AEGboMP/hucg==}
     engines: {node: '>=18'}
@@ -3737,6 +3760,9 @@ packages:
 
   axios@1.13.5:
     resolution: {integrity: sha512-cz4ur7Vb0xS4/KUN0tPWe44eqxrIu31me+fbang3ijiNscE129POzipJJA6zniq2C/Z6sJCjMimjS8Lc/GAs8Q==}
+
+  axios@1.13.6:
+    resolution: {integrity: sha512-ChTCHMouEe2kn713WHbQGcuYrr6fXTBiu460OTwWrWob16g1bXn4vtz07Ope7ewMozJAnEquLk5lWQWtBig9DQ==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -12309,6 +12335,13 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
+  '@tanstack/query-core@5.90.20': {}
+
+  '@tanstack/react-query@5.90.21(react@19.1.0)':
+    dependencies:
+      '@tanstack/query-core': 5.90.20
+      react: 19.1.0
+
   '@testing-library/react-native@13.2.2(jest@30.2.0(@types/node@20.19.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.1(@swc/core@1.15.11(@swc/helpers@0.5.18))(@types/node@20.19.9)(typescript@5.9.3)))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react-test-renderer@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       chalk: 4.1.2
@@ -13206,6 +13239,14 @@ snapshots:
   axe-core@4.11.1: {}
 
   axios@1.13.5:
+    dependencies:
+      follow-redirects: 1.15.11(debug@4.4.3)
+      form-data: 4.0.5
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.13.6:
     dependencies:
       follow-redirects: 1.15.11(debug@4.4.3)
       form-data: 4.0.5

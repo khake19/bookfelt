@@ -4,16 +4,16 @@ import { useThemeColors } from "../../../shared";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import BookSearchResult from "./BookSearchResult";
-import { Book } from "../types/book";
+import type { GoogleBook } from "@bookfelt/core";
 import LottieView from "lottie-react-native";
 
 interface BookSearchResultsProps {
-  results: Book[];
+  results: GoogleBook[];
   isLoading: boolean;
   error: string | null;
   query: string;
   isInLibrary: (bookId: string) => boolean;
-  onSelectBook: (book: any) => void;
+  onSelectBook: (book: GoogleBook) => void;
   onManualCreate: () => void;
 }
 
@@ -63,6 +63,16 @@ const BookSearchResults = (props: BookSearchResultsProps) => {
           </Text>
         </Pressable>
       </Animated.View>
+      }
+      ListFooterComponent={
+        results.length > 0 ? (
+          <Animated.View entering={FadeInDown.duration(300).delay(results.length * 50)} className="items-center pt-4 pb-2">
+            <Pressable onPress={onManualCreate} className="flex-row items-center gap-2">
+              <PencilIcon size={14} color={primary} />
+              <Text className="text-muted text-xs">Can't find it? Add manually</Text>
+            </Pressable>
+          </Animated.View>
+        ) : null
       }
     />
   );

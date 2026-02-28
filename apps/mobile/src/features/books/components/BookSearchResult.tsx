@@ -1,12 +1,12 @@
 import { Image, Pressable, Text, View } from "react-native";
 import { BookOpenIcon, PlusCircleIcon } from "react-native-heroicons/outline";
 import { useThemeColors } from "../../../shared";
-import type { Book } from "../types/book";
+import type { GoogleBook } from "@bookfelt/core";
 
 interface BookSearchResultProps {
-  book: Book;
+  book: GoogleBook;
   isInLibrary: boolean;
-  onPress: (book: Book) => void;
+  onPress: (book: GoogleBook) => void;
 }
 
 const BookSearchResult = (props: BookSearchResultProps) => {

@@ -1,5 +1,21 @@
 # Mobile App Architecture
 
+## Monorepo Packages
+
+| Package | Purpose |
+|---------|---------|
+| `@bookfelt/ui` | Shared React Native UI components (Button, Input, Card, etc.) |
+| `@bookfelt/core` | Platform-agnostic services and HTTP layer. Lives in `packages/core/` because it contains no React or React Native code — just HTTP clients and API services. This keeps it reusable across any consumer (mobile, web, backend) and avoids coupling data-fetching logic to a specific UI framework. React-specific wrappers (TanStack Query hooks) live in the mobile app's feature modules. |
+
+```
+packages/core/
+  src/
+    http/              # Axios-based HTTP client factory
+    services/          # External API integrations (Google Books, Supabase, etc.)
+    auth/              # Auth client (Better Auth) — future
+    index.ts           # Barrel export
+```
+
 ## File Structure
 
 ```

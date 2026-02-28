@@ -10,10 +10,10 @@
       "path": "./apps/mobile"
     },
     {
-      "path": "./apps/mobile/ui"
+      "path": "./packages/ui"
     },
     {
-      "path": "./packages/ui"
+      "path": "./packages/core"
     }
   ]
 }
