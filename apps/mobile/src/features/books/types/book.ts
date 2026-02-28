@@ -15,7 +15,5 @@ export type ReadingStatus = "reading" | "want-to-read" | "finished";
 
 export interface LibraryBook extends Book {
   status: ReadingStatus;
-  currentChapter?: number;
-  totalChapters?: number;
   addedAt: number;
 }

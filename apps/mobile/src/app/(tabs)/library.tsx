@@ -1,59 +1,16 @@
 import LottieView from "lottie-react-native";
 import { useEffect, useRef, useState } from "react";
-import { Text, View, ScrollView } from "react-native";
+import { Keyboard, Text, View, ScrollView } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import BookSearchInput from "../../features/books/components/BookSearchInput";
 import BookSearchResults from "../../features/books/components/BookSearchResults";
 import ManualBookForm from "../../features/books/components/ManualBookForm";
 import LibraryBookRow from "../../features/books/components/LibraryBookRow";
 import { useSearchBooks } from "../../features/books/queries/use-search-books";
-import type {
-  LibraryBook,
-  ReadingStatus,
-} from "../../features/books/types/book";
+import { useLibrary } from "../../features/books/hooks/use-library";
+import type { ReadingStatus } from "../../features/books/types/book";
 import { ScreenWrapper } from "../../shared";
 
-const MOCK_LIBRARY: LibraryBook[] = [
-  {
-    id: "1",
-    title: "The Three-Body Problem",
-    authors: ["Liu Cixin"],
-    coverUrl:
-      "https://books.google.com/books/content?id=ZrNzAwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-    source: "google",
-    status: "reading",
-    currentChapter: 12,
-    totalChapters: 35,
-    addedAt: Date.now(),
-  },
-  {
-    id: "4",
-    title: "Norwegian Wood",
-    authors: ["Haruki Murakami"],
-    source: "google",
-    status: "want-to-read",
-    addedAt: Date.now(),
-  },
-  {
-    id: "5",
-    title: "Sapiens",
-    authors: ["Yuval Noah Harari"],
-    source: "google",
-    status: "want-to-read",
-    addedAt: Date.now(),
-  },
-  {
-    id: "6",
-    title: "Dune",
-    authors: ["Frank Herbert"],
-    source: "manual",
-    status: "finished",
-    addedAt: Date.now(),
-  },
-];
-
-// TODO: replace with zustand store
-const ADDED_IDS = new Set<string>();
 const STATUS_ORDER: ReadingStatus[] = ["reading", "want-to-read", "finished"];
 
 const STATUS_LABELS: Record<ReadingStatus, string> = {
@@ -68,6 +25,7 @@ export default function LibraryScreen() {
   const [showManualForm, setShowManualForm] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { data: searchResults = [], isLoading, error } = useSearchBooks(debouncedQuery);
+  const { books, addBook, removeBook, updateStatus, isInLibrary } = useLibrary();
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -78,7 +36,7 @@ export default function LibraryScreen() {
   const grouped = STATUS_ORDER.map((status) => ({
     status,
     label: STATUS_LABELS[status],
-    items: MOCK_LIBRARY.filter((b) => b.status === status),
+    items: books.filter((b) => b.status === status),
   })).filter((group) => group.items.length > 0);
 
   return (
@@ -106,12 +64,15 @@ export default function LibraryScreen() {
             isLoading={isLoading}
             error={error ? error.message : null}
             query={debouncedQuery}
-            isInLibrary={(id) => ADDED_IDS.has(id)}
-            onSelectBook={() => undefined}
+            isInLibrary={isInLibrary}
+            onSelectBook={(book) => {
+              Keyboard.dismiss();
+              addBook({ ...book, source: "google" }, "want-to-read");
+            }}
             onManualCreate={() => setShowManualForm(true)}
           />
         </View>
-      ) : MOCK_LIBRARY.length === 0 ? (
+      ) : books.length === 0 ? (
         <Animated.View
           entering={FadeIn.duration(300)}
           className="flex-1 items-center justify-center pb-20"
@@ -144,7 +105,11 @@ export default function LibraryScreen() {
                 {group.items.map((book, index) => (
                   <View key={book.id}>
                     {index > 0 && <View className="h-px bg-border" />}
-                    <LibraryBookRow book={book} onSetReading={() => undefined} />
+                    <LibraryBookRow
+                      book={book}
+                      onSetReading={() => updateStatus(book.id, "reading")}
+                      onRemove={() => removeBook(book.id)}
+                    />
                   </View>
                 ))}
               </View>
@@ -156,7 +121,7 @@ export default function LibraryScreen() {
         <ManualBookForm
           initialTitle={query}
           onSubmit={(book) => {
-            console.log("Manual book added:", book);
+            addBook(book, "want-to-read");
             setShowManualForm(false);
             setQuery("");
           }}
