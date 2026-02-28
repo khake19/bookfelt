@@ -1,30 +1,19 @@
+import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { PlusIcon } from "react-native-heroicons/solid";
 import { EntryCard, useEntries } from "../../features/entries";
 import { useLibrary } from "../../features/books/hooks/use-library";
-import { ScreenWrapper, useThemeColors } from "../../shared";
+import { ConfirmDialog, ScreenWrapper, timeAgo, useThemeColors } from "../../shared";
 import { useRouter } from "expo-router";
-
-function timeAgo(timestamp: number): string {
-  const seconds = Math.floor((Date.now() - timestamp) / 1000);
-  if (seconds < 60) return "just now";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d ago`;
-  const weeks = Math.floor(days / 7);
-  return `${weeks}w ago`;
-}
 
 export default function HomeScreen() {
   const router = useRouter();
   const { books } = useLibrary();
-  const { entries } = useEntries();
+  const { entries, removeEntry } = useEntries();
   const { background } = useThemeColors();
   const currentlyReading = books.find((b) => b.status === "reading");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const handlePress = (id: string) => {
     router.push({
@@ -40,7 +29,15 @@ export default function HomeScreen() {
     });
   };
 
+  const handleConfirmDelete = () => {
+    if (deleteId) {
+      removeEntry(deleteId);
+      setDeleteId(null);
+    }
+  };
+
   return (
+    <>
     <ScreenWrapper>
       <Animated.Text
         entering={FadeInDown.duration(400)}
@@ -102,6 +99,7 @@ export default function HomeScreen() {
                   reaction={entry.reflection ?? ""}
                   feeling={entry.feeling}
                   onPress={() => handlePress(entry.id)}
+                  onLongPress={() => setDeleteId(entry.id)}
                 />
               </Animated.View>
             ))
@@ -121,5 +119,15 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
     </ScreenWrapper>
+    <ConfirmDialog
+      open={deleteId != null}
+      onClose={() => setDeleteId(null)}
+      onConfirm={handleConfirmDelete}
+      title="Delete reflection?"
+      description="This can't be undone."
+      confirmLabel="Delete"
+      destructive
+    />
+    </>
   );
 }

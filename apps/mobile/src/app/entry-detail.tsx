@@ -2,35 +2,35 @@ import { useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Platform, Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { EMOTIONS, FocusModeOverlay, RichTextPreview, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
-import { CloseButton, ScreenWrapper, useThemeColors } from "../shared";
+import { CloseButton, ScreenWrapper } from "../shared";
 
 const EntryDetailScreen = () => {
   const { id, bookId } = useLocalSearchParams<{ id: string; bookId?: string }>();
   const router = useRouter();
   const { books } = useLibrary();
-  const { addEntry } = useEntries();
+  const { entries, addEntry, updateEntry } = useEntries();
+  const existing = id ? entries.find((e) => e.id === id) : undefined;
   const book = books.find((b) => b.id === bookId) ?? books.find((b) => b.status === "reading");
-  const isNew = !id;
+  const isNew = !existing;
 
-  const [chapter, setChapter] = useState("");
-  const [page, setPage] = useState("");
-  const [percent, setPercent] = useState("");
-  const [snippet, setSnippet] = useState("");
-  const [selectedFeeling, setSelectedFeeling] = useState<string | null>(null);
-  const [reflection, setReflection] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [chapter, setChapter] = useState(existing?.chapter ?? "");
+  const [page, setPage] = useState(existing?.page ?? "");
+  const [percent, setPercent] = useState(existing?.percent ?? "");
+  const numericOnly = (setter: (v: string) => void) => (v: string) => setter(v.replace(/[^0-9]/g, ""));
+  const [snippet, setSnippet] = useState(existing?.snippet ?? "");
+  const [selectedFeeling, setSelectedFeeling] = useState<string | null>(existing?.feeling ?? null);
+  const [reflection, setReflection] = useState(existing?.reflection ?? "");
+  const [date, setDate] = useState(existing ? new Date(existing.date) : new Date());
   const [isFocusMode, setIsFocusMode] = useState(false);
-  const { primary } = useThemeColors();
 
-  const canSave = snippet.trim().length > 0 && book != null;
+  const canSave = snippet.trim().length > 0 && selectedFeeling != null && book != null;
 
   const handleSave = () => {
     if (!canSave) return;
-    addEntry({
+    const data = {
       bookId: book.id,
       bookTitle: book.title,
       chapter: chapter || undefined,
@@ -40,7 +40,12 @@ const EntryDetailScreen = () => {
       feeling: selectedFeeling ?? undefined,
       reflection: reflection || undefined,
       date: date.getTime(),
-    });
+    };
+    if (isNew) {
+      addEntry(data);
+    } else {
+      updateEntry(existing.id, data);
+    }
     router.back();
   };
 
@@ -72,7 +77,7 @@ const EntryDetailScreen = () => {
               <Input
                 className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
                 value={chapter}
-                onChangeText={setChapter}
+                onChangeText={numericOnly(setChapter)}
                 placeholder="—"
                 keyboardType="number-pad"
               />
@@ -82,7 +87,7 @@ const EntryDetailScreen = () => {
               <Input
                 className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
                 value={page}
-                onChangeText={setPage}
+                onChangeText={numericOnly(setPage)}
                 placeholder="—"
                 keyboardType="number-pad"
               />
@@ -92,7 +97,7 @@ const EntryDetailScreen = () => {
               <Input
                 className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
                 value={percent}
-                onChangeText={setPercent}
+                onChangeText={numericOnly(setPercent)}
                 placeholder="—"
                 keyboardType="number-pad"
               />

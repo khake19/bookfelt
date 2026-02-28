@@ -17,6 +17,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { getEmotionByLabel } from "../constants/emotions";
 
+const stripHtml = (html: string) =>
+  html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+
 export interface EntryCardData {
   id: string;
   title: string;
@@ -29,10 +32,11 @@ export interface EntryCardData {
 
 interface EntryCardProps extends EntryCardData {
   onPress?: () => void;
+  onLongPress?: () => void;
 }
 
 const EntryCard = (props: EntryCardProps) => {
-  const { title, chapter, date, snippet, reaction, feeling, onPress } = props;
+  const { title, chapter, date, snippet, reaction, feeling, onPress, onLongPress } = props;
 
   const emotion = feeling ? getEmotionByLabel(feeling) : undefined;
   const color = emotion?.color;
@@ -54,7 +58,7 @@ const EntryCard = (props: EntryCardProps) => {
   }));
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={onPress} onLongPress={onLongPress}>
       <Card
         style={color ? { borderLeftWidth: 3, borderLeftColor: color } : undefined}
       >
@@ -83,12 +87,14 @@ const EntryCard = (props: EntryCardProps) => {
               {"\u201D"}
             </Text>
           </View>
-          <Text
-            className="text-sm text-muted leading-relaxed"
-            numberOfLines={2}
-          >
-            {reaction}
-          </Text>
+          {reaction ? (
+            <Text
+              className="text-sm text-muted leading-relaxed"
+              numberOfLines={2}
+            >
+              {stripHtml(reaction)}
+            </Text>
+          ) : null}
         </CardContent>
         {emotion && (
           <CardFooter>
