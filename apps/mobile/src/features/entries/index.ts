@@ -7,3 +7,4 @@ export type { Emotion } from "./constants/emotions";
 export { MOCK_ENTRIES } from "./constants/mock-entries";
 export { useEntries } from "./hooks/use-entries";
 export type { Entry } from "./types/entry";
+export { entryFormSchema, type EntryFormValues } from "./schemas/entry-form";

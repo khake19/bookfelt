@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
+import { zodResolver } from "@hookform/resolvers/zod";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { EMOTIONS, FocusModeOverlay, RichTextPreview, useEntries } from "../features/entries";
+import { entryFormSchema, type EntryFormValues } from "../features/entries/schemas/entry-form";
 import { useLibrary } from "../features/books/hooks/use-library";
 import { CloseButton, ScreenWrapper } from "../shared";
 
@@ -16,30 +19,38 @@ const EntryDetailScreen = () => {
   const book = books.find((b) => b.id === bookId) ?? books.find((b) => b.status === "reading");
   const isNew = !existing;
 
-  const [chapter, setChapter] = useState(existing?.chapter ?? "");
-  const [page, setPage] = useState(existing?.page ?? "");
-  const [percent, setPercent] = useState(existing?.percent ?? "");
-  const numericOnly = (setter: (v: string) => void) => (v: string) => setter(v.replace(/[^0-9]/g, ""));
-  const [snippet, setSnippet] = useState(existing?.snippet ?? "");
-  const [selectedFeeling, setSelectedFeeling] = useState<string | null>(existing?.feeling ?? null);
-  const [reflection, setReflection] = useState(existing?.reflection ?? "");
-  const [date, setDate] = useState(existing ? new Date(existing.date) : new Date());
+  const { control, handleSubmit, watch, setValue, formState: { isValid } } = useForm<EntryFormValues>({
+    resolver: zodResolver(entryFormSchema),
+    defaultValues: {
+      chapter: existing?.chapter ?? "",
+      page: existing?.page ?? "",
+      percent: existing?.percent ?? "",
+      snippet: existing?.snippet ?? "",
+      feeling: existing?.feeling ?? "",
+      reflection: existing?.reflection ?? "",
+      date: existing ? new Date(existing.date) : new Date(),
+    },
+    mode: "onChange",
+  });
+
   const [isFocusMode, setIsFocusMode] = useState(false);
 
-  const canSave = snippet.trim().length > 0 && selectedFeeling != null && book != null;
+  const numericOnly = (v: string) => v.replace(/[^0-9]/g, "");
 
-  const handleSave = () => {
-    if (!canSave) return;
+  const canSave = isValid && book != null;
+
+  const onSubmit = (values: EntryFormValues) => {
+    if (!book) return;
     const data = {
       bookId: book.id,
       bookTitle: book.title,
-      chapter: chapter || undefined,
-      page: page || undefined,
-      percent: percent || undefined,
-      snippet: snippet.trim(),
-      feeling: selectedFeeling ?? undefined,
-      reflection: reflection || undefined,
-      date: date.getTime(),
+      chapter: values.chapter || undefined,
+      page: values.page || undefined,
+      percent: values.percent || undefined,
+      snippet: values.snippet.trim(),
+      feeling: values.feeling || undefined,
+      reflection: values.reflection || undefined,
+      date: values.date.getTime(),
     };
     if (isNew) {
       addEntry(data);
@@ -48,6 +59,10 @@ const EntryDetailScreen = () => {
     }
     router.back();
   };
+
+  const selectedFeeling = watch("feeling");
+  const snippet = watch("snippet");
+  const reflection = watch("reflection");
 
   return (
     <ScreenWrapper>
@@ -58,7 +73,7 @@ const EntryDetailScreen = () => {
             {book?.title ?? "No book selected"}
           </Text>
         </View>
-        <Button shape="pill" onPress={handleSave} disabled={!canSave}>
+        <Button shape="pill" onPress={handleSubmit(onSubmit)} disabled={!canSave}>
           <Text className="text-secondary font-medium">Save</Text>
         </Button>
       </View>
@@ -72,36 +87,54 @@ const EntryDetailScreen = () => {
             Where are you?
           </Text>
           <View className="flex-row gap-2">
-            <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${chapter ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
-              <Text className="text-xs text-muted">Ch.</Text>
-              <Input
-                className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
-                value={chapter}
-                onChangeText={numericOnly(setChapter)}
-                placeholder="—"
-                keyboardType="number-pad"
-              />
-            </View>
-            <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${page ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
-              <Text className="text-xs text-muted">Pg.</Text>
-              <Input
-                className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
-                value={page}
-                onChangeText={numericOnly(setPage)}
-                placeholder="—"
-                keyboardType="number-pad"
-              />
-            </View>
-            <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${percent ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
-              <Text className="text-xs text-muted">%</Text>
-              <Input
-                className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
-                value={percent}
-                onChangeText={numericOnly(setPercent)}
-                placeholder="—"
-                keyboardType="number-pad"
-              />
-            </View>
+            <Controller
+              control={control}
+              name="chapter"
+              render={({ field: { onChange, value } }) => (
+                <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
+                  <Text className="text-xs text-muted">Ch.</Text>
+                  <Input
+                    className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
+                    value={value}
+                    onChangeText={(v) => onChange(numericOnly(v))}
+                    placeholder="—"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              )}
+            />
+            <Controller
+              control={control}
+              name="page"
+              render={({ field: { onChange, value } }) => (
+                <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
+                  <Text className="text-xs text-muted">Pg.</Text>
+                  <Input
+                    className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
+                    value={value}
+                    onChangeText={(v) => onChange(numericOnly(v))}
+                    placeholder="—"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              )}
+            />
+            <Controller
+              control={control}
+              name="percent"
+              render={({ field: { onChange, value } }) => (
+                <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
+                  <Text className="text-xs text-muted">%</Text>
+                  <Input
+                    className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
+                    value={value}
+                    onChangeText={(v) => onChange(numericOnly(v))}
+                    placeholder="—"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              )}
+            />
           </View>
         </View>
         <View className="h-px bg-border" />
@@ -110,16 +143,22 @@ const EntryDetailScreen = () => {
             When
           </Text>
           <View className="flex-row items-center">
-            <DateTimePicker
-              value={date}
-              mode="datetime"
-              display="compact"
-              maximumDate={new Date()}
-              onChange={(_, selected) => {
-                if (selected) setDate(selected);
-              }}
-              accentColor="gray"
-              style={{ marginLeft: -10, transform: [{ scale: 0.85 }], transformOrigin: "left" }}
+            <Controller
+              control={control}
+              name="date"
+              render={({ field: { onChange, value } }) => (
+                <DateTimePicker
+                  value={value}
+                  mode="datetime"
+                  display="compact"
+                  maximumDate={new Date()}
+                  onChange={(_, selected) => {
+                    if (selected) onChange(selected);
+                  }}
+                  accentColor="gray"
+                  style={{ marginLeft: -10, transform: [{ scale: 0.85 }], transformOrigin: "left" }}
+                />
+              )}
             />
           </View>
         </View>
@@ -129,14 +168,20 @@ const EntryDetailScreen = () => {
             SNIPPET
           </Text>
           <View className="border-l-2 border-foreground/20 rounded-l pl-3">
-            <Input
-              className="h-auto w-full border-0 bg-transparent p-0 text-sm leading-relaxed text-foreground/70 font-serif-italic shadow-none placeholder:font-light"
-              value={snippet}
-              onChangeText={setSnippet}
-              placeholder="Paste or type a passage that resonated..."
-              multiline
-              numberOfLines={4}
-              style={{ minHeight: 80, textAlignVertical: "top" }}
+            <Controller
+              control={control}
+              name="snippet"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  className="h-auto w-full border-0 bg-transparent p-0 text-sm leading-relaxed text-foreground/70 font-serif-italic shadow-none placeholder:font-light"
+                  value={value}
+                  onChangeText={onChange}
+                  placeholder="Paste or type a passage that resonated..."
+                  multiline
+                  numberOfLines={4}
+                  style={{ minHeight: 80, textAlignVertical: "top" }}
+                />
+              )}
             />
           </View>
         </View>
@@ -152,7 +197,7 @@ const EntryDetailScreen = () => {
                 <Pressable
                   key={emotion.label}
                   onPress={() =>
-                    setSelectedFeeling(isSelected ? null : emotion.label)
+                    setValue("feeling", isSelected ? "" : emotion.label, { shouldValidate: true })
                   }
                   className={`flex-row items-center gap-1.5 rounded-full px-3 py-1.5 ${isSelected ? "" : "bg-secondary border border-border"}`}
                   style={isSelected ? { backgroundColor: emotion.color + "30" } : undefined}
@@ -186,7 +231,7 @@ const EntryDetailScreen = () => {
           )}
         </Pressable>
       </ScrollView>
-      {isFocusMode && <FocusModeOverlay snippet={snippet ? `\u201C${snippet}\u201D` : ""} reflection={reflection} onChangeReflection={setReflection} onDone={() => setIsFocusMode(false)} />}
+      {isFocusMode && <FocusModeOverlay snippet={snippet ? `\u201C${snippet}\u201D` : ""} reflection={reflection} onChangeReflection={(html) => setValue("reflection", html)} onDone={() => setIsFocusMode(false)} />}
     </ScreenWrapper>
   );
 };
