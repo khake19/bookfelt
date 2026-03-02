@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { PlusIcon } from "react-native-heroicons/solid";
+import { SheetManager } from "react-native-actions-sheet";
 import { EntryCard, useEntries } from "../../features/entries";
 import { useLibrary } from "../../features/books/hooks/use-library";
-import { ConfirmDialog, ScreenWrapper, timeAgo, useThemeColors } from "../../shared";
+import { ScreenWrapper, timeAgo, useThemeColors } from "../../shared";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
@@ -13,7 +13,6 @@ export default function HomeScreen() {
   const { entries, removeEntry } = useEntries();
   const { background } = useThemeColors();
   const currentlyReading = books.find((b) => b.status === "reading");
-  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const handlePress = (id: string) => {
     router.push({
@@ -29,15 +28,13 @@ export default function HomeScreen() {
     });
   };
 
-  const handleConfirmDelete = () => {
-    if (deleteId) {
-      removeEntry(deleteId);
-      setDeleteId(null);
-    }
+  const handleLongPress = (entryId: string) => {
+    SheetManager.show("delete-entry-sheet", {
+      payload: { onConfirm: () => removeEntry(entryId) },
+    });
   };
 
   return (
-    <>
     <ScreenWrapper>
       <Animated.Text
         entering={FadeInDown.duration(400)}
@@ -99,7 +96,7 @@ export default function HomeScreen() {
                   reaction={entry.reflection ?? ""}
                   feeling={entry.feeling}
                   onPress={() => handlePress(entry.id)}
-                  onLongPress={() => setDeleteId(entry.id)}
+                  onLongPress={() => handleLongPress(entry.id)}
                 />
               </Animated.View>
             ))
@@ -119,15 +116,5 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
     </ScreenWrapper>
-    <ConfirmDialog
-      open={deleteId != null}
-      onClose={() => setDeleteId(null)}
-      onConfirm={handleConfirmDelete}
-      title="Delete reflection?"
-      description="This can't be undone."
-      confirmLabel="Delete"
-      destructive
-    />
-    </>
   );
 }
