@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { EMOTIONS, FocusModeOverlay, RichTextPreview, useEntries } from "../features/entries";
 import { entryFormSchema, type EntryFormValues } from "../features/entries/schemas/entry-form";
 import { useLibrary } from "../features/books/hooks/use-library";
@@ -34,6 +34,7 @@ const EntryDetailScreen = () => {
   });
 
   const [isFocusMode, setIsFocusMode] = useState(false);
+  const [androidPickerMode, setAndroidPickerMode] = useState<"date" | "time" | null>(null);
 
   const numericOnly = (v: string) => v.replace(/[^0-9]/g, "");
 
@@ -147,17 +148,47 @@ const EntryDetailScreen = () => {
               control={control}
               name="date"
               render={({ field: { onChange, value } }) => (
-                <DateTimePicker
-                  value={value}
-                  mode="datetime"
-                  display="compact"
-                  maximumDate={new Date()}
-                  onChange={(_, selected) => {
-                    if (selected) onChange(selected);
-                  }}
-                  accentColor="gray"
-                  style={{ marginLeft: -10, transform: [{ scale: 0.85 }], transformOrigin: "left" }}
-                />
+                <>
+                  {Platform.OS === "android" ? (
+                    <View className="flex-row items-center gap-3">
+                      <Pressable onPress={() => setAndroidPickerMode("date")}>
+                        <Text className="text-sm text-foreground">
+                          {value.toLocaleDateString()}
+                        </Text>
+                      </Pressable>
+                      <Text className="text-muted/40 text-xs">·</Text>
+                      <Pressable onPress={() => setAndroidPickerMode("time")}>
+                        <Text className="text-sm text-foreground">
+                          {value.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </Text>
+                      </Pressable>
+                      {androidPickerMode && (
+                        <DateTimePicker
+                          value={value}
+                          mode={androidPickerMode}
+                          display="default"
+                          maximumDate={new Date()}
+                          onChange={(_, selected) => {
+                            setAndroidPickerMode(null);
+                            if (selected) onChange(selected);
+                          }}
+                        />
+                      )}
+                    </View>
+                  ) : (
+                    <DateTimePicker
+                      value={value}
+                      mode="datetime"
+                      display="compact"
+                      maximumDate={new Date()}
+                      onChange={(_, selected) => {
+                        if (selected) onChange(selected);
+                      }}
+                      accentColor="gray"
+                      style={{ marginLeft: -10, transform: [{ scale: 0.85 }], transformOrigin: "left" }}
+                    />
+                  )}
+                </>
               )}
             />
           </View>
