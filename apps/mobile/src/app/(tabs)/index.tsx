@@ -1,9 +1,20 @@
-import { Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import { BookOpenIcon, PlusIcon } from "react-native-heroicons/solid";
+import { PlusIcon } from "react-native-heroicons/solid";
 import { SheetManager } from "react-native-actions-sheet";
-import { EntryCard, getEmotionByLabel, useEntries } from "../../features/entries";
+import {
+  EntryCard,
+  getEmotionByLabel,
+  useEntries,
+} from "../../features/entries";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import { ScreenWrapper, timeAgo, useThemeColors } from "../../shared";
 import { useRouter } from "expo-router";
@@ -12,11 +23,13 @@ export default function HomeScreen() {
   const router = useRouter();
   const { books } = useLibrary();
   const { entries, removeEntry } = useEntries();
-  const { background, muted } = useThemeColors();
+  const { background } = useThemeColors();
   const currentlyReading = books.find((b) => b.status === "reading");
   const bookEntries = useEntries(currentlyReading?.id).entries;
   const latestFeeling = bookEntries[0]?.feeling;
-  const latestEmotion = latestFeeling ? getEmotionByLabel(latestFeeling) : undefined;
+  const latestEmotion = latestFeeling
+    ? getEmotionByLabel(latestFeeling)
+    : undefined;
 
   const handlePress = (id: string) => {
     router.push({
@@ -51,7 +64,12 @@ export default function HomeScreen() {
         <Animated.View entering={FadeInDown.duration(500).delay(100)}>
           <Pressable
             className="rounded-3xl overflow-hidden mb-6"
-            onPress={() => router.push({ pathname: "/book-detail", params: { bookId: currentlyReading.id } })}
+            onPress={() =>
+              router.push({
+                pathname: "/book-detail",
+                params: { bookId: currentlyReading.id },
+              })
+            }
           >
             {currentlyReading.coverUrl ? (
               <ImageBackground
@@ -60,7 +78,13 @@ export default function HomeScreen() {
                 resizeMode="cover"
               >
                 <LinearGradient
-                  colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0.3)", "rgba(0,0,0,0.15)", "rgba(0,0,0,0.4)", "rgba(0,0,0,0.65)"]}
+                  colors={[
+                    "rgba(0,0,0,0.7)",
+                    "rgba(0,0,0,0.3)",
+                    "rgba(0,0,0,0.15)",
+                    "rgba(0,0,0,0.4)",
+                    "rgba(0,0,0,0.65)",
+                  ]}
                   locations={[0, 0.25, 0.5, 0.75, 1]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -75,15 +99,24 @@ export default function HomeScreen() {
                     <Text className="text-[10px] font-medium uppercase tracking-widest text-white/50 mb-1.5">
                       Currently reading
                     </Text>
-                    <Text className="text-white font-serif text-lg font-semibold leading-snug" numberOfLines={2}>
+                    <Text
+                      className="text-white font-serif text-lg font-semibold leading-snug"
+                      numberOfLines={2}
+                    >
                       {currentlyReading.title}
                     </Text>
-                    <Text className="text-white/70 text-sm mt-0.5" numberOfLines={1}>
+                    <Text
+                      className="text-white/70 text-sm mt-0.5"
+                      numberOfLines={1}
+                    >
                       {currentlyReading.authors.join(", ")}
                     </Text>
                     {bookEntries.length > 0 && (
                       <Text className="text-white/40 text-xs mt-2">
-                        {bookEntries.length} {bookEntries.length === 1 ? "reflection" : "reflections"}
+                        {bookEntries.length}{" "}
+                        {bookEntries.length === 1
+                          ? "reflection"
+                          : "reflections"}
                         {latestEmotion ? ` · ${latestEmotion.emoji}` : ""}
                       </Text>
                     )}
@@ -92,7 +125,11 @@ export default function HomeScreen() {
               </ImageBackground>
             ) : (
               <LinearGradient
-                colors={["rgba(60,45,35,1)", "rgba(75,55,40,1)", "rgba(55,40,30,1)"]}
+                colors={[
+                  "rgba(60,45,35,1)",
+                  "rgba(75,55,40,1)",
+                  "rgba(55,40,30,1)",
+                ]}
                 locations={[0, 0.5, 1]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -102,15 +139,22 @@ export default function HomeScreen() {
                   <Text className="text-[10px] font-medium uppercase tracking-widest text-background/40 mb-1.5">
                     Currently reading
                   </Text>
-                  <Text className="text-background font-serif text-lg font-semibold leading-snug" numberOfLines={2}>
+                  <Text
+                    className="text-background font-serif text-lg font-semibold leading-snug"
+                    numberOfLines={2}
+                  >
                     {currentlyReading.title}
                   </Text>
-                  <Text className="text-background/50 text-sm mt-0.5" numberOfLines={1}>
+                  <Text
+                    className="text-background/50 text-sm mt-0.5"
+                    numberOfLines={1}
+                  >
                     {currentlyReading.authors.join(", ")}
                   </Text>
                   {bookEntries.length > 0 && (
                     <Text className="text-background/30 text-xs mt-2">
-                      {bookEntries.length} {bookEntries.length === 1 ? "reflection" : "reflections"}
+                      {bookEntries.length}{" "}
+                      {bookEntries.length === 1 ? "reflection" : "reflections"}
                       {latestEmotion ? ` · ${latestEmotion.emoji}` : ""}
                     </Text>
                   )}

@@ -1,9 +1,17 @@
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { BookOpenIcon, PlusIcon } from "react-native-heroicons/solid";
+import { LinearGradient } from "expo-linear-gradient";
+import { PlusIcon } from "react-native-heroicons/solid";
 import { SheetManager } from "react-native-actions-sheet";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { EntryCard, useEntries } from "../features/entries";
+import { getEmotionByLabel, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
 import { CloseButton, ScreenWrapper, timeAgo, useThemeColors } from "../shared";
 
@@ -12,7 +20,7 @@ const BookDetailScreen = () => {
   const router = useRouter();
   const { books } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
-  const { background, muted } = useThemeColors();
+  const { background } = useThemeColors();
   const book = books.find((b) => b.id === bookId);
 
   const handleEntryPress = (entryId: string) => {
@@ -43,78 +51,172 @@ const BookDetailScreen = () => {
   }
 
   return (
-    <ScreenWrapper>
-      <View className="flex-row items-center pt-[34px] pb-3">
-        <CloseButton onPress={() => router.back()} />
-        <View className="flex-1" />
-        <View className="w-[30px]" />
-      </View>
-
+    <View className="flex-1 bg-background">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="pb-6">
-        <Animated.View
-          entering={FadeInDown.duration(400)}
-          className="items-center pt-2 pb-6"
-        >
+        {/* Header with blurred cover background */}
+        <Animated.View entering={FadeInDown.duration(400)}>
           {book.coverUrl ? (
-            <Image
+            <ImageBackground
               source={{ uri: book.coverUrl }}
-              className="w-28 h-40 rounded-2xl"
+              blurRadius={60}
               resizeMode="cover"
-            />
-          ) : (
-            <View className="w-28 h-40 rounded-2xl bg-card items-center justify-center">
-              <BookOpenIcon size={32} color={muted} />
-            </View>
-          )}
-          <Text className="text-foreground font-serif text-xl font-semibold mt-5 text-center px-4">
-            {book.title}
-          </Text>
-          <Text className="text-muted/80 text-sm mt-1">
-            {book.authors.join(", ")}
-          </Text>
-          {(book.publisher || book.publishedDate) && (
-            <Text className="text-muted/50 text-xs mt-1.5">
-              {[book.publisher, book.publishedDate].filter(Boolean).join(" · ")}
-            </Text>
-          )}
-        </Animated.View>
-
-        <Animated.View
-          entering={FadeInDown.duration(400).delay(150)}
-          className="flex-row items-center justify-between mb-3 mt-2"
-        >
-          <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
-            Reflections ({entries.length})
-          </Text>
-          <Pressable
-            onPress={handleNewEntry}
-            className="flex-row items-center gap-1 bg-primary/10 rounded-full px-2.5 py-1"
-          >
-            <PlusIcon size={12} color={background} />
-            <Text className="text-primary text-xs font-medium">New</Text>
-          </Pressable>
-        </Animated.View>
-
-        <View className="gap-3">
-          {entries.length > 0 ? (
-            entries.map((entry, index) => (
-              <Animated.View
-                key={entry.id}
-                entering={FadeInDown.duration(400).delay(250 + index * 100)}
+            >
+              <LinearGradient
+                colors={[
+                  "rgba(0,0,0,0.8)",
+                  "rgba(0,0,0,0.4)",
+                  "rgba(0,0,0,0.2)",
+                  "rgba(0,0,0,0.5)",
+                  "rgba(0,0,0,0.75)",
+                ]}
+                locations={[0, 0.25, 0.5, 0.75, 1]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0.3, y: 1 }}
               >
-                <EntryCard
-                  id={entry.id}
-                  title={entry.bookTitle}
-                  chapter={entry.chapter ? `Chapter ${entry.chapter}` : ""}
-                  date={timeAgo(entry.date)}
-                  snippet={entry.snippet}
-                  reaction={entry.reflection ?? ""}
-                  feeling={entry.feeling}
-                  onPress={() => handleEntryPress(entry.id)}
-                  onLongPress={() => handleLongPress(entry.id)}
-                />
-              </Animated.View>
-            ))
+                <View className="pt-[34px] px-5 pb-8">
+                  <CloseButton onPress={() => router.back()} className="bg-white/20" />
+                  <View className="items-center mt-4">
+                    <Image
+                      source={{ uri: book.coverUrl }}
+                      className="w-28 h-40 rounded-2xl"
+                      resizeMode="cover"
+                    />
+                    <Text className="text-white font-serif text-xl font-semibold mt-5 text-center px-4">
+                      {book.title}
+                    </Text>
+                    <Text className="text-white/70 text-sm mt-1">
+                      {book.authors.join(", ")}
+                    </Text>
+                    {(book.publisher || book.publishedDate) && (
+                      <Text className="text-white/40 text-xs mt-1.5">
+                        {[book.publisher, book.publishedDate]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              </LinearGradient>
+            </ImageBackground>
+          ) : (
+            <LinearGradient
+              colors={["rgba(60,45,35,1)", "rgba(75,55,40,1)"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <View className="pt-[34px] px-5 pb-8">
+                <CloseButton onPress={() => router.back()} className="bg-white/20" />
+                <View className="items-center mt-4">
+                  <View className="w-28 h-40" />
+                  <Text className="text-white font-serif text-xl font-semibold mt-5 text-center px-4">
+                    {book.title}
+                  </Text>
+                  <Text className="text-white/70 text-sm mt-1">
+                    {book.authors.join(", ")}
+                  </Text>
+                  {(book.publisher || book.publishedDate) && (
+                    <Text className="text-white/40 text-xs mt-1.5">
+                      {[book.publisher, book.publishedDate]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </LinearGradient>
+          )}
+        </Animated.View>
+
+        {/* Body */}
+        <View className="px-5 pt-5">
+          {/* Section header */}
+          <Animated.View
+            entering={FadeInDown.duration(400).delay(150)}
+            className="flex-row items-center justify-between mb-5"
+          >
+            <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
+              Reflections ({entries.length})
+            </Text>
+            <Pressable
+              onPress={handleNewEntry}
+              className="flex-row items-center gap-1 bg-primary/10 rounded-full px-2.5 py-1"
+            >
+              <PlusIcon size={12} color={background} />
+              <Text className="text-primary text-xs font-medium">New</Text>
+            </Pressable>
+          </Animated.View>
+
+          {/* Timeline */}
+          {entries.length > 0 ? (
+            <View className="relative">
+              {/* Vertical line */}
+              <View className="absolute left-[5px] top-1.5 bottom-0 w-0.5 bg-border" />
+
+              {entries.map((entry, index) => {
+                const emotion = entry.feeling
+                  ? getEmotionByLabel(entry.feeling)
+                  : undefined;
+
+                return (
+                  <Animated.View
+                    key={entry.id}
+                    entering={FadeInDown.duration(400).delay(250 + index * 80)}
+                  >
+                    <Pressable
+                      onPress={() => handleEntryPress(entry.id)}
+                      onLongPress={() => handleLongPress(entry.id)}
+                      className="flex-row mb-6"
+                    >
+                      {/* Dot */}
+                      <View
+                        className="w-3 h-3 rounded-full mt-1 z-10"
+                        style={{
+                          backgroundColor: emotion?.color ?? "#71717a",
+                        }}
+                      />
+
+                      {/* Content */}
+                      <View className="flex-1 ml-4">
+                        <View className="flex-row items-center gap-2">
+                          <Text className="text-muted/60 text-xs">
+                            {timeAgo(entry.date)}
+                          </Text>
+                          {entry.chapter && (
+                            <Text className="text-muted/40 text-xs">
+                              · Ch. {entry.chapter}
+                            </Text>
+                          )}
+                        </View>
+
+                        {entry.snippet ? (
+                          <Text
+                            className="text-foreground font-serif text-sm italic mt-1.5 leading-relaxed"
+                            numberOfLines={2}
+                          >
+                            "{entry.snippet}"
+                          </Text>
+                        ) : null}
+
+                        {entry.reflection ? (
+                          <Text
+                            className="text-muted/70 text-sm mt-1"
+                            numberOfLines={1}
+                          >
+                            {entry.reflection}
+                          </Text>
+                        ) : null}
+
+                        {emotion && (
+                          <Text className="text-muted/50 text-xs mt-1.5">
+                            {emotion.emoji} {emotion.label}
+                          </Text>
+                        )}
+                      </View>
+                    </Pressable>
+                  </Animated.View>
+                );
+              })}
+            </View>
           ) : (
             <Animated.View
               entering={FadeInDown.duration(400).delay(250)}
@@ -128,13 +230,15 @@ const BookDetailScreen = () => {
                 className="flex-row items-center gap-1.5 bg-primary/10 rounded-full px-4 py-2"
               >
                 <PlusIcon size={14} color={background} />
-                <Text className="text-primary text-sm font-medium">Add first reflection</Text>
+                <Text className="text-primary text-sm font-medium">
+                  Add first reflection
+                </Text>
               </Pressable>
             </Animated.View>
           )}
         </View>
       </ScrollView>
-    </ScreenWrapper>
+    </View>
   );
 };
 
