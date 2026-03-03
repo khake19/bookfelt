@@ -59,29 +59,24 @@ const EntryCard = (props: EntryCardProps) => {
 
   return (
     <Pressable onPress={onPress} onLongPress={onLongPress}>
-      <Card
-        style={color ? { borderLeftWidth: 3, borderLeftColor: color } : undefined}
-      >
+      <Card style={color ? { backgroundColor: color + "40" } : undefined}>
         <CardHeader>
           <View className="flex-row items-center justify-between">
-            <View className="flex-row flex-1 items-center gap-2">
-              {color && (
-                <View
-                  className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: color }}
-                />
-              )}
-              <View className="flex-1">
-                <CardTitle className="font-mono">{title}</CardTitle>
-                <Text className="text-muted-foreground text-sm">{chapter}</Text>
-              </View>
+            <View className="flex-1">
+              <CardTitle className="font-mono">{title}</CardTitle>
+              {chapter ? (
+                <Text className="text-muted text-xs mt-0.5">{chapter}</Text>
+              ) : null}
             </View>
-            <Text className="text-muted/60 text-xs">{date}</Text>
+            <Text className="text-muted text-xs">{date}</Text>
           </View>
         </CardHeader>
-        <CardContent className="gap-2">
-          <View className="border-l-2 border-foreground/20 rounded-l pl-3">
-            <Text className="text-sm italic text-foreground/70 font-serif-italic leading-relaxed">
+        <CardContent className="gap-3">
+          <View
+            className="rounded-l pl-3"
+            style={color ? { borderLeftWidth: 2, borderLeftColor: color + "60" } : { borderLeftWidth: 2, borderLeftColor: "rgba(0,0,0,0.1)" }}
+          >
+            <Text className="text-sm italic text-foreground/80 font-serif-italic leading-relaxed" numberOfLines={3}>
               {"\u201C"}
               {snippet}
               {"\u201D"}
@@ -100,7 +95,7 @@ const EntryCard = (props: EntryCardProps) => {
           <CardFooter>
             <Animated.View style={badgeStyle}>
               <Badge
-                style={{ backgroundColor: color + "25" }}
+                style={{ backgroundColor: color + "18" }}
                 className="border-0"
               >
                 <Text style={{ color }} className="text-xs font-medium">
