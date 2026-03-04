@@ -81,7 +81,8 @@ const ManualBookForm = ({
             shape="pill"
             className="mt-2"
           >
-            <Text className="text-primary-foreground font-medium">
+            <Text
+              className="text-background text-center font-medium">
               Add to library
             </Text>
           </Button>
