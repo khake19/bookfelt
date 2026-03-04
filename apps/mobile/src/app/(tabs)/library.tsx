@@ -10,6 +10,7 @@ import { useSearchBooks } from "../../features/books/queries/use-search-books";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import type { ReadingStatus } from "../../features/books/types/book";
 import { ScreenWrapper } from "../../shared";
+import { useRouter } from "expo-router";
 
 const STATUS_ORDER: ReadingStatus[] = ["reading", "want-to-read", "finished"];
 
@@ -20,6 +21,7 @@ const STATUS_LABELS: Record<ReadingStatus, string> = {
 };
 
 export default function LibraryScreen() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [showManualForm, setShowManualForm] = useState(false);
@@ -107,6 +109,12 @@ export default function LibraryScreen() {
                     {index > 0 && <View className="h-px bg-border" />}
                     <LibraryBookRow
                       book={book}
+                      onPress={() =>
+                        router.push({
+                          pathname: "/book-detail",
+                          params: { bookId: book.id },
+                        })
+                      }
                       onSetReading={() => updateStatus(book.id, "reading")}
                       onRemove={() => removeBook(book.id)}
                     />

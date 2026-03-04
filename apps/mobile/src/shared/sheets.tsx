@@ -2,9 +2,11 @@ import { registerSheet, SheetDefinition } from "react-native-actions-sheet";
 import type { ReadingStatus } from "../features/books/types/book";
 import DeleteConfirmSheet from "./components/DeleteConfirmSheet";
 import BookOptionsSheet from "./components/BookOptionsSheet";
+import ChangeStatusSheet from "./components/ChangeStatusSheet";
 
 registerSheet("delete-entry-sheet", DeleteConfirmSheet);
 registerSheet("entry-options-sheet", BookOptionsSheet);
+registerSheet("change-status-sheet", ChangeStatusSheet);
 
 declare module "react-native-actions-sheet" {
   interface Sheets {
@@ -19,6 +21,12 @@ declare module "react-native-actions-sheet" {
       payload: {
         onEdit: () => void;
         onDelete: () => void;
+        onChangeStatus: (status: ReadingStatus) => void;
+        currentStatus: ReadingStatus;
+      };
+    }>;
+    "change-status-sheet": SheetDefinition<{
+      payload: {
         onChangeStatus: (status: ReadingStatus) => void;
         currentStatus: ReadingStatus;
       };

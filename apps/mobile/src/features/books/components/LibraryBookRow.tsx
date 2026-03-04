@@ -8,12 +8,14 @@ interface LibraryBookRowProps {
   book: LibraryBook;
   onSetReading: () => void;
   onRemove?: () => void;
+  onPress?: () => void;
 }
 const LibraryBookRow = (props: LibraryBookRowProps) => {
-  const { book, onSetReading, onRemove } = props;
+  const { book, onSetReading, onRemove, onPress } = props;
   const { muted } = useThemeColors();
 
   return (
+    <Pressable onPress={onPress}>
     <Animated.View
       exiting={FadeOut.duration(200)}
       layout={LinearTransition.duration(300)}
@@ -58,6 +60,7 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
         </View>
       )}
     </Animated.View>
+    </Pressable>
   );
 };
 
