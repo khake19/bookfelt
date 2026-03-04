@@ -6,7 +6,7 @@ interface LibraryState {
   addBook: (book: Book, status: ReadingStatus) => void;
   removeBook: (bookId: string) => void;
   updateStatus: (bookId: string, status: ReadingStatus) => void;
-  updateBook: (bookId: string, updates: Partial<Book>) => void;
+  updateBook: (bookId: string, updates: Partial<LibraryBook>) => void;
 }
 
 export const useLibraryStore = create<LibraryState>((set) => ({

@@ -4,8 +4,8 @@ import ActionSheet, {
   SheetProps,
 } from "react-native-actions-sheet";
 import { CheckIcon } from "react-native-heroicons/mini";
-import { useThemeColors } from "../hooks/use-theme-colors";
-import type { ReadingStatus } from "../../features/books/types/book";
+import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
+import type { ReadingStatus } from "../types/book";
 
 const STATUS_OPTIONS: { value: ReadingStatus; label: string }[] = [
   { value: "reading", label: "Reading" },

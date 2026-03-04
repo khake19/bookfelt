@@ -31,12 +31,15 @@ const BookEditScreen = () => {
       title: book?.title ?? "",
       authors: book?.authors.join(", ") ?? "",
       description: book?.description ?? "",
+      expectation: book?.expectation ?? "",
     },
     mode: "onChange",
   });
 
   const [isFocusMode, setIsFocusMode] = useState(false);
+  const [isExpectationFocusMode, setIsExpectationFocusMode] = useState(false);
   const description = watch("description");
+  const expectation = watch("expectation");
 
   const onSubmit = (values: BookFormValues) => {
     updateBook(bookId, {
@@ -46,6 +49,7 @@ const BookEditScreen = () => {
         .map((a) => a.trim())
         .filter(Boolean),
       description: values.description.trim() || undefined,
+      expectation: values.expectation.trim() || undefined,
     });
     router.back();
   };
@@ -142,6 +146,19 @@ const BookEditScreen = () => {
             </Text>
           )}
         </Pressable>
+        <View className="h-px bg-border" />
+        <Pressable onPress={() => setIsExpectationFocusMode(true)} className="py-3">
+          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+            Expectation
+          </Text>
+          {expectation ? (
+            <RichTextPreview html={expectation} />
+          ) : (
+            <Text className="text-sm text-muted/60 italic">
+              What are you expecting from this one?
+            </Text>
+          )}
+        </Pressable>
       </ScrollView>
       {isFocusMode && (
         <FocusModeOverlay
@@ -150,6 +167,15 @@ const BookEditScreen = () => {
           onChangeContent={(html) => setValue("description", html)}
           onDone={() => setIsFocusMode(false)}
           placeholder="What is this book about?"
+        />
+      )}
+      {isExpectationFocusMode && (
+        <FocusModeOverlay
+          subtitle="Expectation"
+          content={expectation}
+          onChangeContent={(html) => setValue("expectation", html)}
+          onDone={() => setIsExpectationFocusMode(false)}
+          placeholder="What are you expecting from this one?"
         />
       )}
     </ScreenWrapper>

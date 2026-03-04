@@ -2,6 +2,7 @@ import LottieView from "lottie-react-native";
 import { useEffect, useRef, useState } from "react";
 import { Keyboard, Text, View, ScrollView } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
+import { SheetManager } from "react-native-actions-sheet";
 import BookSearchInput from "../../features/books/components/BookSearchInput";
 import BookSearchResults from "../../features/books/components/BookSearchResults";
 import ManualBookForm from "../../features/books/components/ManualBookForm";
@@ -27,7 +28,7 @@ export default function LibraryScreen() {
   const [showManualForm, setShowManualForm] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { data: searchResults = [], isLoading, error } = useSearchBooks(debouncedQuery);
-  const { books, addBook, removeBook, updateStatus, isInLibrary } = useLibrary();
+  const { books, addBook, removeBook, updateStatus, updateBook, isInLibrary } = useLibrary();
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -70,6 +71,14 @@ export default function LibraryScreen() {
             onSelectBook={(book) => {
               Keyboard.dismiss();
               addBook({ ...book, source: "google" }, "want-to-read");
+              setQuery("");
+              setTimeout(() => {
+                SheetManager.show("expectation-sheet", {
+                  payload: {
+                    onSave: (text) => updateBook(book.id, { expectation: text }),
+                  },
+                });
+              }, 300);
             }}
             onManualCreate={() => setShowManualForm(true)}
           />
@@ -132,6 +141,13 @@ export default function LibraryScreen() {
             addBook(book, "want-to-read");
             setShowManualForm(false);
             setQuery("");
+            setTimeout(() => {
+              SheetManager.show("expectation-sheet", {
+                payload: {
+                  onSave: (text) => updateBook(book.id, { expectation: text }),
+                },
+              });
+            }, 300);
           }}
           onClose={() => setShowManualForm(false)}
         />
