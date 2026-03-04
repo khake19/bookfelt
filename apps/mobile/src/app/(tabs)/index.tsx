@@ -10,6 +10,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { PlusIcon } from "react-native-heroicons/solid";
 import { SheetManager } from "react-native-actions-sheet";
+import { SHEET_IDS } from "../../shared/sheets";
 import {
   EntryCard,
   getEmotionByLabel,
@@ -46,7 +47,7 @@ export default function HomeScreen() {
   };
 
   const handleLongPress = (entryId: string) => {
-    SheetManager.show("delete-entry-sheet", {
+    SheetManager.show(SHEET_IDS.DELETE_ENTRY, {
       payload: { onConfirm: () => removeEntry(entryId) },
     });
   };

@@ -4,6 +4,7 @@ import ActionSheet, {
   SheetProps,
 } from "react-native-actions-sheet";
 import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
+import { SHEET_IDS } from "../../../shared/sheets";
 
 export default function BookOptionsSheet({
   sheetId,
@@ -21,7 +22,7 @@ export default function BookOptionsSheet({
         <Pressable
           onPress={async () => {
             await SheetManager.hide(sheetId);
-            SheetManager.show("change-status-sheet", {
+            SheetManager.show(SHEET_IDS.CHANGE_STATUS, {
               payload: {
                 onChangeStatus: (status) => payload?.onChangeStatus?.(status),
                 currentStatus: payload?.currentStatus!,
@@ -48,7 +49,7 @@ export default function BookOptionsSheet({
         <Pressable
           onPress={async () => {
             await SheetManager.hide(sheetId);
-            SheetManager.show("delete-entry-sheet", {
+            SheetManager.show(SHEET_IDS.DELETE_ENTRY, {
               payload: {
                 onConfirm: () => payload?.onDelete?.(),
                 title: "Delete book?",

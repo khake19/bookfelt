@@ -11,6 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { PlusIcon } from "react-native-heroicons/solid";
 import { EllipsisHorizontalIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
+import { SHEET_IDS } from "../shared/sheets";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getEmotionByLabel, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
@@ -36,14 +37,14 @@ const BookDetailScreen = () => {
   };
 
   const handleLongPress = (entryId: string) => {
-    SheetManager.show("delete-entry-sheet", {
+    SheetManager.show(SHEET_IDS.DELETE_ENTRY, {
       payload: { onConfirm: () => removeEntry(entryId) },
     });
   };
 
   const handleBookOptions = () => {
     if (!book) return;
-    SheetManager.show("entry-options-sheet", {
+    SheetManager.show(SHEET_IDS.ENTRY_OPTIONS, {
       payload: {
         onEdit: () => router.push({ pathname: "/book-edit", params: { bookId } }),
         onDelete: () => {
@@ -53,7 +54,7 @@ const BookDetailScreen = () => {
         onChangeStatus: (status: ReadingStatus) => {
           updateStatus(bookId, status);
           if (status === "finished") {
-            SheetManager.show("final-thought-sheet", {
+            SheetManager.show(SHEET_IDS.FINAL_THOUGHT, {
               payload: {
                 firstImpression: book.firstImpression ?? "",
                 onSave: (text) => updateBook(bookId, { finalThought: text }),

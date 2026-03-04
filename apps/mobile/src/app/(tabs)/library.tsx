@@ -11,6 +11,7 @@ import { useSearchBooks } from "../../features/books/queries/use-search-books";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import type { ReadingStatus } from "../../features/books/types/book";
 import { ScreenWrapper } from "../../shared";
+import { SHEET_IDS } from "../../shared/sheets";
 import { useRouter } from "expo-router";
 
 const STATUS_ORDER: ReadingStatus[] = ["reading", "want-to-read", "finished"];
@@ -73,7 +74,7 @@ export default function LibraryScreen() {
               addBook({ ...book, source: "google" }, "want-to-read");
               setQuery("");
               setTimeout(() => {
-                SheetManager.show("first-impression-sheet", {
+                SheetManager.show(SHEET_IDS.FIRST_IMPRESSION, {
                   payload: {
                     onSave: (text) => updateBook(book.id, { firstImpression: text }),
                   },
@@ -142,7 +143,7 @@ export default function LibraryScreen() {
             setShowManualForm(false);
             setQuery("");
             setTimeout(() => {
-              SheetManager.show("first-impression-sheet", {
+              SheetManager.show(SHEET_IDS.FIRST_IMPRESSION, {
                 payload: {
                   onSave: (text) => updateBook(book.id, { firstImpression: text }),
                 },
