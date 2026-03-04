@@ -3,9 +3,9 @@ import ActionSheet, {
   SheetManager,
   SheetProps,
 } from "react-native-actions-sheet";
-import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
+import { useThemeColors } from "../hooks/use-theme-colors";
 
-export default function DeleteEntrySheet({
+export default function DeleteConfirmSheet({
   sheetId,
   payload,
 }: SheetProps<"delete-entry-sheet">) {
@@ -19,9 +19,11 @@ export default function DeleteEntrySheet({
       <View className="px-6 pt-2 gap-4">
         <View className="gap-1 items-center">
           <Text className="text-foreground font-semibold text-lg">
-            Delete reflection?
+            {payload?.title ?? "Delete reflection?"}
           </Text>
-          <Text className="text-muted text-sm">This can't be undone.</Text>
+          <Text className="text-muted text-sm">
+            {payload?.description ?? "This can't be undone."}
+          </Text>
         </View>
 
         <View className="gap-2">

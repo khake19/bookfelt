@@ -1,15 +1,19 @@
 import { registerSheet, SheetDefinition } from "react-native-actions-sheet";
 import type { ReadingStatus } from "../features/books/types/book";
-import DeleteEntrySheet from "../features/entries/components/DeleteEntrySheet";
-import EntryOptionsSheet from "../features/entries/components/EntryOptionsSheet";
+import DeleteConfirmSheet from "./components/DeleteConfirmSheet";
+import BookOptionsSheet from "./components/BookOptionsSheet";
 
-registerSheet("delete-entry-sheet", DeleteEntrySheet);
-registerSheet("entry-options-sheet", EntryOptionsSheet);
+registerSheet("delete-entry-sheet", DeleteConfirmSheet);
+registerSheet("entry-options-sheet", BookOptionsSheet);
 
 declare module "react-native-actions-sheet" {
   interface Sheets {
     "delete-entry-sheet": SheetDefinition<{
-      payload: { onConfirm: () => void };
+      payload: {
+        onConfirm: () => void;
+        title?: string;
+        description?: string;
+      };
     }>;
     "entry-options-sheet": SheetDefinition<{
       payload: {
