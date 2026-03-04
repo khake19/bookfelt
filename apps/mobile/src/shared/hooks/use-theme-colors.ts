@@ -12,5 +12,6 @@ export function useThemeColors() {
     foreground: useHslColor("--foreground"),
     background: useHslColor("--background"),
     border: useHslColor("--border"),
+    card: useHslColor("--card"),
   };
 }

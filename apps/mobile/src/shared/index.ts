@@ -1,4 +1,5 @@
 export { default as CloseButton } from './components/CloseButton';
+export { default as FloatingActionButton } from './components/FloatingActionButton';
 export { default as ConfirmDialog } from './components/ConfirmDialog';
 export { FocusModeOverlay, RichTextPreview } from './components/editor';
 export { ScreenWrapper } from './components/ScreenWrapper';
