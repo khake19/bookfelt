@@ -9,18 +9,22 @@ import {
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { PlusIcon } from "react-native-heroicons/solid";
+import { EllipsisHorizontalIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getEmotionByLabel, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
+import type { ReadingStatus } from "../features/books/types/book";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CloseButton, ScreenWrapper, timeAgo, useThemeColors } from "../shared";
 
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
-  const { books } = useLibrary();
+  const { books, updateStatus, removeBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
   const { background } = useThemeColors();
+  const insets = useSafeAreaInsets();
   const book = books.find((b) => b.id === bookId);
 
   const handleEntryPress = (entryId: string) => {
@@ -37,10 +41,25 @@ const BookDetailScreen = () => {
     });
   };
 
+  const handleBookOptions = () => {
+    if (!book) return;
+    SheetManager.show("entry-options-sheet", {
+      payload: {
+        onEdit: () => {},
+        onDelete: () => {
+          removeBook(bookId);
+          router.back();
+        },
+        onChangeStatus: (status: ReadingStatus) => updateStatus(bookId, status),
+        currentStatus: book.status,
+      },
+    });
+  };
+
   if (!book) {
     return (
       <ScreenWrapper>
-        <View className="flex-row items-center pt-[34px] pb-3">
+        <View className="flex-row items-center pb-3" style={{ paddingTop: insets.top }}>
           <CloseButton onPress={() => router.back()} />
         </View>
         <View className="flex-1 items-center justify-center">
@@ -73,8 +92,13 @@ const BookDetailScreen = () => {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0.3, y: 1 }}
               >
-                <View className="pt-[34px] px-5 pb-8">
-                  <CloseButton onPress={() => router.back()} className="bg-white/20" />
+                <View className="px-5 pb-8" style={{ paddingTop: insets.top }}>
+                  <View className="flex-row items-center justify-between">
+                    <CloseButton onPress={() => router.back()} className="bg-white/20" />
+                    <Pressable onPress={handleBookOptions} className="w-9 h-9 rounded-full bg-white/20 items-center justify-center">
+                      <EllipsisHorizontalIcon size={20} color="white" />
+                    </Pressable>
+                  </View>
                   <View className="items-center mt-4">
                     <Image
                       source={{ uri: book.coverUrl }}
@@ -104,8 +128,13 @@ const BookDetailScreen = () => {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <View className="pt-[34px] px-5 pb-8">
-                <CloseButton onPress={() => router.back()} className="bg-white/20" />
+              <View className="px-5 pb-8" style={{ paddingTop: insets.top }}>
+                <View className="flex-row items-center justify-between">
+                  <CloseButton onPress={() => router.back()} className="bg-white/20" />
+                  <Pressable onPress={handleBookOptions} className="w-9 h-9 rounded-full bg-white/20 items-center justify-center">
+                    <EllipsisHorizontalIcon size={20} color="white" />
+                  </Pressable>
+                </View>
                 <View className="items-center mt-4">
                   <View className="w-28 h-40" />
                   <Text className="text-white font-serif text-xl font-semibold mt-5 text-center px-4">
