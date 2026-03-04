@@ -1,5 +1,5 @@
 import { registerSheet, SheetDefinition } from "react-native-actions-sheet";
-import DeleteEntrySheet from "./components/DeleteEntrySheet";
+import DeleteEntrySheet from "../features/entries/components/DeleteEntrySheet";
 
 registerSheet("delete-entry-sheet", DeleteEntrySheet);
 

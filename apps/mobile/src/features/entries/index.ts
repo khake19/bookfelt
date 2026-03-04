@@ -1,3 +1,4 @@
+export { default as DeleteEntrySheet } from "./components/DeleteEntrySheet";
 export { default as EntryCard } from "./components/EntryCard";
 export type { EntryCardData } from "./components/EntryCard";
 export { default as FocusModeOverlay } from "./components/FocusModeOverlay";

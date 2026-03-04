@@ -3,7 +3,7 @@ import ActionSheet, {
   SheetManager,
   SheetProps,
 } from "react-native-actions-sheet";
-import { useThemeColors } from "../hooks/use-theme-colors";
+import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
 
 export default function DeleteEntrySheet({
   sheetId,
@@ -16,7 +16,7 @@ export default function DeleteEntrySheet({
       id={sheetId}
       containerStyle={{ backgroundColor: background }}
     >
-      <View className="px-6 pt-2 pb-8 gap-4">
+      <View className="px-6 pt-2 gap-4">
         <View className="gap-1 items-center">
           <Text className="text-foreground font-semibold text-lg">
             Delete reflection?
