@@ -17,7 +17,7 @@ import {
   HardBreakBridge,
   PlaceholderBridge,
 } from "@10play/tentap-editor";
-import { CloseButton } from "../../../../shared";
+import CloseButton from "../CloseButton";
 import FloatingToolbar from "./FloatingToolbar";
 
 const SELECTION_LISTENER_JS = `
@@ -70,19 +70,21 @@ blockquote {
 `;
 
 interface FocusModeOverlayProps {
-  snippet?: string;
-  reflection: string;
-  onChangeReflection: (text: string) => void;
+  subtitle?: string;
+  content: string;
+  onChangeContent: (text: string) => void;
   onDone: () => void;
+  placeholder?: string;
 }
 
 const TOOLBAR_HEIGHT = 48;
 
 const FocusModeOverlay = ({
-  snippet,
-  reflection,
-  onChangeReflection,
+  subtitle,
+  content,
+  onChangeContent,
   onDone,
+  placeholder = "Start writing..",
 }: FocusModeOverlayProps) => {
   const insets = useSafeAreaInsets();
   const [showDone, setShowDone] = useState(false);
@@ -92,7 +94,7 @@ const FocusModeOverlay = ({
 
   const editor = useEditorBridge({
     autofocus: true,
-    initialContent: reflection || undefined,
+    initialContent: content || undefined,
     bridgeExtensions: [
       CoreBridge.configureCSS(editorCSS),
       BoldBridge,
@@ -101,7 +103,7 @@ const FocusModeOverlay = ({
       HistoryBridge,
       HardBreakBridge,
       PlaceholderBridge.configureExtension({
-        placeholder: "Write what this made you feel..",
+        placeholder,
       }),
     ],
     onChange: () => {
@@ -135,7 +137,7 @@ const FocusModeOverlay = ({
 
   const handleDone = async () => {
     const html = await editor.getHTML();
-    onChangeReflection(html);
+    onChangeContent(html);
     onDone();
   };
 
@@ -164,9 +166,9 @@ const FocusModeOverlay = ({
             </Animated.View>
           )}
         </View>
-        {snippet && (
+        {subtitle && (
           <Text className="px-4 pb-3 text-sm italic text-muted font-serif-italic leading-relaxed">
-            {snippet}
+            {subtitle}
           </Text>
         )}
         <View className="relative flex-1">

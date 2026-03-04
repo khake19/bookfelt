@@ -1,6 +1,5 @@
 export { default as EntryCard } from "./components/EntryCard";
 export type { EntryCardData } from "./components/EntryCard";
-export { FocusModeOverlay, RichTextPreview } from "./components/editor";
 export { EMOTIONS, getEmotionByLabel } from "./constants/emotions";
 export type { Emotion } from "./constants/emotions";
 export { MOCK_ENTRIES } from "./constants/mock-entries";

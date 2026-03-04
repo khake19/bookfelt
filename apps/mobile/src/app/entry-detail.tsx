@@ -5,10 +5,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
-import { EMOTIONS, FocusModeOverlay, RichTextPreview, useEntries } from "../features/entries";
+import { EMOTIONS, useEntries } from "../features/entries";
 import { entryFormSchema, type EntryFormValues } from "../features/entries/schemas/entry-form";
 import { useLibrary } from "../features/books/hooks/use-library";
-import { CloseButton, ScreenWrapper } from "../shared";
+import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper } from "../shared";
 
 const EntryDetailScreen = () => {
   const { id, bookId } = useLocalSearchParams<{ id: string; bookId?: string }>();
@@ -262,7 +262,7 @@ const EntryDetailScreen = () => {
           )}
         </Pressable>
       </ScrollView>
-      {isFocusMode && <FocusModeOverlay snippet={snippet ? `\u201C${snippet}\u201D` : ""} reflection={reflection} onChangeReflection={(html) => setValue("reflection", html)} onDone={() => setIsFocusMode(false)} />}
+      {isFocusMode && <FocusModeOverlay subtitle={snippet ? `\u201C${snippet}\u201D` : ""} content={reflection} onChangeContent={(html) => setValue("reflection", html)} onDone={() => setIsFocusMode(false)} placeholder="Write what this made you feel.." />}
     </ScreenWrapper>
   );
 };

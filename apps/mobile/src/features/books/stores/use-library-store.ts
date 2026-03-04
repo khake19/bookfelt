@@ -6,6 +6,7 @@ interface LibraryState {
   addBook: (book: Book, status: ReadingStatus) => void;
   removeBook: (bookId: string) => void;
   updateStatus: (bookId: string, status: ReadingStatus) => void;
+  updateBook: (bookId: string, updates: Partial<Book>) => void;
 }
 
 export const useLibraryStore = create<LibraryState>((set) => ({
@@ -28,6 +29,12 @@ export const useLibraryStore = create<LibraryState>((set) => ({
     set((state) => ({
       books: state.books.map((b) =>
         b.id === bookId ? { ...b, status } : b,
+      ),
+    })),
+  updateBook: (bookId, updates) =>
+    set((state) => ({
+      books: state.books.map((b) =>
+        b.id === bookId ? { ...b, ...updates } : b,
       ),
     })),
 }));

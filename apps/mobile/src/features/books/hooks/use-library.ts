@@ -6,11 +6,12 @@ export function useLibrary() {
   const addBook = useLibraryStore((s) => s.addBook);
   const removeBook = useLibraryStore((s) => s.removeBook);
   const updateStatus = useLibraryStore((s) => s.updateStatus);
+  const updateBook = useLibraryStore((s) => s.updateBook);
 
   const isInLibrary = useCallback(
     (bookId: string) => books.some((b) => b.id === bookId),
     [books],
   );
 
-  return { books, addBook, removeBook, updateStatus, isInLibrary };
+  return { books, addBook, removeBook, updateStatus, updateBook, isInLibrary };
 }

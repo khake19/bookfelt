@@ -45,7 +45,7 @@ const BookDetailScreen = () => {
     if (!book) return;
     SheetManager.show("entry-options-sheet", {
       payload: {
-        onEdit: () => {},
+        onEdit: () => router.push({ pathname: "/book-edit", params: { bookId } }),
         onDelete: () => {
           removeBook(bookId);
           router.back();
