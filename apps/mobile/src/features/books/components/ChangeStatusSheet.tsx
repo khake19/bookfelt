@@ -36,9 +36,9 @@ export default function ChangeStatusSheet({
             return (
               <Pressable
                 key={option.value}
-                onPress={() => {
+                onPress={async () => {
+                  await SheetManager.hide(sheetId);
                   payload?.onChangeStatus?.(option.value);
-                  SheetManager.hide(sheetId);
                 }}
                 className={`flex-row items-center justify-between px-5 py-3.5${
                   index > 0 ? " border-t border-border/30" : ""

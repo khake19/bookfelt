@@ -21,7 +21,7 @@ import { CloseButton, ScreenWrapper, timeAgo, useThemeColors } from "../shared";
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
-  const { books, updateStatus, removeBook } = useLibrary();
+  const { books, updateStatus, removeBook, updateBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
   const { background } = useThemeColors();
   const insets = useSafeAreaInsets();
@@ -50,7 +50,17 @@ const BookDetailScreen = () => {
           removeBook(bookId);
           router.back();
         },
-        onChangeStatus: (status: ReadingStatus) => updateStatus(bookId, status),
+        onChangeStatus: (status: ReadingStatus) => {
+          updateStatus(bookId, status);
+          if (status === "finished") {
+            SheetManager.show("final-thought-sheet", {
+              payload: {
+                firstImpression: book.firstImpression ?? "",
+                onSave: (text) => updateBook(bookId, { finalThought: text }),
+              },
+            });
+          }
+        },
         currentStatus: book.status,
       },
     });

@@ -73,9 +73,9 @@ export default function LibraryScreen() {
               addBook({ ...book, source: "google" }, "want-to-read");
               setQuery("");
               setTimeout(() => {
-                SheetManager.show("expectation-sheet", {
+                SheetManager.show("first-impression-sheet", {
                   payload: {
-                    onSave: (text) => updateBook(book.id, { expectation: text }),
+                    onSave: (text) => updateBook(book.id, { firstImpression: text }),
                   },
                 });
               }, 300);
@@ -142,9 +142,9 @@ export default function LibraryScreen() {
             setShowManualForm(false);
             setQuery("");
             setTimeout(() => {
-              SheetManager.show("expectation-sheet", {
+              SheetManager.show("first-impression-sheet", {
                 payload: {
-                  onSave: (text) => updateBook(book.id, { expectation: text }),
+                  onSave: (text) => updateBook(book.id, { firstImpression: text }),
                 },
               });
             }, 300);

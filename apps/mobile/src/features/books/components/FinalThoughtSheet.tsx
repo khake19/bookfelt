@@ -6,10 +6,10 @@ import ActionSheet, {
 } from "react-native-actions-sheet";
 import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
 
-export default function ExpectationSheet({
+export default function FinalThoughtSheet({
   sheetId,
   payload,
-}: SheetProps<"expectation-sheet">) {
+}: SheetProps<"final-thought-sheet">) {
   const { background } = useThemeColors();
   const [text, setText] = useState("");
 
@@ -20,14 +20,25 @@ export default function ExpectationSheet({
     >
       <View className="px-6 pt-2 gap-4">
         <Text className="text-foreground font-semibold text-lg text-center">
-          What are you expecting from this one?
+          Any final thoughts?
         </Text>
+
+        {payload?.firstImpression ? (
+          <View className="bg-card rounded-xl px-4 py-3">
+            <Text className="text-muted/60 text-xs uppercase tracking-widest mb-1">
+              First Impression
+            </Text>
+            <Text className="text-muted italic text-sm leading-relaxed">
+              "{payload.firstImpression.replace(/<[^>]*>/g, '')}"
+            </Text>
+          </View>
+        ) : null}
 
         <TextInput
           className="text-base text-foreground leading-relaxed min-h-[100px] placeholder:text-muted/50"
           value={text}
           onChangeText={setText}
-          placeholder="Hoping for a good cry..."
+          placeholder="It exceeded every expectation..."
           multiline
           textAlignVertical="top"
           autoFocus

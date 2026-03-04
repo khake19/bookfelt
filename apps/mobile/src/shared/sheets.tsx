@@ -3,12 +3,14 @@ import type { ReadingStatus } from "../features/books/types/book";
 import DeleteConfirmSheet from "./components/DeleteConfirmSheet";
 import BookOptionsSheet from "../features/books/components/BookOptionsSheet";
 import ChangeStatusSheet from "../features/books/components/ChangeStatusSheet";
-import ExpectationSheet from "../features/books/components/ExpectationSheet";
+import FirstImpressionSheet from "../features/books/components/FirstImpressionSheet";
+import FinalThoughtSheet from "../features/books/components/FinalThoughtSheet";
 
 registerSheet("delete-entry-sheet", DeleteConfirmSheet);
 registerSheet("entry-options-sheet", BookOptionsSheet);
 registerSheet("change-status-sheet", ChangeStatusSheet);
-registerSheet("expectation-sheet", ExpectationSheet);
+registerSheet("first-impression-sheet", FirstImpressionSheet);
+registerSheet("final-thought-sheet", FinalThoughtSheet);
 
 declare module "react-native-actions-sheet" {
   interface Sheets {
@@ -33,9 +35,15 @@ declare module "react-native-actions-sheet" {
         currentStatus: ReadingStatus;
       };
     }>;
-    "expectation-sheet": SheetDefinition<{
+    "first-impression-sheet": SheetDefinition<{
       payload: {
-        onSave: (expectation: string) => void;
+        onSave: (text: string) => void;
+      };
+    }>;
+    "final-thought-sheet": SheetDefinition<{
+      payload: {
+        firstImpression: string;
+        onSave: (text: string) => void;
       };
     }>;
   }

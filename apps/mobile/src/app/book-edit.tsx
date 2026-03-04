@@ -31,15 +31,18 @@ const BookEditScreen = () => {
       title: book?.title ?? "",
       authors: book?.authors.join(", ") ?? "",
       description: book?.description ?? "",
-      expectation: book?.expectation ?? "",
+      firstImpression: book?.firstImpression ?? "",
+      finalThought: book?.finalThought ?? "",
     },
     mode: "onChange",
   });
 
   const [isFocusMode, setIsFocusMode] = useState(false);
-  const [isExpectationFocusMode, setIsExpectationFocusMode] = useState(false);
+  const [isFirstImpressionFocusMode, setIsFirstImpressionFocusMode] = useState(false);
+  const [isFinalThoughtFocusMode, setIsFinalThoughtFocusMode] = useState(false);
   const description = watch("description");
-  const expectation = watch("expectation");
+  const firstImpression = watch("firstImpression");
+  const finalThought = watch("finalThought");
 
   const onSubmit = (values: BookFormValues) => {
     updateBook(bookId, {
@@ -49,7 +52,8 @@ const BookEditScreen = () => {
         .map((a) => a.trim())
         .filter(Boolean),
       description: values.description.trim() || undefined,
-      expectation: values.expectation.trim() || undefined,
+      firstImpression: values.firstImpression.trim() || undefined,
+      finalThought: values.finalThought.trim() || undefined,
     });
     router.back();
   };
@@ -147,18 +151,35 @@ const BookEditScreen = () => {
           )}
         </Pressable>
         <View className="h-px bg-border" />
-        <Pressable onPress={() => setIsExpectationFocusMode(true)} className="py-3">
+        <Pressable onPress={() => setIsFirstImpressionFocusMode(true)} className="py-3">
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-            Expectation
+            First Impression
           </Text>
-          {expectation ? (
-            <RichTextPreview html={expectation} />
+          {firstImpression ? (
+            <RichTextPreview html={firstImpression} />
           ) : (
             <Text className="text-sm text-muted/60 italic">
-              What are you expecting from this one?
+              What's your first impression?
             </Text>
           )}
         </Pressable>
+        {book.status === "finished" && (
+          <>
+            <View className="h-px bg-border" />
+            <Pressable onPress={() => setIsFinalThoughtFocusMode(true)} className="py-3">
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+                Final Thought
+              </Text>
+              {finalThought ? (
+                <RichTextPreview html={finalThought} />
+              ) : (
+                <Text className="text-sm text-muted/60 italic">
+                  Any final thoughts?
+                </Text>
+              )}
+            </Pressable>
+          </>
+        )}
       </ScrollView>
       {isFocusMode && (
         <FocusModeOverlay
@@ -169,13 +190,22 @@ const BookEditScreen = () => {
           placeholder="What is this book about?"
         />
       )}
-      {isExpectationFocusMode && (
+      {isFirstImpressionFocusMode && (
         <FocusModeOverlay
-          subtitle="Expectation"
-          content={expectation}
-          onChangeContent={(html) => setValue("expectation", html)}
-          onDone={() => setIsExpectationFocusMode(false)}
-          placeholder="What are you expecting from this one?"
+          subtitle="First Impression"
+          content={firstImpression}
+          onChangeContent={(html) => setValue("firstImpression", html)}
+          onDone={() => setIsFirstImpressionFocusMode(false)}
+          placeholder="What is your first impression?"
+        />
+      )}
+      {isFinalThoughtFocusMode && (
+        <FocusModeOverlay
+          subtitle="Final Thought"
+          content={finalThought}
+          onChangeContent={(html) => setValue("finalThought", html)}
+          onDone={() => setIsFinalThoughtFocusMode(false)}
+          placeholder="Any final thoughts?"
         />
       )}
     </ScreenWrapper>
