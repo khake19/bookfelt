@@ -1,8 +1,7 @@
 export { default as DeleteEntrySheet } from "./components/DeleteEntrySheet";
 export { default as EntryCard } from "./components/EntryCard";
 export type { EntryCardData } from "./components/EntryCard";
-export { default as FocusModeOverlay } from "./components/FocusModeOverlay";
-export { default as RichTextPreview } from "./components/RichTextPreview";
+export { FocusModeOverlay, RichTextPreview } from "./components/editor";
 export { EMOTIONS, getEmotionByLabel } from "./constants/emotions";
 export type { Emotion } from "./constants/emotions";
 export { MOCK_ENTRIES } from "./constants/mock-entries";
