@@ -5,7 +5,7 @@ export interface Entry {
   chapter?: string;
   page?: string;
   percent?: string;
-  snippet: string;
+  snippet?: string;
   feeling?: string;
   reflection?: string;
   date: number;

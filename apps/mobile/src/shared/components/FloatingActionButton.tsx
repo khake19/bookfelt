@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Portal } from '@rn-primitives/portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,6 +15,7 @@ import {
   CameraIcon,
   MicrophoneIcon,
 } from 'react-native-heroicons/solid';
+import { useRouter } from 'expo-router';
 import { useThemeColors } from '../hooks/use-theme-colors';
 
 const SPRING_CONFIG = { damping: 15, stiffness: 180 };
@@ -31,11 +33,13 @@ type FabOptionProps = {
   foreground: string | undefined;
   card: string | undefined;
   border: string | undefined;
+  onPress?: () => void;
+  isOpen: boolean;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-function FabOption({ label, icon: Icon, index, progress, foreground, card, border }: FabOptionProps) {
+function FabOption({ label, icon: Icon, index, progress, foreground, card, border, onPress, isOpen }: FabOptionProps) {
   const animatedStyle = useAnimatedStyle(() => {
     const staggeredProgress = interpolate(
       progress.value,
@@ -55,12 +59,13 @@ function FabOption({ label, icon: Icon, index, progress, foreground, card, borde
   return (
     <Animated.View
       style={[styles.optionRow, { bottom: (index + 1) * OPTION_SPACING }, animatedStyle]}
-      pointerEvents={progress.value > 0 ? 'auto' : 'none'}
+      pointerEvents={isOpen ? 'auto' : 'none'}
     >
       <Animated.Text style={[styles.optionLabel, { color: foreground }]}>
         {label}
       </Animated.Text>
       <Pressable
+        onPress={onPress}
         style={[
           styles.optionCircle,
           { backgroundColor: card, borderColor: border },
@@ -73,24 +78,34 @@ function FabOption({ label, icon: Icon, index, progress, foreground, card, borde
 }
 
 const OPTIONS = [
-  { label: 'Write', icon: PencilSquareIcon, index: 0 },
-  { label: 'Photo', icon: CameraIcon, index: 1 },
-  { label: 'Audio', icon: MicrophoneIcon, index: 2 },
+  { label: 'Write', icon: PencilSquareIcon, index: 0, key: 'write' },
+  { label: 'Photo', icon: CameraIcon, index: 1, key: 'photo' },
+  { label: 'Audio', icon: MicrophoneIcon, index: 2, key: 'audio' },
 ] as const;
 
 export default function FloatingActionButton() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const { primary, foreground, card, border } = useThemeColors();
   const progress = useSharedValue(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   const bottomOffset = TAB_BAR_HEIGHT + insets.bottom + 16;
 
   const toggle = () => {
-    progress.value = withSpring(progress.value > 0.5 ? 0 : 1, SPRING_CONFIG);
+    const opening = progress.value <= 0.5;
+    progress.value = withSpring(opening ? 1 : 0, SPRING_CONFIG);
+    setIsOpen(opening);
   };
 
   const collapse = () => {
     progress.value = withSpring(0, SPRING_CONFIG);
+    setIsOpen(false);
+  };
+
+  const handleWrite = () => {
+    collapse();
+    router.navigate('/entry-detail');
   };
 
   const mainIconStyle = useAnimatedStyle(() => ({
@@ -112,7 +127,7 @@ export default function FloatingActionButton() {
         style={[styles.container, { bottom: bottomOffset, right: RIGHT_OFFSET }]}
         pointerEvents="box-none"
       >
-        {OPTIONS.map((option) => (
+        {OPTIONS.map(({ key, ...option }) => (
           <FabOption
             key={option.label}
             {...option}
@@ -120,6 +135,8 @@ export default function FloatingActionButton() {
             foreground={foreground}
             card={card}
             border={border}
+            onPress={key === 'write' ? handleWrite : undefined}
+            isOpen={isOpen}
           />
         ))}
         <Pressable

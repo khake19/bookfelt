@@ -48,7 +48,7 @@ const EntryDetailScreen = () => {
       chapter: values.chapter || undefined,
       page: values.page || undefined,
       percent: values.percent || undefined,
-      snippet: values.snippet.trim(),
+      snippet: values.snippet.trim() || undefined,
       feeling: values.feeling || undefined,
       reflection: values.reflection || undefined,
       date: values.date.getTime(),

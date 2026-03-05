@@ -25,7 +25,7 @@ export interface EntryCardData {
   title: string;
   chapter: string;
   date: string;
-  snippet: string;
+  snippet?: string;
   reaction: string;
   feeling?: string;
 }
@@ -72,16 +72,18 @@ const EntryCard = (props: EntryCardProps) => {
           </View>
         </CardHeader>
         <CardContent className="gap-3">
-          <View
-            className="rounded-l pl-3"
-            style={color ? { borderLeftWidth: 2, borderLeftColor: color + "60" } : { borderLeftWidth: 2, borderLeftColor: "rgba(0,0,0,0.1)" }}
-          >
-            <Text className="text-sm italic text-foreground/80 font-serif-italic leading-relaxed" numberOfLines={3}>
-              {"\u201C"}
-              {snippet}
-              {"\u201D"}
-            </Text>
-          </View>
+          {snippet ? (
+            <View
+              className="rounded-l pl-3"
+              style={color ? { borderLeftWidth: 2, borderLeftColor: color + "60" } : { borderLeftWidth: 2, borderLeftColor: "rgba(0,0,0,0.1)" }}
+            >
+              <Text className="text-sm italic text-foreground/80 font-serif-italic leading-relaxed" numberOfLines={3}>
+                {"\u201C"}
+                {snippet}
+                {"\u201D"}
+              </Text>
+            </View>
+          ) : null}
           {reaction ? (
             <Text
               className="text-sm text-muted leading-relaxed"
