@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
+import LinearGradient from "react-native-linear-gradient";
 import { PlusIcon } from "react-native-heroicons/solid";
 import { EllipsisHorizontalIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";

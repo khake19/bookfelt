@@ -1,17 +1,11 @@
 import LottieView from "lottie-react-native";
-import { useEffect, useRef, useState } from "react";
-import { Keyboard, Text, View, ScrollView } from "react-native";
+import { Pressable, Text, View, ScrollView } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
-import { SheetManager } from "react-native-actions-sheet";
-import BookSearchInput from "../../features/books/components/BookSearchInput";
-import BookSearchResults from "../../features/books/components/BookSearchResults";
-import ManualBookForm from "../../features/books/components/ManualBookForm";
+import { PlusIcon } from "react-native-heroicons/outline";
 import LibraryBookRow from "../../features/books/components/LibraryBookRow";
-import { useSearchBooks } from "../../features/books/queries/use-search-books";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import type { ReadingStatus } from "../../features/books/types/book";
-import { ScreenWrapper } from "../../shared";
-import { SHEET_IDS } from "../../shared/sheets";
+import { ScreenWrapper, useThemeColors } from "../../shared";
 import { useRouter } from "expo-router";
 
 const STATUS_ORDER: ReadingStatus[] = ["reading", "want-to-read", "finished"];
@@ -24,18 +18,8 @@ const STATUS_LABELS: Record<ReadingStatus, string> = {
 
 export default function LibraryScreen() {
   const router = useRouter();
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [showManualForm, setShowManualForm] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const { data: searchResults = [], isLoading, error } = useSearchBooks(debouncedQuery);
-  const { books, addBook, removeBook, updateStatus, updateBook, isInLibrary } = useLibrary();
-
-  useEffect(() => {
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setDebouncedQuery(query), 400);
-    return () => clearTimeout(timerRef.current);
-  }, [query]);
+  const { foreground } = useThemeColors();
+  const { books, removeBook, updateStatus } = useLibrary();
 
   const grouped = STATUS_ORDER.map((status) => ({
     status,
@@ -45,46 +29,22 @@ export default function LibraryScreen() {
 
   return (
     <ScreenWrapper>
-      <Animated.Text
-        entering={FadeInDown.duration(400)}
-        className="text-foreground font-mono-bold text-xl mt-2 mb-4"
-      >
-        Library
-      </Animated.Text>
       <Animated.View
-        entering={FadeInDown.duration(500).delay(100)}
-        className="mb-3"
+        entering={FadeInDown.duration(400)}
+        className="flex-row items-center justify-between mt-2 mb-4"
       >
-        <BookSearchInput
-          value={query}
-          onChangeText={setQuery}
-          onClear={() => setQuery("")}
-        />
+        <Text className="text-foreground font-mono-bold text-xl">
+          Library
+        </Text>
+        <Pressable
+          onPress={() => router.push("/add-book")}
+          hitSlop={8}
+          className="w-8 h-8 rounded-full bg-card border border-border items-center justify-center"
+        >
+          <PlusIcon size={18} color={foreground} />
+        </Pressable>
       </Animated.View>
-      {debouncedQuery.trim().length > 0 ? (
-        <View className="flex-1">
-          <BookSearchResults
-            results={searchResults}
-            isLoading={isLoading}
-            error={error ? error.message : null}
-            query={debouncedQuery}
-            isInLibrary={isInLibrary}
-            onSelectBook={(book) => {
-              Keyboard.dismiss();
-              addBook({ ...book, source: "google" }, "want-to-read");
-              setQuery("");
-              setTimeout(() => {
-                SheetManager.show(SHEET_IDS.FIRST_IMPRESSION, {
-                  payload: {
-                    onSave: (text) => updateBook(book.id, { firstImpression: text }),
-                  },
-                });
-              }, 300);
-            }}
-            onManualCreate={() => setShowManualForm(true)}
-          />
-        </View>
-      ) : books.length === 0 ? (
+      {books.length === 0 ? (
         <Animated.View
           entering={FadeIn.duration(300)}
           className="flex-1 items-center justify-center pb-20"
@@ -97,7 +57,7 @@ export default function LibraryScreen() {
             style={{ width: 120, height: 120, backgroundColor: "transparent" }}
           />
           <Text className="text-muted text-sm mt-4 text-center leading-relaxed">
-            Your library is empty. {"\n"}Search for a book to get started.
+            Your library is empty.{"\n"}Tap + to add your first book.
           </Text>
         </Animated.View>
       ) : (
@@ -134,24 +94,6 @@ export default function LibraryScreen() {
             </Animated.View>
           ))}
         </ScrollView>
-      )}
-      {showManualForm && (
-        <ManualBookForm
-          initialTitle={query}
-          onSubmit={(book) => {
-            addBook(book, "want-to-read");
-            setShowManualForm(false);
-            setQuery("");
-            setTimeout(() => {
-              SheetManager.show(SHEET_IDS.FIRST_IMPRESSION, {
-                payload: {
-                  onSave: (text) => updateBook(book.id, { firstImpression: text }),
-                },
-              });
-            }, 300);
-          }}
-          onClose={() => setShowManualForm(false)}
-        />
       )}
     </ScreenWrapper>
   );
