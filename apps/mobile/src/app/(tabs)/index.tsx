@@ -10,7 +10,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import LinearGradient from "react-native-linear-gradient";
 import { PlusIcon } from "react-native-heroicons/solid";
 import { SheetManager } from "react-native-actions-sheet";
-import { SHEET_IDS } from "../../shared/sheets";
+import { SHEET_IDS } from "../../shared/constants/sheet-ids";
 import {
   EntryCard,
   getEmotionByLabel,

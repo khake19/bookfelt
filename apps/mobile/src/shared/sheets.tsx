@@ -4,13 +4,7 @@ import DeleteConfirmSheet from "./components/DeleteConfirmSheet";
 import BookOptionsSheet from "../features/books/components/BookOptionsSheet";
 import ChangeStatusSheet from "../features/books/components/ChangeStatusSheet";
 import FinalThoughtSheet from "../features/books/components/FinalThoughtSheet";
-
-export const SHEET_IDS = {
-  DELETE_ENTRY: "delete-entry-sheet",
-  ENTRY_OPTIONS: "entry-options-sheet",
-  CHANGE_STATUS: "change-status-sheet",
-  FINAL_THOUGHT: "final-thought-sheet",
-} as const;
+import { SHEET_IDS } from "./constants/sheet-ids";
 
 registerSheet(SHEET_IDS.DELETE_ENTRY, DeleteConfirmSheet);
 registerSheet(SHEET_IDS.ENTRY_OPTIONS, BookOptionsSheet);

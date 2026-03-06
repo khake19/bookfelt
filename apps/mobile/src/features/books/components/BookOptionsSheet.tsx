@@ -4,7 +4,7 @@ import ActionSheet, {
   SheetProps,
 } from "react-native-actions-sheet";
 import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
-import { SHEET_IDS } from "../../../shared/sheets";
+import { SHEET_IDS } from "../../../shared/constants/sheet-ids";
 
 export default function BookOptionsSheet({
   sheetId,

@@ -11,7 +11,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { PlusIcon } from "react-native-heroicons/solid";
 import { EllipsisHorizontalIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
-import { SHEET_IDS } from "../shared/sheets";
+import { SHEET_IDS } from "../shared/constants/sheet-ids";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getEmotionByLabel, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
