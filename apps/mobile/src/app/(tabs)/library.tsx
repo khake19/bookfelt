@@ -113,7 +113,7 @@ export default function LibraryScreen() {
 
           <ScrollView
             showsVerticalScrollIndicator={false}
-            contentContainerClassName="pb-6"
+            contentContainerClassName="pb-6 gap-3"
           >
             {grouped.map((group, groupIndex) => (
               <Animated.View
@@ -121,30 +121,24 @@ export default function LibraryScreen() {
                 entering={FadeInDown.duration(400).delay(100 + groupIndex * 80)}
               >
                 {filter === "all" && (
-                  <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-2 mt-4">
+                  <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-2 mt-2">
                     {group.label}
                   </Text>
                 )}
-                <View
-                  className={`bg-card rounded-xl border border-border px-3 ${
-                    filter !== "all" ? "mt-2" : ""
-                  }`}
-                >
-                  {group.items.map((book, index) => (
-                    <View key={book.id}>
-                      {index > 0 && <View className="h-px bg-border" />}
-                      <LibraryBookRow
-                        book={book}
-                        onPress={() =>
-                          router.push({
-                            pathname: "/book-detail",
-                            params: { bookId: book.id },
-                          })
-                        }
-                        onSetReading={() => updateStatus(book.id, "reading")}
-                        onRemove={() => removeBook(book.id)}
-                      />
-                    </View>
+                <View className="gap-3">
+                  {group.items.map((book) => (
+                    <LibraryBookRow
+                      key={book.id}
+                      book={book}
+                      onPress={() =>
+                        router.push({
+                          pathname: "/book-detail",
+                          params: { bookId: book.id },
+                        })
+                      }
+                      onSetReading={() => updateStatus(book.id, "reading")}
+                      onRemove={() => removeBook(book.id)}
+                    />
                   ))}
                 </View>
               </Animated.View>
