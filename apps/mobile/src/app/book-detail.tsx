@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import LinearGradient from "react-native-linear-gradient";
-import { PlusIcon } from "react-native-heroicons/solid";
 import { EllipsisHorizontalIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
 import { SHEET_IDS } from "../shared/constants/sheet-ids";
@@ -17,14 +16,13 @@ import { getEmotionByLabel, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { ReadingStatus } from "../features/books/types/book";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { CloseButton, ScreenWrapper, timeAgo, useThemeColors } from "../shared";
+import { CloseButton, PillButton, ScreenWrapper, timeAgo } from "../shared";
 
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
   const { books, updateStatus, removeBook, updateBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
-  const { background } = useThemeColors();
   const insets = useSafeAreaInsets();
   const book = books.find((b) => b.id === bookId);
 
@@ -105,7 +103,7 @@ const BookDetailScreen = () => {
               >
                 <View className="px-5 pb-8" style={{ paddingTop: insets.top }}>
                   <View className="flex-row items-center justify-between">
-                    <CloseButton onPress={() => router.back()} className="bg-white/20" />
+                    <CloseButton onPress={() => router.back()} variant="overlay" />
                     <Pressable onPress={handleBookOptions} className="w-9 h-9 rounded-full bg-white/20 items-center justify-center">
                       <EllipsisHorizontalIcon size={20} color="white" />
                     </Pressable>
@@ -141,7 +139,7 @@ const BookDetailScreen = () => {
             >
               <View className="px-5 pb-8" style={{ paddingTop: insets.top }}>
                 <View className="flex-row items-center justify-between">
-                  <CloseButton onPress={() => router.back()} className="bg-white/20" />
+                  <CloseButton onPress={() => router.back()} variant="overlay" />
                   <Pressable onPress={handleBookOptions} className="w-9 h-9 rounded-full bg-white/20 items-center justify-center">
                     <EllipsisHorizontalIcon size={20} color="white" />
                   </Pressable>
@@ -177,13 +175,11 @@ const BookDetailScreen = () => {
             <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
               Reflections ({entries.length})
             </Text>
-            <Pressable
+            <PillButton
+              icon="plus"
+              label="New"
               onPress={handleNewEntry}
-              className="flex-row items-center gap-1 bg-primary/10 rounded-full px-2.5 py-1"
-            >
-              <PlusIcon size={12} color={background} />
-              <Text className="text-primary text-xs font-medium">New</Text>
-            </Pressable>
+            />
           </Animated.View>
 
           {/* Timeline */}
@@ -265,15 +261,11 @@ const BookDetailScreen = () => {
               <Text className="text-muted text-sm text-center leading-relaxed mb-4">
                 No reflections yet.
               </Text>
-              <Pressable
+              <PillButton
+                icon="plus"
+                label="Add Reflection"
                 onPress={handleNewEntry}
-                className="flex-row items-center gap-1.5 bg-primary/10 rounded-full px-4 py-2"
-              >
-                <PlusIcon size={14} color={background} />
-                <Text className="text-primary text-sm font-medium">
-                  Add first reflection
-                </Text>
-              </Pressable>
+              />
             </Animated.View>
           )}
         </View>

@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import LinearGradient from "react-native-linear-gradient";
-import { PlusIcon } from "react-native-heroicons/solid";
 import { SheetManager } from "react-native-actions-sheet";
 import { SHEET_IDS } from "../../shared/constants/sheet-ids";
 import {
@@ -17,14 +16,13 @@ import {
   useEntries,
 } from "../../features/entries";
 import { useLibrary } from "../../features/books/hooks/use-library";
-import { ScreenWrapper, timeAgo, useThemeColors } from "../../shared";
+import { PillButton, ScreenWrapper, timeAgo } from "../../shared";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
   const router = useRouter();
   const { books } = useLibrary();
   const { entries, removeEntry } = useEntries();
-  const { background } = useThemeColors();
   const currentlyReading = books.find((b) => b.status === "reading");
   const bookEntries = useEntries(currentlyReading?.id).entries;
   const latestFeeling = bookEntries[0]?.feeling;
@@ -178,13 +176,11 @@ export default function HomeScreen() {
             Recent reflections
           </Text>
           {currentlyReading && (
-            <Pressable
+            <PillButton
+              icon="plus"
+              label="New"
               onPress={handleNewEntry}
-              className="flex-row items-center gap-1 bg-primary/10 rounded-full px-2.5 py-1"
-            >
-              <PlusIcon size={12} color={background} />
-              <Text className="text-primary text-xs font-medium">New</Text>
-            </Pressable>
+            />
           )}
         </Animated.View>
         <View className="gap-3">

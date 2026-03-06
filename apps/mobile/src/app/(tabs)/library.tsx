@@ -1,12 +1,12 @@
 import { useState } from "react";
 import LottieView from "lottie-react-native";
 import { Pressable, Text, View, ScrollView } from "react-native";
+
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
-import { PlusIcon } from "react-native-heroicons/outline";
 import LibraryBookRow from "../../features/books/components/LibraryBookRow";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import type { ReadingStatus } from "../../features/books/types/book";
-import { ScreenWrapper, useThemeColors } from "../../shared";
+import { PillButton, ScreenWrapper } from "../../shared";
 import { useRouter } from "expo-router";
 
 type Filter = "all" | ReadingStatus;
@@ -28,7 +28,6 @@ const STATUS_LABELS: Record<ReadingStatus, string> = {
 
 export default function LibraryScreen() {
   const router = useRouter();
-  const { foreground, background } = useThemeColors();
   const { books, removeBook, updateStatus } = useLibrary();
   const [filter, setFilter] = useState<Filter>("all");
 
@@ -47,16 +46,13 @@ export default function LibraryScreen() {
         entering={FadeInDown.duration(400)}
         className="flex-row items-center justify-between mt-2 mb-3"
       >
-        <Text className="text-foreground font-mono-bold text-xl">
-          Library
-        </Text>
-        <Pressable
+        <Text className="text-foreground font-mono-bold text-xl">Library</Text>
+        <PillButton
+          icon="plus"
+          label="Add Book "
           onPress={() => router.push("/add-book")}
           hitSlop={8}
-          className="w-8 h-8 rounded-full bg-foreground items-center justify-center"
-        >
-          <PlusIcon size={18} strokeWidth={2.5} color={background} />
-        </Pressable>
+        />
       </Animated.View>
 
       {books.length === 0 ? (
