@@ -1,7 +1,5 @@
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeOut, LinearTransition } from "react-native-reanimated";
-import { BookOpenIcon } from "react-native-heroicons/outline";
-import { useThemeColors } from "../../../shared";
 import { LibraryBook } from "../types/book";
 
 interface LibraryBookRowProps {
@@ -13,7 +11,6 @@ interface LibraryBookRowProps {
 
 const LibraryBookRow = (props: LibraryBookRowProps) => {
   const { book, onSetReading, onRemove, onPress } = props;
-  const { muted } = useThemeColors();
 
   return (
     <Pressable onPress={onPress}>
@@ -22,16 +19,12 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
         layout={LinearTransition.duration(300)}
         className="flex-row gap-4 p-3 bg-card rounded-2xl"
       >
-        {book.coverUrl ? (
+        {book.coverUrl && (
           <Image
             source={{ uri: book.coverUrl }}
             className="w-16 h-24 rounded-xl bg-border"
             resizeMode="cover"
           />
-        ) : (
-          <View className="w-16 h-24 rounded-xl bg-border items-center justify-center">
-            <BookOpenIcon size={20} color={muted} />
-          </View>
         )}
 
         <View className="flex-1 justify-center">
