@@ -36,6 +36,12 @@
       ],
       "expo-router",
       [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "Allow Bookfelt to use your camera to scan book barcodes."
+        }
+      ],
+      [
         "expo-font",
         {
           "fonts": [

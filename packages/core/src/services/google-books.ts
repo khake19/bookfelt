@@ -37,6 +37,8 @@ export interface GoogleBook {
 
 // --- Client ---
 
+const GOOGLE_BOOKS_API_KEY = "AIzaSyAkFPsaogCpPLPNDQQRkKzoM_ohatf7eXo";
+
 const googleBooksClient = createHttpClient({
   baseURL: "https://www.googleapis.com/books/v1",
   timeout: 10_000,
@@ -81,10 +83,34 @@ export async function searchGoogleBooks(query: string): Promise<GoogleBook[]> {
         q: query,
         maxResults: MAX_RESULTS,
         printType: "books",
+        key: GOOGLE_BOOKS_API_KEY,
       },
     },
   );
 
   if (!data.items) return [];
   return data.items.map(toGoogleBook);
+}
+
+export async function searchGoogleBooksByIsbn(
+  isbn: string,
+): Promise<GoogleBook | null> {
+  const { data } = await googleBooksClient.get<GoogleBooksResponse>(
+    "/volumes",
+    {
+      params: {
+        q: `isbn:${isbn}`,
+        maxResults: 1,
+        printType: "books",
+        key: GOOGLE_BOOKS_API_KEY,
+      },
+    },
+  );
+
+  if (!data.items?.length) return null;
+  const book = toGoogleBook(data.items[0]);
+  if (!book.coverUrl) {
+    book.coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+  }
+  return book;
 }

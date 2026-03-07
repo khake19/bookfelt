@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import { useRouter } from "expo-router";
-import { Image, Keyboard, Pressable, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Keyboard, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { BookOpenIcon, PencilIcon } from "react-native-heroicons/outline";
+import { PencilIcon } from "react-native-heroicons/outline";
 import LottieView from "lottie-react-native";
 import type { GoogleBook } from "@bookfelt/core";
 import BookSearchInput from "../features/books/components/BookSearchInput";
 import BookSearchResults from "../features/books/components/BookSearchResults";
+import IsbnScannerOverlay from "../features/books/components/IsbnScannerOverlay";
 import { useSearchBooks } from "../features/books/queries/use-search-books";
+import { useIsbnLookup } from "../features/books/queries/use-isbn-lookup";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { Book, ReadingStatus } from "../features/books/types/book";
 import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper, useThemeColors } from "../shared";
@@ -29,6 +31,8 @@ export default function AddBookScreen() {
   const { addBook, updateBook, isInLibrary } = useLibrary();
 
   const [mode, setMode] = useState<ScreenMode>({ kind: "search" });
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const isbnLookup = useIsbnLookup();
 
   // Search state
   const [query, setQuery] = useState("");
@@ -55,6 +59,36 @@ export default function AddBookScreen() {
     setMode({ kind: "search" });
     setFirstImpression("");
     setSelectedStatus("want-to-read");
+  };
+
+  const handleIsbnScanned = (isbn: string) => {
+    setIsScannerOpen(false);
+    isbnLookup.mutate(isbn, {
+      onSuccess: (book) => {
+        if (book) {
+          handleSelectBook(book);
+        } else {
+          Alert.alert(
+            "Book Not Found",
+            `No book found for ISBN ${isbn}.`,
+            [
+              { text: "Try Again", onPress: () => setIsScannerOpen(true) },
+              { text: "Add Manually", onPress: () => setMode({ kind: "manual" }) },
+            ],
+          );
+        }
+      },
+      onError: () => {
+        Alert.alert(
+          "Lookup Failed",
+          "Something went wrong while looking up the book. Please try again.",
+          [
+            { text: "Try Again", onPress: () => setIsScannerOpen(true) },
+            { text: "Cancel" },
+          ],
+        );
+      },
+    });
   };
 
   const handleSelectBook = (googleBook: GoogleBook) => {
@@ -126,6 +160,7 @@ export default function AddBookScreen() {
               value={query}
               onChangeText={setQuery}
               onClear={() => setQuery("")}
+              onScanPress={() => setIsScannerOpen(true)}
             />
           </Animated.View>
           {debouncedQuery.trim().length > 0 ? (
@@ -277,16 +312,12 @@ export default function AddBookScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <Animated.View entering={FadeInDown.duration(400)} className="items-center py-6">
-            {mode.book.coverUrl ? (
+            {mode.book.coverUrl && (
               <Image
                 source={{ uri: mode.book.coverUrl }}
                 className="w-24 h-36 rounded-xl"
                 resizeMode="cover"
               />
-            ) : (
-              <View className="w-24 h-36 rounded-xl bg-card border border-border items-center justify-center">
-                <BookOpenIcon size={32} color={muted} />
-              </View>
             )}
             <Text className="text-foreground font-serif text-lg font-semibold mt-4 text-center px-8">
               {mode.book.title}
@@ -364,6 +395,21 @@ export default function AddBookScreen() {
           />
         )}
         </>
+      )}
+      {isbnLookup.isPending && (
+        <View className="absolute inset-0 items-center justify-center bg-background/80">
+          <ActivityIndicator size="large" color={primary} />
+          <Text className="text-muted text-sm mt-3">
+            Looking up scanned book...
+          </Text>
+        </View>
+      )}
+
+      {isScannerOpen && (
+        <IsbnScannerOverlay
+          onScanned={handleIsbnScanned}
+          onClose={() => setIsScannerOpen(false)}
+        />
       )}
     </ScreenWrapper>
   );

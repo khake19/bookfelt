@@ -1,20 +1,26 @@
 import { Input } from "@bookfelt/ui";
 import { Pressable, View } from "react-native";
-import { MagnifyingGlassIcon, XMarkIcon } from "react-native-heroicons/outline";
+import {
+  MagnifyingGlassIcon,
+  ViewfinderCircleIcon,
+  XMarkIcon,
+} from "react-native-heroicons/outline";
 import { useThemeColors } from "../../../shared";
 
 interface BookSearchInputProps {
   value: string;
   onChangeText: (text: string) => void;
   onClear: () => void;
+  onScanPress?: () => void;
 }
 
 const BookSearchInput = ({
   value,
   onChangeText,
   onClear,
+  onScanPress,
 }: BookSearchInputProps) => {
-  const { muted } = useThemeColors();
+  const { muted, primary } = useThemeColors();
 
   return (
     <View className="flex-row items-center rounded-xl bg-card border border-border px-3 gap-2">
@@ -31,6 +37,11 @@ const BookSearchInput = ({
       {value.length > 0 && (
         <Pressable onPress={onClear} hitSlop={8}>
           <XMarkIcon size={16} color={muted} />
+        </Pressable>
+      )}
+      {onScanPress && (
+        <Pressable onPress={onScanPress} hitSlop={8}>
+          <ViewfinderCircleIcon size={20} color={primary} />
         </Pressable>
       )}
     </View>
