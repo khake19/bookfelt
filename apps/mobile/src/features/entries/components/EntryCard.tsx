@@ -18,7 +18,10 @@ import Animated, {
 import { getEmotionByLabel } from "../constants/emotions";
 
 const stripHtml = (html: string) =>
-  html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+  html
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .trim();
 
 export interface EntryCardData {
   id: string;
@@ -36,7 +39,16 @@ interface EntryCardProps extends EntryCardData {
 }
 
 const EntryCard = (props: EntryCardProps) => {
-  const { title, chapter, date, snippet, reaction, feeling, onPress, onLongPress } = props;
+  const {
+    title,
+    chapter,
+    date,
+    snippet,
+    reaction,
+    feeling,
+    onPress,
+    onLongPress,
+  } = props;
 
   const emotion = feeling ? getEmotionByLabel(feeling) : undefined;
   const color = emotion?.color;
@@ -48,11 +60,12 @@ const EntryCard = (props: EntryCardProps) => {
         600,
         withSequence(
           withTiming(1.08, { duration: 250 }),
-          withTiming(1, { duration: 200 })
-        )
+          withTiming(1, { duration: 200 }),
+        ),
       );
     }
-  }, []);
+  }, [badgeScale, emotion]);
+
   const badgeStyle = useAnimatedStyle(() => ({
     transform: [{ scale: badgeScale.value }],
   }));
@@ -75,9 +88,16 @@ const EntryCard = (props: EntryCardProps) => {
           {snippet ? (
             <View
               className="rounded-l pl-3"
-              style={color ? { borderLeftWidth: 2, borderLeftColor: color + "60" } : { borderLeftWidth: 2, borderLeftColor: "rgba(0,0,0,0.1)" }}
+              style={
+                color
+                  ? { borderLeftWidth: 2, borderLeftColor: color + "60" }
+                  : { borderLeftWidth: 2, borderLeftColor: "rgba(0,0,0,0.1)" }
+              }
             >
-              <Text className="text-sm italic text-foreground/80 font-serif-italic leading-relaxed" numberOfLines={3}>
+              <Text
+                className="text-sm italic text-foreground/80 font-serif-italic leading-relaxed"
+                numberOfLines={3}
+              >
                 {"\u201C"}
                 {snippet}
                 {"\u201D"}

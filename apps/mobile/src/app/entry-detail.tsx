@@ -1,40 +1,45 @@
 import { useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
-import { zodResolver } from "@hookform/resolvers/zod";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
-import { EMOTIONS, useEntries } from "../features/entries";
-import { entryFormSchema, type EntryFormValues } from "../features/entries/schemas/entry-form";
+import { EMOTIONS, useEntries, useEntryForm } from "../features/entries";
+import type { EntryFormValues } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
-import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper } from "../shared";
+import {
+  CloseButton,
+  FocusModeOverlay,
+  RichTextPreview,
+  ScreenWrapper,
+} from "../shared";
 
 const EntryDetailScreen = () => {
-  const { id, bookId } = useLocalSearchParams<{ id: string; bookId?: string }>();
+  const { id, bookId } = useLocalSearchParams<{
+    id: string;
+    bookId?: string;
+  }>();
   const router = useRouter();
   const { books } = useLibrary();
   const { entries, addEntry, updateEntry } = useEntries();
   const existing = id ? entries.find((e) => e.id === id) : undefined;
-  const book = books.find((b) => b.id === bookId) ?? books.find((b) => b.status === "reading");
+  const book =
+    books.find((b) => b.id === bookId) ??
+    books.find((b) => b.status === "reading");
   const isNew = !existing;
 
-  const { control, handleSubmit, watch, setValue, formState: { isValid } } = useForm<EntryFormValues>({
-    resolver: zodResolver(entryFormSchema),
-    defaultValues: {
-      chapter: existing?.chapter ?? "",
-      page: existing?.page ?? "",
-      percent: existing?.percent ?? "",
-      snippet: existing?.snippet ?? "",
-      feeling: existing?.feeling ?? "",
-      reflection: existing?.reflection ?? "",
-      date: existing ? new Date(existing.date) : new Date(),
-    },
-    mode: "onChange",
-  });
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { isValid },
+  } = useEntryForm(existing);
 
   const [isFocusMode, setIsFocusMode] = useState(false);
-  const [androidPickerMode, setAndroidPickerMode] = useState<"date" | "time" | null>(null);
+  const [androidPickerMode, setAndroidPickerMode] = useState<
+    "date" | "time" | null
+  >(null);
 
   const numericOnly = (v: string) => v.replace(/[^0-9]/g, "");
 
@@ -70,11 +75,18 @@ const EntryDetailScreen = () => {
       <View className="flex-row items-center pt-[34px] pb-3">
         <CloseButton onPress={() => router.back()} />
         <View className="flex-1 items-center">
-          <Text className="text-foreground font-serif font-semibold" numberOfLines={1}>
+          <Text
+            className="text-foreground font-serif font-semibold"
+            numberOfLines={1}
+          >
             {book?.title ?? "No book selected"}
           </Text>
         </View>
-        <Button shape="pill" onPress={handleSubmit(onSubmit)} disabled={!canSave}>
+        <Button
+          shape="pill"
+          onPress={handleSubmit(onSubmit)}
+          disabled={!canSave}
+        >
           <Text className="text-secondary font-medium">Save</Text>
         </Button>
       </View>
@@ -92,7 +104,9 @@ const EntryDetailScreen = () => {
               control={control}
               name="chapter"
               render={({ field: { onChange, value } }) => (
-                <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
+                <View
+                  className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}
+                >
                   <Text className="text-xs text-muted">Ch.</Text>
                   <Input
                     className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
@@ -108,7 +122,9 @@ const EntryDetailScreen = () => {
               control={control}
               name="page"
               render={({ field: { onChange, value } }) => (
-                <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
+                <View
+                  className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}
+                >
                   <Text className="text-xs text-muted">Pg.</Text>
                   <Input
                     className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
@@ -124,7 +140,9 @@ const EntryDetailScreen = () => {
               control={control}
               name="percent"
               render={({ field: { onChange, value } }) => (
-                <View className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}>
+                <View
+                  className={`flex-1 flex-row items-center rounded-lg py-2.5 px-3 gap-1.5 ${value ? "bg-primary/10 border-[1.5px] border-primary" : "bg-card border-[1.5px] border-border"}`}
+                >
                   <Text className="text-xs text-muted">%</Text>
                   <Input
                     className="flex-1 h-auto w-full border-0 bg-transparent p-0 text-sm leading-tight text-foreground shadow-none placeholder:font-light"
@@ -147,49 +165,54 @@ const EntryDetailScreen = () => {
             <Controller
               control={control}
               name="date"
-              render={({ field: { onChange, value } }) => (
-                <>
-                  {Platform.OS === "android" ? (
-                    <View className="flex-row items-center gap-3">
-                      <Pressable onPress={() => setAndroidPickerMode("date")}>
-                        <Text className="text-sm text-foreground">
-                          {value.toLocaleDateString()}
-                        </Text>
-                      </Pressable>
-                      <Text className="text-muted/40 text-xs">·</Text>
-                      <Pressable onPress={() => setAndroidPickerMode("time")}>
-                        <Text className="text-sm text-foreground">
-                          {value.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                        </Text>
-                      </Pressable>
-                      {androidPickerMode && (
-                        <DateTimePicker
-                          value={value}
-                          mode={androidPickerMode}
-                          display="default"
-                          maximumDate={new Date()}
-                          onChange={(_, selected) => {
-                            setAndroidPickerMode(null);
-                            if (selected) onChange(selected);
-                          }}
-                        />
-                      )}
-                    </View>
-                  ) : (
-                    <DateTimePicker
-                      value={value}
-                      mode="datetime"
-                      display="compact"
-                      maximumDate={new Date()}
-                      onChange={(_, selected) => {
-                        if (selected) onChange(selected);
-                      }}
-                      accentColor="gray"
-                      style={{ marginLeft: -10, transform: [{ scale: 0.85 }], transformOrigin: "left" }}
-                    />
-                  )}
-                </>
-              )}
+              render={({ field: { onChange, value } }) =>
+                Platform.OS === "android" ? (
+                  <View className="flex-row items-center gap-3">
+                    <Pressable onPress={() => setAndroidPickerMode("date")}>
+                      <Text className="text-sm text-foreground">
+                        {value.toLocaleDateString()}
+                      </Text>
+                    </Pressable>
+                    <Text className="text-muted/40 text-xs">·</Text>
+                    <Pressable onPress={() => setAndroidPickerMode("time")}>
+                      <Text className="text-sm text-foreground">
+                        {value.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </Text>
+                    </Pressable>
+                    {androidPickerMode && (
+                      <DateTimePicker
+                        value={value}
+                        mode={androidPickerMode}
+                        display="default"
+                        maximumDate={new Date()}
+                        onChange={(_, selected) => {
+                          setAndroidPickerMode(null);
+                          if (selected) onChange(selected);
+                        }}
+                      />
+                    )}
+                  </View>
+                ) : (
+                  <DateTimePicker
+                    value={value}
+                    mode="datetime"
+                    display="compact"
+                    maximumDate={new Date()}
+                    onChange={(_, selected) => {
+                      if (selected) onChange(selected);
+                    }}
+                    accentColor="gray"
+                    style={{
+                      marginLeft: -10,
+                      transform: [{ scale: 0.85 }],
+                      transformOrigin: "left",
+                    }}
+                  />
+                )
+              }
             />
           </View>
         </View>
@@ -228,10 +251,16 @@ const EntryDetailScreen = () => {
                 <Pressable
                   key={emotion.label}
                   onPress={() =>
-                    setValue("feeling", isSelected ? "" : emotion.label, { shouldValidate: true })
+                    setValue("feeling", isSelected ? "" : emotion.label, {
+                      shouldValidate: true,
+                    })
                   }
                   className={`flex-row items-center gap-1.5 rounded-full px-3 py-1.5 ${isSelected ? "" : "bg-secondary border border-border"}`}
-                  style={isSelected ? { backgroundColor: emotion.color + "30" } : undefined}
+                  style={
+                    isSelected
+                      ? { backgroundColor: emotion.color + "30" }
+                      : undefined
+                  }
                 >
                   <Text>{emotion.emoji}</Text>
                   <Text
@@ -246,10 +275,7 @@ const EntryDetailScreen = () => {
           </View>
         </View>
         <View className="h-px bg-border" />
-        <Pressable
-          onPress={() => setIsFocusMode(true)}
-          className="py-3"
-        >
+        <Pressable onPress={() => setIsFocusMode(true)} className="py-3">
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
             Your Reflection
           </Text>
@@ -262,7 +288,15 @@ const EntryDetailScreen = () => {
           )}
         </Pressable>
       </ScrollView>
-      {isFocusMode && <FocusModeOverlay subtitle={snippet ? `\u201C${snippet}\u201D` : ""} content={reflection} onChangeContent={(html) => setValue("reflection", html)} onDone={() => setIsFocusMode(false)} placeholder="Write what this made you feel.." />}
+      {isFocusMode && (
+        <FocusModeOverlay
+          subtitle={snippet ? `\u201C${snippet}\u201D` : ""}
+          content={reflection}
+          onChangeContent={(html) => setValue("reflection", html)}
+          onDone={() => setIsFocusMode(false)}
+          placeholder="Write what this made you feel.."
+        />
+      )}
     </ScreenWrapper>
   );
 };
