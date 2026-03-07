@@ -72,7 +72,7 @@ const EntryDetailScreen = () => {
 
   return (
     <ScreenWrapper>
-      <View className="flex-row items-center pt-[34px] pb-3">
+      <View className="flex-row items-center pb-3">
         <CloseButton onPress={() => router.back()} />
         <View className="flex-1 items-center">
           <Text

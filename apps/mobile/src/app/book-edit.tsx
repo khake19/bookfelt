@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLibrary } from "../features/books/hooks/use-library";
 import {
   bookFormSchema,
@@ -15,7 +14,6 @@ import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper } from ".
 const BookEditScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { books, updateBook } = useLibrary();
   const book = books.find((b) => b.id === bookId);
 
@@ -63,7 +61,6 @@ const BookEditScreen = () => {
       <ScreenWrapper>
         <View
           className="flex-row items-center pb-3"
-          style={{ paddingTop: insets.top }}
         >
           <CloseButton onPress={() => router.back()} />
         </View>
@@ -78,7 +75,6 @@ const BookEditScreen = () => {
     <ScreenWrapper>
       <View
         className="flex-row items-center pb-3"
-        style={{ paddingTop: insets.top }}
       >
         <CloseButton onPress={() => router.back()} />
         <View className="flex-1 items-center">

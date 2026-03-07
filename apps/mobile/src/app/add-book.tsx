@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import { useRouter } from "expo-router";
 import { Image, Keyboard, Pressable, ScrollView, Text, TextInput, View } from "react-native";
-import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BookOpenIcon } from "react-native-heroicons/outline";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { BookOpenIcon, PencilIcon } from "react-native-heroicons/outline";
+import LottieView from "lottie-react-native";
 import type { GoogleBook } from "@bookfelt/core";
 import BookSearchInput from "../features/books/components/BookSearchInput";
 import BookSearchResults from "../features/books/components/BookSearchResults";
@@ -25,8 +25,7 @@ const STATUS_OPTIONS: { value: ReadingStatus; label: string }[] = [
 
 export default function AddBookScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
-  const { muted } = useThemeColors();
+  const { muted, primary } = useThemeColors();
   const { addBook, updateBook, isInLibrary } = useLibrary();
 
   const [mode, setMode] = useState<ScreenMode>({ kind: "search" });
@@ -97,7 +96,7 @@ export default function AddBookScreen() {
 
   return (
     <ScreenWrapper>
-      <View className="flex-row items-center pb-3" style={{ paddingTop: insets.top }}>
+      <View className="flex-row items-center pb-3">
         <CloseButton
           onPress={() => {
             if (mode.kind === "confirm" || mode.kind === "manual") {
@@ -137,14 +136,33 @@ export default function AddBookScreen() {
               />
             </View>
           ) : (
-            <Animated.View
-              entering={FadeIn.duration(300)}
-              className="flex-1 items-center justify-center pb-20"
-            >
-              <Text className="text-muted text-sm text-center leading-relaxed">
-                Search for a book by title or author.
-              </Text>
-            </Animated.View>
+            <View className="flex-1 items-center justify-center pb-20">
+              <Animated.View entering={FadeInDown.duration(400).delay(100)} className="items-center">
+                <LottieView
+                  source={require("../assets/book.lottie")}
+                  autoPlay
+                  loop
+                  renderMode="SOFTWARE"
+                  style={{ width: 120, height: 120, backgroundColor: "transparent" }}
+                />
+              </Animated.View>
+              <Animated.View entering={FadeInDown.duration(400).delay(200)} className="items-center mt-4">
+                <Text className="text-muted text-sm text-center leading-relaxed">
+                  What are you reading next?
+                </Text>
+              </Animated.View>
+              <Animated.View entering={FadeInDown.duration(400).delay(300)} className="items-center mt-4">
+                <Pressable
+                  onPress={() => setMode({ kind: "manual" })}
+                  className="flex-row items-center gap-2 bg-primary/10 rounded-full px-4 py-2"
+                >
+                  <PencilIcon size={14} color={primary} />
+                  <Text className="text-primary text-sm font-medium">
+                    Add manually
+                  </Text>
+                </Pressable>
+              </Animated.View>
+            </View>
           )}
         </>
       )}
