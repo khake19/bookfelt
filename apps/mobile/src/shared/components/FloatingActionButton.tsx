@@ -17,6 +17,15 @@ import {
 } from 'react-native-heroicons/solid';
 import { useRouter } from 'expo-router';
 import { useThemeColors } from '../hooks/use-theme-colors';
+import TextScannerOverlay from '../../features/entries/components/TextScannerOverlay';
+
+// Module-level store to pass large OCR text without URL params
+let _pendingSnippet: string | null = null;
+export function consumePendingSnippet(): string | null {
+  const text = _pendingSnippet;
+  _pendingSnippet = null;
+  return text;
+}
 
 const SPRING_CONFIG = { damping: 15, stiffness: 180 };
 const TAB_BAR_HEIGHT = 49;
@@ -89,6 +98,7 @@ export default function FloatingActionButton() {
   const { primary, foreground, card, border } = useThemeColors();
   const progress = useSharedValue(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
 
   const bottomOffset = TAB_BAR_HEIGHT + insets.bottom + 16;
 
@@ -106,6 +116,19 @@ export default function FloatingActionButton() {
   const handleWrite = () => {
     collapse();
     router.navigate('/entry-detail');
+  };
+
+  const handlePhoto = () => {
+    collapse();
+    setIsTextScannerOpen(true);
+  };
+
+  const handleTextCaptured = (text: string) => {
+    _pendingSnippet = text;
+    setIsTextScannerOpen(false);
+    setTimeout(() => {
+      router.navigate('/entry-detail');
+    }, 300);
   };
 
   const mainIconStyle = useAnimatedStyle(() => ({
@@ -135,7 +158,7 @@ export default function FloatingActionButton() {
             foreground={foreground}
             card={card}
             border={border}
-            onPress={key === 'write' ? handleWrite : undefined}
+            onPress={key === 'write' ? handleWrite : key === 'photo' ? handlePhoto : undefined}
             isOpen={isOpen}
           />
         ))}
@@ -148,6 +171,12 @@ export default function FloatingActionButton() {
           </Animated.View>
         </Pressable>
       </View>
+      {isTextScannerOpen && (
+        <TextScannerOverlay
+          onCaptured={handleTextCaptured}
+          onClose={() => setIsTextScannerOpen(false)}
+        />
+      )}
     </Portal>
   );
 }

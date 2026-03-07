@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -13,6 +13,7 @@ import {
   RichTextPreview,
   ScreenWrapper,
 } from "../shared";
+import { consumePendingSnippet } from "../shared/components/FloatingActionButton";
 
 const EntryDetailScreen = () => {
   const { id, bookId } = useLocalSearchParams<{
@@ -33,6 +34,13 @@ const EntryDetailScreen = () => {
     setValue,
     formState: { isValid },
   } = useEntryForm(existing);
+
+  useEffect(() => {
+    const pending = consumePendingSnippet();
+    if (pending) {
+      setValue("snippet", pending);
+    }
+  }, [setValue]);
 
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [androidPickerMode, setAndroidPickerMode] = useState<
