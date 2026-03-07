@@ -4,13 +4,16 @@ import { LibraryBook } from "../types/book";
 
 interface LibraryBookRowProps {
   book: LibraryBook;
+  isPrimary?: boolean;
   onSetReading: () => void;
+  onSetPrimary?: () => void;
   onRemove?: () => void;
   onPress?: () => void;
 }
 
 const LibraryBookRow = (props: LibraryBookRowProps) => {
-  const { book, onSetReading, onRemove, onPress } = props;
+  const { book, isPrimary, onSetReading, onSetPrimary, onPress } =
+    props;
 
   return (
     <Pressable onPress={onPress}>
@@ -46,6 +49,29 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
               {book.description}
             </Text>
           ) : null}
+
+          {book.status === "reading" && isPrimary && (
+            <View className="flex-row items-center gap-1.5 mt-2">
+              <View className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <Text className="text-primary text-[10px] font-medium uppercase tracking-widest">
+                Primary read
+              </Text>
+            </View>
+          )}
+
+          {book.status === "reading" && !isPrimary && onSetPrimary && (
+            <View className="flex-row items-center gap-2 mt-2">
+              <Pressable
+                onPress={onSetPrimary}
+                hitSlop={8}
+                className="bg-primary/10 rounded-full px-3 py-1"
+              >
+                <Text className="text-primary text-xs font-medium">
+                  Set as Primary
+                </Text>
+              </Pressable>
+            </View>
+          )}
 
           {book.status === "want-to-read" && (
             <View className="flex-row items-center gap-2 mt-2">

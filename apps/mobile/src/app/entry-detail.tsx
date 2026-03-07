@@ -20,12 +20,10 @@ const EntryDetailScreen = () => {
     bookId?: string;
   }>();
   const router = useRouter();
-  const { books } = useLibrary();
+  const { books, primaryRead } = useLibrary();
   const { entries, addEntry, updateEntry } = useEntries();
   const existing = id ? entries.find((e) => e.id === id) : undefined;
-  const book =
-    books.find((b) => b.id === bookId) ??
-    books.find((b) => b.status === "reading");
+  const book = books.find((b) => b.id === bookId) ?? primaryRead;
   const isNew = !existing;
 
   const {

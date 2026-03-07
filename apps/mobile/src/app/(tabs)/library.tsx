@@ -1,13 +1,13 @@
-import { useState } from "react";
 import LottieView from "lottie-react-native";
-import { Pressable, Text, View, ScrollView } from "react-native";
+import { useState } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
+import { useRouter } from "expo-router";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import LibraryBookRow from "../../features/books/components/LibraryBookRow";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import type { ReadingStatus } from "../../features/books/types/book";
 import { PillButton, ScreenWrapper } from "../../shared";
-import { useRouter } from "expo-router";
 
 type Filter = "all" | ReadingStatus;
 
@@ -28,7 +28,8 @@ const STATUS_LABELS: Record<ReadingStatus, string> = {
 
 export default function LibraryScreen() {
   const router = useRouter();
-  const { books, removeBook, updateStatus } = useLibrary();
+  const { books, primaryRead, removeBook, updateStatus, setPrimaryRead } =
+    useLibrary();
   const [filter, setFilter] = useState<Filter>("all");
 
   const filteredBooks =
@@ -126,6 +127,7 @@ export default function LibraryScreen() {
                     <LibraryBookRow
                       key={book.id}
                       book={book}
+                      isPrimary={book.id === primaryRead?.id}
                       onPress={() =>
                         router.push({
                           pathname: "/book-detail",
@@ -133,6 +135,7 @@ export default function LibraryScreen() {
                         })
                       }
                       onSetReading={() => updateStatus(book.id, "reading")}
+                      onSetPrimary={() => setPrimaryRead(book.id)}
                       onRemove={() => removeBook(book.id)}
                     />
                   ))}

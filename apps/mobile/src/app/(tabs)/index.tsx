@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import {
   Image,
   ImageBackground,
@@ -6,24 +7,29 @@ import {
   Text,
   View,
 } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
-import LinearGradient from "react-native-linear-gradient";
 import { SheetManager } from "react-native-actions-sheet";
-import { SHEET_IDS } from "../../shared/constants/sheet-ids";
+import { BookOpenIcon } from "react-native-heroicons/outline";
+import LinearGradient from "react-native-linear-gradient";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { useLibrary } from "../../features/books/hooks/use-library";
 import {
   EntryCard,
   getEmotionByLabel,
   useEntries,
 } from "../../features/entries";
-import { useLibrary } from "../../features/books/hooks/use-library";
-import { PillButton, ScreenWrapper, timeAgo } from "../../shared";
-import { useRouter } from "expo-router";
+import {
+  PillButton,
+  ScreenWrapper,
+  timeAgo,
+  useThemeColors,
+} from "../../shared";
+import { SHEET_IDS } from "../../shared/constants/sheet-ids";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { books } = useLibrary();
+  const { muted } = useThemeColors();
+  const { books, primaryRead: currentlyReading } = useLibrary();
   const { entries, removeEntry } = useEntries();
-  const currentlyReading = books.find((b) => b.status === "reading");
   const bookEntries = useEntries(currentlyReading?.id).entries;
   const latestFeeling = bookEntries[0]?.feeling;
   const latestEmotion = latestFeeling
@@ -176,11 +182,7 @@ export default function HomeScreen() {
             Recent reflections
           </Text>
           {currentlyReading && (
-            <PillButton
-              icon="plus"
-              label="New"
-              onPress={handleNewEntry}
-            />
+            <PillButton icon="plus" label="New" onPress={handleNewEntry} />
           )}
         </Animated.View>
         <View className="gap-3">
@@ -208,12 +210,27 @@ export default function HomeScreen() {
               entering={FadeInDown.duration(400).delay(350)}
               className="items-center py-12"
             >
-              <Text className="text-muted text-sm text-center leading-relaxed">
-                No reflections yet.{"\n"}
-                {currentlyReading
-                  ? "Tap + to log your first one."
-                  : "Add a book to get started."}
-              </Text>
+              {books.length === 0 ? (
+                <>
+                  <BookOpenIcon size={40} color={muted} />
+                  <Text className="text-muted text-sm text-center leading-relaxed mt-4">
+                    Your library is empty.{"\n"}Add your first book to get
+                    started.
+                  </Text>
+                  <Pressable
+                    onPress={() => router.push("/add-book")}
+                    className="flex-row items-center gap-2 bg-primary/10 rounded-full px-4 py-2 mt-4"
+                  >
+                    <Text className="text-primary text-sm font-medium">
+                      Add a Book
+                    </Text>
+                  </Pressable>
+                </>
+              ) : (
+                <Text className="text-muted text-sm text-center leading-relaxed">
+                  No reflections yet.{"\n"}Tap + to log your first one.
+                </Text>
+              )}
             </Animated.View>
           )}
         </View>
