@@ -79,54 +79,42 @@ export default function HomeScreen() {
             {currentlyReading.coverUrl ? (
               <ImageBackground
                 source={{ uri: currentlyReading.coverUrl }}
-                blurRadius={60}
+                blurRadius={80}
                 resizeMode="cover"
+                imageStyle={{ transform: [{ scale: 2 }] }}
+                style={{ flexDirection: "row", gap: 16, padding: 20 }}
               >
-                <LinearGradient
-                  colors={[
-                    "rgba(0,0,0,0.7)",
-                    "rgba(0,0,0,0.3)",
-                    "rgba(0,0,0,0.15)",
-                    "rgba(0,0,0,0.4)",
-                    "rgba(0,0,0,0.65)",
-                  ]}
-                  locations={[0, 0.25, 0.5, 0.75, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={{ flexDirection: "row", gap: 16, padding: 20 }}
-                >
-                  <Image
-                    source={{ uri: currentlyReading.coverUrl }}
-                    className="w-16 h-24 rounded-xl"
-                    resizeMode="cover"
-                  />
-                  <View className="flex-1 justify-center">
-                    <Text className="text-[10px] font-medium uppercase tracking-widest text-white/50 mb-1.5">
-                      Currently reading
+                <Image
+                  source={{ uri: currentlyReading.coverUrl }}
+                  className="w-16 h-24 rounded-xl"
+                  resizeMode="cover"
+                />
+                <View className="flex-1 justify-center">
+                  <Text className="text-[10px] font-medium uppercase tracking-widest text-white/50 mb-1.5">
+                    Currently reading
+                  </Text>
+                  <Text
+                    className="text-white font-serif text-lg font-semibold leading-snug"
+                    numberOfLines={2}
+                  >
+                    {currentlyReading.title}
+                  </Text>
+                  <Text
+                    className="text-white/70 text-sm mt-0.5"
+                    numberOfLines={1}
+                  >
+                    {currentlyReading.authors.join(", ")}
+                  </Text>
+                  {bookEntries.length > 0 && (
+                    <Text className="text-white/40 text-xs mt-2">
+                      {bookEntries.length}{" "}
+                      {bookEntries.length === 1
+                        ? "reflection"
+                        : "reflections"}
+                      {latestEmotion ? ` · ${latestEmotion.emoji}` : ""}
                     </Text>
-                    <Text
-                      className="text-white font-serif text-lg font-semibold leading-snug"
-                      numberOfLines={2}
-                    >
-                      {currentlyReading.title}
-                    </Text>
-                    <Text
-                      className="text-white/70 text-sm mt-0.5"
-                      numberOfLines={1}
-                    >
-                      {currentlyReading.authors.join(", ")}
-                    </Text>
-                    {bookEntries.length > 0 && (
-                      <Text className="text-white/40 text-xs mt-2">
-                        {bookEntries.length}{" "}
-                        {bookEntries.length === 1
-                          ? "reflection"
-                          : "reflections"}
-                        {latestEmotion ? ` · ${latestEmotion.emoji}` : ""}
-                      </Text>
-                    )}
-                  </View>
-                </LinearGradient>
+                  )}
+                </View>
               </ImageBackground>
             ) : (
               <LinearGradient
