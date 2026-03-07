@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import { useRouter } from "expo-router";
-import { Image, Keyboard, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Image, Keyboard, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { BookOpenIcon, PencilIcon } from "react-native-heroicons/outline";
 import LottieView from "lottie-react-native";
@@ -11,7 +11,7 @@ import BookSearchResults from "../features/books/components/BookSearchResults";
 import { useSearchBooks } from "../features/books/queries/use-search-books";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { Book, ReadingStatus } from "../features/books/types/book";
-import { CloseButton, ScreenWrapper, useThemeColors } from "../shared";
+import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper, useThemeColors } from "../shared";
 
 type ScreenMode =
   | { kind: "search" }
@@ -43,6 +43,7 @@ export default function AddBookScreen() {
   // Confirm state
   const [selectedStatus, setSelectedStatus] = useState<ReadingStatus>("want-to-read");
   const [firstImpression, setFirstImpression] = useState("");
+  const [isFocusMode, setIsFocusMode] = useState(false);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -73,7 +74,7 @@ export default function AddBookScreen() {
     setMode({ kind: "confirm", book });
   };
 
-  const handleManualNext = () => {
+  const handleManualAdd = () => {
     Keyboard.dismiss();
     const book: Book = {
       id: `manual-${Date.now()}`,
@@ -81,7 +82,11 @@ export default function AddBookScreen() {
       authors: manualAuthor.trim() ? [manualAuthor.trim()] : ["Unknown author"],
       source: "manual",
     };
-    setMode({ kind: "confirm", book });
+    addBook(book, selectedStatus);
+    if (firstImpression.trim()) {
+      updateBook(book.id, { firstImpression: firstImpression.trim() });
+    }
+    router.back();
   };
 
   const handleAdd = (book: Book) => {
@@ -168,42 +173,104 @@ export default function AddBookScreen() {
       )}
 
       {mode.kind === "manual" && (
-        <Animated.View entering={FadeInDown.duration(300)} className="gap-5 mt-4">
-          <View>
-            <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-              Title
-            </Text>
-            <Input
-              value={manualTitle}
-              onChangeText={setManualTitle}
-              placeholder="Book title"
-              autoFocus
-              className="bg-card border-border"
-            />
-          </View>
-          <View>
-            <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-              Author
-            </Text>
-            <Input
-              value={manualAuthor}
-              onChangeText={setManualAuthor}
-              placeholder="Author name (optional)"
-              className="bg-card border-border"
-            />
-          </View>
-          <Button
-            onPress={handleManualNext}
-            disabled={manualTitle.trim().length === 0}
-            shape="pill"
-            className="mt-2"
-          >
-            <Text className="text-background text-center font-medium">Next</Text>
-          </Button>
-        </Animated.View>
+        <>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerClassName="pb-6"
+          keyboardShouldPersistTaps="handled"
+        >
+          <Animated.View entering={FadeInDown.duration(300)} className="gap-5 mt-4">
+            <View>
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+                Title
+              </Text>
+              <Input
+                value={manualTitle}
+                onChangeText={setManualTitle}
+                placeholder="Book title"
+                autoFocus
+                className="bg-card border-border"
+              />
+            </View>
+            <View>
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+                Author
+              </Text>
+              <Input
+                value={manualAuthor}
+                onChangeText={setManualAuthor}
+                placeholder="Author name (optional)"
+                className="bg-card border-border"
+              />
+            </View>
+
+            <View className="h-px bg-border" />
+
+            <View>
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-3">
+                Reading Status
+              </Text>
+              <View className="flex-row gap-2">
+                {STATUS_OPTIONS.map((opt) => (
+                  <Pressable
+                    key={opt.value}
+                    onPress={() => setSelectedStatus(opt.value)}
+                    className={`flex-1 rounded-xl py-3 items-center border-[1.5px] ${
+                      selectedStatus === opt.value
+                        ? "bg-primary/10 border-primary"
+                        : "bg-card border-border"
+                    }`}
+                  >
+                    <Text
+                      className={`text-sm font-medium ${
+                        selectedStatus === opt.value ? "text-primary" : "text-foreground"
+                      }`}
+                    >
+                      {opt.label}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+
+            <View className="h-px bg-border" />
+
+            <Pressable onPress={() => setIsFocusMode(true)} className="py-1">
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+                First Impression (optional)
+              </Text>
+              {firstImpression ? (
+                <RichTextPreview html={firstImpression} />
+              ) : (
+                <Text className="text-sm text-muted/60 italic">
+                  Tap to write what you expect from this book..
+                </Text>
+              )}
+            </Pressable>
+
+            <Button
+              onPress={handleManualAdd}
+              disabled={manualTitle.trim().length === 0}
+              shape="pill"
+              className="mt-2"
+            >
+              <Text className="text-background text-center font-medium">Add to Library</Text>
+            </Button>
+          </Animated.View>
+        </ScrollView>
+        {isFocusMode && (
+          <FocusModeOverlay
+            content={firstImpression}
+            onChangeContent={setFirstImpression}
+            onDone={() => setIsFocusMode(false)}
+            placeholder="What do you expect from this book?"
+          />
+        )}
+        </>
       )}
 
       {mode.kind === "confirm" && (
+        <>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerClassName="pb-6"
@@ -261,18 +328,18 @@ export default function AddBookScreen() {
           <View className="h-px bg-border" />
 
           <Animated.View entering={FadeInDown.duration(400).delay(200)} className="py-4">
-            <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-              First Impression (optional)
-            </Text>
-            <TextInput
-              className="text-sm text-foreground leading-relaxed min-h-[80px] bg-card border-[1.5px] border-border rounded-lg px-3 py-2.5"
-              placeholderTextColor="rgba(128,128,128,0.5)"
-              value={firstImpression}
-              onChangeText={setFirstImpression}
-              placeholder="What do you expect from this book?"
-              multiline
-              textAlignVertical="top"
-            />
+            <Pressable onPress={() => setIsFocusMode(true)}>
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+                First Impression (optional)
+              </Text>
+              {firstImpression ? (
+                <RichTextPreview html={firstImpression} />
+              ) : (
+                <Text className="text-sm text-muted/60 italic">
+                  Tap to write what you expect from this book..
+                </Text>
+              )}
+            </Pressable>
           </Animated.View>
 
           <Animated.View entering={FadeInDown.duration(400).delay(300)} className="pt-2">
@@ -288,6 +355,15 @@ export default function AddBookScreen() {
             </Button>
           </Animated.View>
         </ScrollView>
+        {isFocusMode && (
+          <FocusModeOverlay
+            content={firstImpression}
+            onChangeContent={setFirstImpression}
+            onDone={() => setIsFocusMode(false)}
+            placeholder="What do you expect from this book?"
+          />
+        )}
+        </>
       )}
     </ScreenWrapper>
   );
