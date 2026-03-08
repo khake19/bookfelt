@@ -185,34 +185,45 @@ const BookDetailScreen = () => {
           {/* Timeline */}
           {entries.length > 0 ? (
             <View className="relative">
-              {/* Vertical line */}
-              <View className="absolute left-[5px] top-1.5 bottom-0 w-0.5 bg-border" />
-
               {entries.map((entry, index) => {
                 const emotion = entry.feeling
                   ? getEmotionByLabel(entry.feeling)
                   : undefined;
+                const isLast = index === entries.length - 1;
 
                 return (
                   <Animated.View
                     key={entry.id}
                     entering={FadeInDown.duration(400).delay(250 + index * 80)}
                   >
-                    <Pressable
-                      onPress={() => handleEntryPress(entry.id)}
-                      onLongPress={() => handleLongPress(entry.id)}
-                      className="flex-row mb-6"
-                    >
-                      {/* Dot */}
-                      <View
-                        className="w-3 h-3 rounded-full mt-1 z-10"
-                        style={{
-                          backgroundColor: emotion?.color ?? "#71717a",
-                        }}
-                      />
+                    <View className="flex-row mb-6">
+                      {/* Dot + Line segment */}
+                      <View className="w-3 items-center">
+                        <View
+                          className="w-3 h-3 rounded-full mt-1 z-10"
+                          style={{
+                            backgroundColor: emotion?.color ?? "#71717a",
+                          }}
+                        />
+                        {!isLast && (
+                          <View
+                            className="absolute w-0.5"
+                            style={{
+                              top: 16,
+                              bottom: -28,
+                              backgroundColor: emotion?.color ?? "#71717a",
+                              opacity: 0.3,
+                            }}
+                          />
+                        )}
+                      </View>
 
                       {/* Content */}
-                      <View className="flex-1 ml-4">
+                      <Pressable
+                        onPress={() => handleEntryPress(entry.id)}
+                        onLongPress={() => handleLongPress(entry.id)}
+                        className="flex-1 ml-4"
+                      >
                         <View className="flex-row items-center gap-2">
                           <Text className="text-muted/60 text-xs">
                             {timeAgo(entry.date)}
@@ -247,8 +258,8 @@ const BookDetailScreen = () => {
                             {emotion.emoji} {emotion.label}
                           </Text>
                         )}
-                      </View>
-                    </Pressable>
+                      </Pressable>
+                    </View>
                   </Animated.View>
                 );
               })}
