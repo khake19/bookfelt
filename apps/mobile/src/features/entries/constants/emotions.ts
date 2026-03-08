@@ -5,18 +5,24 @@ export interface Emotion {
 }
 
 export const EMOTIONS: Emotion[] = [
-  { label: "mind-blown", emoji: "🤯", color: "#F0C040" },
-  { label: "confused", emoji: "😵‍💫", color: "#9B8AD4" },
-  { label: "unsettled", emoji: "😟", color: "#E0956A" },
-  { label: "hopeful", emoji: "🌱", color: "#7AB87A" },
-  { label: "sad", emoji: "💙", color: "#6A96D4" },
-  { label: "fear", emoji: "😰", color: "#C090E0" },
-  { label: "curious", emoji: "🔍", color: "#60C4BC" },
-  { label: "quiet", emoji: "🌫️", color: "#B0A8A0" },
-  { label: "happy", emoji: "😊", color: "#F2D479" },
-  { label: "serene", emoji: "🧘", color: "#8EBAC4" },
-  { label: "inspired", emoji: "✨", color: "#E4AE6A" },
-  { label: "melancholy", emoji: "🥀", color: "#B898B0" },
+  // High Tension
+  { label: "Mind-blown", emoji: "⚡", color: "#F0C040" },
+  { label: "Betrayed", emoji: "🗡️", color: "#C4564A" },
+  { label: "Suspicious", emoji: "🗝️", color: "#B89860" },
+  { label: "Anxious", emoji: "🫀", color: "#D4786A" },
+  { label: "Appalled", emoji: "💀", color: "#7A7068" },
+  // Deep Feeling
+  { label: "Wrecked", emoji: "🥀", color: "#B05060" },
+  { label: "Melancholy", emoji: "🍂", color: "#B8885A" },
+  { label: "Soft", emoji: "🕊️", color: "#A8B8A0" },
+  { label: "Nostalgic", emoji: "⏳", color: "#C4A870" },
+  { label: "Bittersweet", emoji: "☕", color: "#8B7260" },
+  // Intellectual
+  { label: "Awe-struck", emoji: "✨", color: "#E4AE6A" },
+  { label: "Inspired", emoji: "✍️", color: "#D4A050" },
+  { label: "Intrigued", emoji: "📜", color: "#A09070" },
+  { label: "Enlightened", emoji: "💡", color: "#E0C060" },
+  { label: "Haunted", emoji: "🌑", color: "#605850" },
 ];
 
 export const getEmotionByLabel = (label: string) =>
