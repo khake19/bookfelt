@@ -183,9 +183,53 @@ const BookDetailScreen = () => {
             />
           </Animated.View>
 
+          {/* Fin marker */}
+          {book.status === "finished" && (
+            <Animated.View
+              entering={FadeInDown.duration(400).delay(150)}
+              className="flex-row items-center mb-5 gap-3"
+            >
+              <View className="flex-1 h-px bg-primary/20" />
+              <Text className="text-primary font-serif-italic text-sm italic">
+                Fin.
+              </Text>
+              <View className="flex-1 h-px bg-primary/20" />
+            </Animated.View>
+          )}
+
           {/* Timeline */}
           {entries.length > 0 ? (
             <View className="relative">
+              {/* Final Thought cap */}
+              {book.finalThought && (
+                <Animated.View entering={FadeInDown.duration(400).delay(200)}>
+                  <View className="flex-row mb-6">
+                    <View className="w-3 items-center">
+                      <View
+                        className="w-3 h-3 rounded-full mt-1 z-10"
+                        style={{ backgroundColor: primary }}
+                      />
+                      <View
+                        className="absolute w-0.5"
+                        style={{
+                          top: 16,
+                          bottom: -28,
+                          backgroundColor: primary,
+                          opacity: 0.3,
+                        }}
+                      />
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <Text className="text-primary text-xs font-medium">
+                        Final Thought
+                      </Text>
+                      <View className="mt-1.5">
+                        <RichTextPreview html={book.finalThought} />
+                      </View>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
               {entries.map((entry, index) => {
                 const emotion = entry.feeling
                   ? getEmotionByLabel(entry.feeling)
@@ -296,6 +340,26 @@ const BookDetailScreen = () => {
             </View>
           ) : (
             <>
+              {book.finalThought && (
+                <Animated.View entering={FadeInDown.duration(400).delay(200)}>
+                  <View className="flex-row mb-6">
+                    <View className="w-3 items-center">
+                      <View
+                        className="w-3 h-3 rounded-full mt-1 z-10"
+                        style={{ backgroundColor: primary }}
+                      />
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <Text className="text-primary text-xs font-medium">
+                        Final Thought
+                      </Text>
+                      <View className="mt-1.5">
+                        <RichTextPreview html={book.finalThought} />
+                      </View>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
               <Animated.View
                 entering={FadeInDown.duration(400).delay(250)}
                 className="items-center py-12"
