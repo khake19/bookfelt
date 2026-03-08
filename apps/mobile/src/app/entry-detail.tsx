@@ -42,7 +42,7 @@ const EntryDetailScreen = () => {
     }
   }, [setValue]);
 
-  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [focusTarget, setFocusTarget] = useState<"snippet" | "reflection" | null>(null);
   const [androidPickerMode, setAndroidPickerMode] = useState<
     "date" | "time" | null
   >(null);
@@ -223,28 +223,20 @@ const EntryDetailScreen = () => {
           </View>
         </View>
         <View className="h-px bg-border" />
-        <View>
+        <Pressable onPress={() => setFocusTarget("snippet")} className="py-1">
           <Text className="text-xs font-medium tracking-widest text-muted mb-1.5">
             SNIPPET
           </Text>
-          <View className="border-l-2 border-foreground/20 rounded-l pl-3">
-            <Controller
-              control={control}
-              name="snippet"
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  className="h-auto w-full border-0 bg-transparent p-0 text-sm leading-relaxed text-foreground/70 font-serif-italic shadow-none placeholder:font-light"
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="Paste or type a passage that resonated..."
-                  multiline
-                  numberOfLines={4}
-                  style={{ minHeight: 80, textAlignVertical: "top" }}
-                />
-              )}
-            />
-          </View>
-        </View>
+          {snippet ? (
+            <View className="border-l-2 border-foreground/20 rounded-l pl-3">
+              <RichTextPreview html={snippet} />
+            </View>
+          ) : (
+            <Text className="text-sm text-muted/60 italic">
+              Tap to write a passage that resonated...
+            </Text>
+          )}
+        </Pressable>
         <View className="h-px bg-border" />
         <View>
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
@@ -281,7 +273,7 @@ const EntryDetailScreen = () => {
           </View>
         </View>
         <View className="h-px bg-border" />
-        <Pressable onPress={() => setIsFocusMode(true)} className="py-3">
+        <Pressable onPress={() => setFocusTarget("reflection")} className="py-3">
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
             Your Reflection
           </Text>
@@ -294,12 +286,20 @@ const EntryDetailScreen = () => {
           )}
         </Pressable>
       </ScrollView>
-      {isFocusMode && (
+      {focusTarget === "snippet" && (
+        <FocusModeOverlay
+          content={snippet}
+          onChangeContent={(html) => setValue("snippet", html)}
+          onDone={() => setFocusTarget(null)}
+          placeholder="Paste or type a passage that resonated..."
+        />
+      )}
+      {focusTarget === "reflection" && (
         <FocusModeOverlay
           subtitle={snippet ? `\u201C${snippet}\u201D` : ""}
           content={reflection}
           onChangeContent={(html) => setValue("reflection", html)}
-          onDone={() => setIsFocusMode(false)}
+          onDone={() => setFocusTarget(null)}
           placeholder="Write what this made you feel.."
         />
       )}
