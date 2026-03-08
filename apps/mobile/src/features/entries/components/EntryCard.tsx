@@ -99,7 +99,7 @@ const EntryCard = (props: EntryCardProps) => {
                 numberOfLines={3}
               >
                 {"\u201C"}
-                {snippet}
+                {stripHtml(snippet)}
                 {"\u201D"}
               </Text>
             </View>

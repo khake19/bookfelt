@@ -23,7 +23,7 @@ const BookDetailScreen = () => {
   const router = useRouter();
   const { books, updateStatus, removeBook, updateBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
-  const { primary } = useThemeColors();
+  const { primary, background } = useThemeColors();
   const insets = useSafeAreaInsets();
   const book = books.find((b) => b.id === bookId);
 
@@ -85,7 +85,7 @@ const BookDetailScreen = () => {
 
   return (
     <View className="flex-1 bg-background">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="pb-6">
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="pb-6" stickyHeaderIndices={[1]}>
         {/* Header with blurred cover background */}
         <Animated.View entering={FadeInDown.duration(400)}>
           {book.coverUrl ? (
@@ -170,12 +170,14 @@ const BookDetailScreen = () => {
           )}
         </Animated.View>
 
-        {/* Body */}
-        <View className="px-5 pt-5">
-          {/* Section header */}
+        {/* Sticky section header */}
+        <View
+          className="z-10"
+          style={{ paddingTop: insets.top, backgroundColor: background }}
+        >
           <Animated.View
             entering={FadeInDown.duration(400).delay(150)}
-            className="flex-row items-center justify-between mb-5"
+            className="flex-row items-center justify-between px-5 pb-3"
           >
             <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
               Reflections ({entries.length})
@@ -186,7 +188,10 @@ const BookDetailScreen = () => {
               onPress={handleNewEntry}
             />
           </Animated.View>
+        </View>
 
+        {/* Body */}
+        <View className="px-5">
           {/* Fin marker */}
           {book.status === "finished" && (
             <Animated.View
@@ -296,6 +301,10 @@ const BookDetailScreen = () => {
                 const emotion = entry.feeling
                   ? getEmotionByLabel(entry.feeling)
                   : undefined;
+                const nextEntry = entries[index + 1];
+                const nextEmotion = nextEntry?.feeling
+                  ? getEmotionByLabel(nextEntry.feeling)
+                  : undefined;
                 const isLast = index === entries.length - 1 && !book.firstImpression;
 
                 return (
@@ -318,7 +327,7 @@ const BookDetailScreen = () => {
                             style={{
                               top: 16,
                               bottom: -28,
-                              backgroundColor: emotion?.color ?? "#71717a",
+                              backgroundColor: nextEmotion?.color ?? "#71717a",
                               opacity: 0.3,
                             }}
                           />
