@@ -22,8 +22,9 @@ export const useLibraryStore = create<LibraryState>((set) => ({
         status,
         addedAt: Date.now(),
       };
+      const hasActiveRead = state.books.some((b) => b.status === "reading");
       const shouldSetPrimary =
-        status === "reading" && state.primaryReadId === null;
+        !hasActiveRead && state.primaryReadId === null;
       return {
         books: [libraryBook, ...state.books],
         ...(shouldSetPrimary && { primaryReadId: book.id }),

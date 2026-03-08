@@ -16,13 +16,14 @@ import { getEmotionByLabel, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { ReadingStatus } from "../features/books/types/book";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { CloseButton, PillButton, ScreenWrapper, timeAgo } from "../shared";
+import { CloseButton, PillButton, RichTextPreview, ScreenWrapper, timeAgo, useThemeColors } from "../shared";
 
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
   const { books, updateStatus, removeBook, updateBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
+  const { primary } = useThemeColors();
   const insets = useSafeAreaInsets();
   const book = books.find((b) => b.id === bookId);
 
@@ -189,7 +190,7 @@ const BookDetailScreen = () => {
                 const emotion = entry.feeling
                   ? getEmotionByLabel(entry.feeling)
                   : undefined;
-                const isLast = index === entries.length - 1;
+                const isLast = index === entries.length - 1 && !book.firstImpression;
 
                 return (
                   <Animated.View
@@ -263,21 +264,77 @@ const BookDetailScreen = () => {
                   </Animated.View>
                 );
               })}
+
+              {/* First Impression anchor */}
+              {book.firstImpression && (
+                <Animated.View
+                  entering={FadeInDown.duration(400).delay(250 + entries.length * 80)}
+                >
+                  <View className="flex-row">
+                    <View className="w-3 items-center">
+                      <View
+                        className="w-3 h-3 rounded-full mt-1 z-10"
+                        style={{ backgroundColor: primary }}
+                      />
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <View className="flex-row items-center gap-2">
+                        <Text className="text-primary text-xs font-medium">
+                          First Impression
+                        </Text>
+                        <Text className="text-muted/40 text-xs">
+                          · {timeAgo(book.addedAt)}
+                        </Text>
+                      </View>
+                      <View className="mt-1.5">
+                        <RichTextPreview html={book.firstImpression} />
+                      </View>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
             </View>
           ) : (
-            <Animated.View
-              entering={FadeInDown.duration(400).delay(250)}
-              className="items-center py-12"
-            >
-              <Text className="text-muted text-sm text-center leading-relaxed mb-4">
-                No reflections yet.
-              </Text>
-              <PillButton
-                icon="plus"
-                label="Add Reflection"
-                onPress={handleNewEntry}
-              />
-            </Animated.View>
+            <>
+              <Animated.View
+                entering={FadeInDown.duration(400).delay(250)}
+                className="items-center py-12"
+              >
+                <Text className="text-muted text-sm text-center leading-relaxed mb-4">
+                  No reflections yet.
+                </Text>
+                <PillButton
+                  icon="plus"
+                  label="Add Reflection"
+                  onPress={handleNewEntry}
+                />
+              </Animated.View>
+              {book.firstImpression && (
+                <Animated.View entering={FadeInDown.duration(400).delay(350)}>
+                  <View className="flex-row">
+                    <View className="w-3 items-center">
+                      <View
+                        className="w-3 h-3 rounded-full mt-1 z-10"
+                        style={{ backgroundColor: primary }}
+                      />
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <View className="flex-row items-center gap-2">
+                        <Text className="text-primary text-xs font-medium">
+                          First Impression
+                        </Text>
+                        <Text className="text-muted/40 text-xs">
+                          · {timeAgo(book.addedAt)}
+                        </Text>
+                      </View>
+                      <View className="mt-1.5">
+                        <RichTextPreview html={book.firstImpression} />
+                      </View>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
+            </>
           )}
         </View>
       </ScrollView>

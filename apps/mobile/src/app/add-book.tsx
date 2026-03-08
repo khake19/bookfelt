@@ -13,7 +13,7 @@ import { useSearchBooks } from "../features/books/queries/use-search-books";
 import { useIsbnLookup } from "../features/books/queries/use-isbn-lookup";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { Book, ReadingStatus } from "../features/books/types/book";
-import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper, useThemeColors } from "../shared";
+import { CloseButton, ScreenWrapper, useThemeColors } from "../shared";
 
 type ScreenMode =
   | { kind: "search" }
@@ -28,7 +28,7 @@ const STATUS_OPTIONS: { value: ReadingStatus; label: string }[] = [
 export default function AddBookScreen() {
   const router = useRouter();
   const { muted, primary } = useThemeColors();
-  const { addBook, updateBook, isInLibrary } = useLibrary();
+  const { addBook, isInLibrary } = useLibrary();
 
   const [mode, setMode] = useState<ScreenMode>({ kind: "search" });
   const [isScannerOpen, setIsScannerOpen] = useState(false);
@@ -46,8 +46,6 @@ export default function AddBookScreen() {
 
   // Confirm state
   const [selectedStatus, setSelectedStatus] = useState<ReadingStatus>("want-to-read");
-  const [firstImpression, setFirstImpression] = useState("");
-  const [isFocusMode, setIsFocusMode] = useState(false);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
@@ -57,7 +55,6 @@ export default function AddBookScreen() {
 
   const goBackToSearch = () => {
     setMode({ kind: "search" });
-    setFirstImpression("");
     setSelectedStatus("want-to-read");
   };
 
@@ -117,18 +114,12 @@ export default function AddBookScreen() {
       source: "manual",
     };
     addBook(book, selectedStatus);
-    if (firstImpression.trim()) {
-      updateBook(book.id, { firstImpression: firstImpression.trim() });
-    }
-    router.back();
+    router.replace({ pathname: "/first-impression", params: { bookId: book.id } });
   };
 
   const handleAdd = (book: Book) => {
     addBook(book, selectedStatus);
-    if (firstImpression.trim()) {
-      updateBook(book.id, { firstImpression: firstImpression.trim() });
-    }
-    router.back();
+    router.replace({ pathname: "/first-impression", params: { bookId: book.id } });
   };
 
   const alreadyAdded = mode.kind === "confirm" && isInLibrary(mode.book.id);
@@ -268,21 +259,6 @@ export default function AddBookScreen() {
               </View>
             </View>
 
-            <View className="h-px bg-border" />
-
-            <Pressable onPress={() => setIsFocusMode(true)} className="py-1">
-              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-                First Impression (optional)
-              </Text>
-              {firstImpression ? (
-                <RichTextPreview html={firstImpression} />
-              ) : (
-                <Text className="text-sm text-muted/60 italic">
-                  Tap to write what you expect from this book..
-                </Text>
-              )}
-            </Pressable>
-
             <Button
               onPress={handleManualAdd}
               disabled={manualTitle.trim().length === 0}
@@ -293,14 +269,6 @@ export default function AddBookScreen() {
             </Button>
           </Animated.View>
         </ScrollView>
-        {isFocusMode && (
-          <FocusModeOverlay
-            content={firstImpression}
-            onChangeContent={setFirstImpression}
-            onDone={() => setIsFocusMode(false)}
-            placeholder="What do you expect from this book?"
-          />
-        )}
         </>
       )}
 
@@ -356,24 +324,7 @@ export default function AddBookScreen() {
             </View>
           </Animated.View>
 
-          <View className="h-px bg-border" />
-
-          <Animated.View entering={FadeInDown.duration(400).delay(200)} className="py-4">
-            <Pressable onPress={() => setIsFocusMode(true)}>
-              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-                First Impression (optional)
-              </Text>
-              {firstImpression ? (
-                <RichTextPreview html={firstImpression} />
-              ) : (
-                <Text className="text-sm text-muted/60 italic">
-                  Tap to write what you expect from this book..
-                </Text>
-              )}
-            </Pressable>
-          </Animated.View>
-
-          <Animated.View entering={FadeInDown.duration(400).delay(300)} className="pt-2">
+          <Animated.View entering={FadeInDown.duration(400).delay(200)} className="pt-2">
             <Button
               onPress={() => handleAdd(mode.book)}
               shape="pill"
@@ -386,14 +337,6 @@ export default function AddBookScreen() {
             </Button>
           </Animated.View>
         </ScrollView>
-        {isFocusMode && (
-          <FocusModeOverlay
-            content={firstImpression}
-            onChangeContent={setFirstImpression}
-            onDone={() => setIsFocusMode(false)}
-            placeholder="What do you expect from this book?"
-          />
-        )}
         </>
       )}
       {isbnLookup.isPending && (
