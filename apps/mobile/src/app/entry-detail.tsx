@@ -15,6 +15,8 @@ import {
   stripHtml,
 } from "../shared";
 import { consumePendingSnippet } from "../shared/components/FloatingActionButton";
+import { CameraIcon } from "react-native-heroicons/outline";
+import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
 
 const EntryDetailScreen = () => {
   const { id, bookId } = useLocalSearchParams<{
@@ -44,6 +46,7 @@ const EntryDetailScreen = () => {
   }, [setValue]);
 
   const [focusTarget, setFocusTarget] = useState<"snippet" | "reflection" | null>(null);
+  const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
   const [androidPickerMode, setAndroidPickerMode] = useState<
     "date" | "time" | null
   >(null);
@@ -224,20 +227,31 @@ const EntryDetailScreen = () => {
           </View>
         </View>
         <View className="h-px bg-border" />
-        <Pressable onPress={() => setFocusTarget("snippet")} className="py-1">
-          <Text className="text-xs font-medium tracking-widest text-muted mb-1.5">
-            SNIPPET
-          </Text>
-          {snippet ? (
-            <View className="border-l-2 border-foreground/20 rounded-l pl-3">
-              <RichTextPreview html={snippet} />
-            </View>
-          ) : (
-            <Text className="text-sm text-muted/60 italic">
-              Tap to write a passage that resonated...
+        <View className="py-1">
+          <View className="flex-row items-center justify-between mb-1.5">
+            <Text className="text-xs font-medium tracking-widest text-muted">
+              SNIPPET
             </Text>
-          )}
-        </Pressable>
+            <Pressable
+              onPress={() => setIsTextScannerOpen(true)}
+              hitSlop={8}
+              className="p-1"
+            >
+              <CameraIcon size={18} className="text-muted" />
+            </Pressable>
+          </View>
+          <Pressable onPress={() => setFocusTarget("snippet")}>
+            {snippet ? (
+              <View className="border-l-2 border-foreground/20 rounded-l pl-3">
+                <RichTextPreview html={snippet} />
+              </View>
+            ) : (
+              <Text className="text-sm text-muted/60 italic">
+                Tap to write a passage that resonated...
+              </Text>
+            )}
+          </Pressable>
+        </View>
         <View className="h-px bg-border" />
         <View>
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
@@ -302,6 +316,15 @@ const EntryDetailScreen = () => {
           onChangeContent={(html) => setValue("reflection", html)}
           onDone={() => setFocusTarget(null)}
           placeholder="Write what this made you feel.."
+        />
+      )}
+      {isTextScannerOpen && (
+        <TextScannerOverlay
+          onCaptured={(text) => {
+            setValue("snippet", text);
+            setIsTextScannerOpen(false);
+          }}
+          onClose={() => setIsTextScannerOpen(false)}
         />
       )}
     </ScreenWrapper>
