@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Book, LibraryBook, ReadingStatus } from "../types/book";
 
 interface LibraryState {
@@ -11,7 +13,9 @@ interface LibraryState {
   setPrimaryRead: (bookId: string) => void;
 }
 
-export const useLibraryStore = create<LibraryState>((set) => ({
+export const useLibraryStore = create<LibraryState>()(
+  persist(
+    (set) => ({
   books: [],
   primaryReadId: null,
   addBook: (book, status) =>
@@ -66,4 +70,10 @@ export const useLibraryStore = create<LibraryState>((set) => ({
       ),
     })),
   setPrimaryRead: (bookId) => set({ primaryReadId: bookId }),
-}));
+    }),
+    {
+      name: "bookfelt-library",
+      storage: createJSONStorage(() => AsyncStorage),
+    },
+  ),
+);

@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Entry } from "../types/entry";
 
 interface EntryState {
@@ -8,7 +10,9 @@ interface EntryState {
   updateEntry: (entryId: string, updates: Partial<Entry>) => void;
 }
 
-export const useEntryStore = create<EntryState>((set) => ({
+export const useEntryStore = create<EntryState>()(
+  persist(
+    (set) => ({
   entries: [],
   addEntry: (entry) =>
     set((state) => ({
@@ -27,4 +31,10 @@ export const useEntryStore = create<EntryState>((set) => ({
         e.id === entryId ? { ...e, ...updates } : e,
       ),
     })),
-}));
+    }),
+    {
+      name: "bookfelt-entries",
+      storage: createJSONStorage(() => AsyncStorage),
+    },
+  ),
+);

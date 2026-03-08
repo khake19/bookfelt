@@ -126,21 +126,32 @@ const TextScannerOverlay = ({
       // Filter blocks within the viewfinder's vertical range
       const topRatio = vfTop.value / SCREEN_H;
       const bottomRatio = (vfTop.value + vfHeight.value) / SCREEN_H;
-      const photoH = Math.max(photo.width, photo.height); // taller dimension
+
+      // Android captures in landscape orientation (width > height)
+      // In that case, screen Y maps to image X (inverted)
+      const isLandscape = photo.width > photo.height;
 
       const blocks = result?.blocks as Array<{
         blockText: string;
-        blockFrame: { y: number; height: number };
+        blockFrame: { x: number; y: number; height: number; width: number };
       }>;
+
+      const getScreenY = (frame: { x: number; y: number }) => {
+        if (isLandscape) {
+          // Landscape-right: screen top = high X in image
+          return (photo.width - frame.x) / photo.width;
+        }
+        return frame.y / photo.height;
+      };
 
       const text = blocks
         ?.filter((block) => {
           const frame = block.blockFrame;
           if (!frame) return false;
-          const centerY = frame.y / photoH;
-          return centerY >= topRatio && centerY <= bottomRatio;
+          const screenY = getScreenY(frame);
+          return screenY >= topRatio && screenY <= bottomRatio;
         })
-        .sort((a, b) => (a.blockFrame?.y ?? 0) - (b.blockFrame?.y ?? 0))
+        .sort((a, b) => getScreenY(a.blockFrame) - getScreenY(b.blockFrame))
         .map((block) => block.blockText)
         .filter(Boolean)
         .join("\n\n");
