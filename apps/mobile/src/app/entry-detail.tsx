@@ -12,6 +12,7 @@ import {
   FocusModeOverlay,
   RichTextPreview,
   ScreenWrapper,
+  stripHtml,
 } from "../shared";
 import { consumePendingSnippet } from "../shared/components/FloatingActionButton";
 
@@ -296,7 +297,7 @@ const EntryDetailScreen = () => {
       )}
       {focusTarget === "reflection" && (
         <FocusModeOverlay
-          subtitle={snippet ? `\u201C${snippet}\u201D` : ""}
+          subtitle={snippet ? `\u201C${stripHtml(snippet)}\u201D` : ""}
           content={reflection}
           onChangeContent={(html) => setValue("reflection", html)}
           onDone={() => setFocusTarget(null)}

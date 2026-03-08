@@ -16,7 +16,7 @@ import { getEmotionByLabel, useEntries } from "../features/entries";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { ReadingStatus } from "../features/books/types/book";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { CloseButton, PillButton, RichTextPreview, ScreenWrapper, timeAgo, useThemeColors } from "../shared";
+import { CloseButton, PillButton, RichTextPreview, ScreenWrapper, stripHtml, timeAgo, useThemeColors } from "../shared";
 
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
@@ -241,7 +241,7 @@ const BookDetailScreen = () => {
                             className="text-foreground font-serif text-sm italic mt-1.5 leading-relaxed"
                             numberOfLines={2}
                           >
-                            "{entry.snippet}"
+                            "{stripHtml(entry.snippet)}"
                           </Text>
                         ) : null}
 
