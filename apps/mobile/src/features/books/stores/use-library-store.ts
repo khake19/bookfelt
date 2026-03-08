@@ -45,9 +45,14 @@ export const useLibraryStore = create<LibraryState>((set) => ({
         b.id === bookId ? { ...b, status } : b,
       );
       let { primaryReadId } = state;
-      if (status === "reading" && primaryReadId === null) {
-        primaryReadId = bookId;
-      } else if (status !== "reading" && primaryReadId === bookId) {
+      if (status === "reading") {
+        if (primaryReadId === null) {
+          primaryReadId = bookId;
+        }
+      } else if (
+        (status === "finished" || status === "paused" || status === "dnf") &&
+        primaryReadId === bookId
+      ) {
         primaryReadId =
           books.find((b) => b.status === "reading" && b.id !== bookId)?.id ??
           null;

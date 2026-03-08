@@ -20,7 +20,9 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
       <Animated.View
         exiting={FadeOut.duration(200)}
         layout={LinearTransition.duration(300)}
-        className="flex-row gap-4 p-3 bg-card rounded-2xl"
+        className={`flex-row gap-4 p-3 bg-card rounded-2xl${
+          book.status === "paused" ? " opacity-80" : book.status === "dnf" ? " opacity-60" : ""
+        }`}
       >
         {book.coverUrl && (
           <Image
@@ -84,6 +86,28 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
                   Start Reading
                 </Text>
               </Pressable>
+            </View>
+          )}
+
+          {book.status === "paused" && (
+            <View className="flex-row items-center gap-2 mt-2">
+              <Pressable
+                onPress={onSetReading}
+                hitSlop={8}
+                className="bg-primary/10 rounded-full px-3 py-1"
+              >
+                <Text className="text-primary text-xs font-medium">
+                  Resume Reading
+                </Text>
+              </Pressable>
+            </View>
+          )}
+
+          {book.status === "dnf" && (
+            <View className="flex-row items-center gap-1.5 mt-2">
+              <Text className="text-muted/60 text-[10px] font-medium uppercase tracking-widest">
+                Shelved
+              </Text>
             </View>
           )}
         </View>

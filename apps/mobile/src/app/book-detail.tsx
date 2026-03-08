@@ -50,7 +50,11 @@ const BookDetailScreen = () => {
           removeBook(bookId);
           router.back();
         },
-        onChangeStatus: (status: ReadingStatus) => {
+        onChangeStatus: (status: ReadingStatus | "put-down") => {
+          if (status === "put-down") {
+            router.push({ pathname: "/exit-interview", params: { bookId } });
+            return;
+          }
           updateStatus(bookId, status);
           if (status === "finished") {
             SheetManager.show(SHEET_IDS.FINAL_THOUGHT, {
@@ -197,6 +201,34 @@ const BookDetailScreen = () => {
             </Animated.View>
           )}
 
+          {/* Paused marker */}
+          {book.status === "paused" && (
+            <Animated.View
+              entering={FadeInDown.duration(400).delay(150)}
+              className="flex-row items-center mb-5 gap-3"
+            >
+              <View className="flex-1 h-px bg-muted/20" />
+              <Text className="text-muted font-serif-italic text-sm italic">
+                Paused
+              </Text>
+              <View className="flex-1 h-px bg-muted/20" />
+            </Animated.View>
+          )}
+
+          {/* DNF marker */}
+          {book.status === "dnf" && (
+            <Animated.View
+              entering={FadeInDown.duration(400).delay(150)}
+              className="flex-row items-center mb-5 gap-3 opacity-70"
+            >
+              <View className="flex-1 h-px bg-muted/20" />
+              <Text className="text-muted font-serif-italic text-sm italic">
+                Set down.
+              </Text>
+              <View className="flex-1 h-px bg-muted/20" />
+            </Animated.View>
+          )}
+
           {/* Timeline */}
           {entries.length > 0 ? (
             <View className="relative">
@@ -225,6 +257,36 @@ const BookDetailScreen = () => {
                       </Text>
                       <View className="mt-1.5">
                         <RichTextPreview html={book.finalThought} />
+                      </View>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
+              {/* Exit Note node */}
+              {book.exitNote && (
+                <Animated.View entering={FadeInDown.duration(400).delay(200)}>
+                  <View className="flex-row mb-6">
+                    <View className="w-3 items-center">
+                      <View
+                        className={`rounded-full mt-1 z-10 ${
+                          book.status === "dnf"
+                            ? "w-2 h-2 bg-muted/30 ml-0.5"
+                            : "w-3 h-3 bg-muted/50"
+                        }`}
+                      />
+                      {book.status !== "dnf" && (
+                        <View
+                          className="absolute w-0.5 bg-muted/20"
+                          style={{ top: 16, bottom: -28 }}
+                        />
+                      )}
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <Text className="text-muted text-xs font-medium">
+                        Exit Note
+                      </Text>
+                      <View className="mt-1.5">
+                        <RichTextPreview html={book.exitNote} />
                       </View>
                     </View>
                   </View>
@@ -360,19 +422,44 @@ const BookDetailScreen = () => {
                   </View>
                 </Animated.View>
               )}
-              <Animated.View
-                entering={FadeInDown.duration(400).delay(250)}
-                className="items-center py-12"
-              >
-                <Text className="text-muted text-sm text-center leading-relaxed mb-4">
-                  No reflections yet.
-                </Text>
-                <PillButton
-                  icon="plus"
-                  label="Add Reflection"
-                  onPress={handleNewEntry}
-                />
-              </Animated.View>
+              {book.exitNote && (
+                <Animated.View entering={FadeInDown.duration(400).delay(200)}>
+                  <View className="flex-row mb-6">
+                    <View className="w-3 items-center">
+                      <View
+                        className={`rounded-full mt-1 z-10 ${
+                          book.status === "dnf"
+                            ? "w-2 h-2 bg-muted/30 ml-0.5"
+                            : "w-3 h-3 bg-muted/50"
+                        }`}
+                      />
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <Text className="text-muted text-xs font-medium">
+                        Exit Note
+                      </Text>
+                      <View className="mt-1.5">
+                        <RichTextPreview html={book.exitNote} />
+                      </View>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
+              {!book.firstImpression && (
+                <Animated.View
+                  entering={FadeInDown.duration(400).delay(250)}
+                  className="items-center py-12"
+                >
+                  <Text className="text-muted text-sm text-center leading-relaxed mb-4">
+                    No reflections yet.
+                  </Text>
+                  <PillButton
+                    icon="plus"
+                    label="Add Reflection"
+                    onPress={handleNewEntry}
+                  />
+                </Animated.View>
+              )}
               {book.firstImpression && (
                 <Animated.View entering={FadeInDown.duration(400).delay(350)}>
                   <View className="flex-row">

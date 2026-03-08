@@ -16,14 +16,18 @@ const FILTERS: { key: Filter; label: string }[] = [
   { key: "reading", label: "Reading" },
   { key: "want-to-read", label: "Want to Read" },
   { key: "finished", label: "Finished" },
+  { key: "paused", label: "Paused" },
+  { key: "dnf", label: "Shelved" },
 ];
 
-const STATUS_ORDER: ReadingStatus[] = ["reading", "want-to-read", "finished"];
+const STATUS_ORDER: ReadingStatus[] = ["reading", "paused", "want-to-read", "finished", "dnf"];
 
 const STATUS_LABELS: Record<ReadingStatus, string> = {
   reading: "Currently Reading",
+  paused: "Paused",
   "want-to-read": "Want to read",
   finished: "Finished",
+  dnf: "Shelved Journeys",
 };
 
 export default function LibraryScreen() {

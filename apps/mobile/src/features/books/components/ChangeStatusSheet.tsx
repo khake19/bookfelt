@@ -7,9 +7,12 @@ import { CheckIcon } from "react-native-heroicons/mini";
 import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
 import type { ReadingStatus } from "../types/book";
 
-const STATUS_OPTIONS: { value: ReadingStatus; label: string }[] = [
+type StatusOption = ReadingStatus | "put-down";
+
+const STATUS_OPTIONS: { value: StatusOption; label: string }[] = [
   { value: "reading", label: "Reading" },
   { value: "finished", label: "Finished" },
+  { value: "put-down", label: "Put Down" },
 ];
 
 export default function ChangeStatusSheet({

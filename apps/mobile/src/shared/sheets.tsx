@@ -24,13 +24,13 @@ declare module "react-native-actions-sheet" {
       payload: {
         onEdit: () => void;
         onDelete: () => void;
-        onChangeStatus: (status: ReadingStatus) => void;
+        onChangeStatus: (status: ReadingStatus | "put-down") => void;
         currentStatus: ReadingStatus;
       };
     }>;
     "change-status-sheet": SheetDefinition<{
       payload: {
-        onChangeStatus: (status: ReadingStatus) => void;
+        onChangeStatus: (status: ReadingStatus | "put-down") => void;
         currentStatus: ReadingStatus;
       };
     }>;
