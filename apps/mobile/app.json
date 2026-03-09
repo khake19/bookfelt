@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.kerk.-bookfelt-mobile"
+      "bundleIdentifier": "com.kerk.-bookfelt-mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow Bookfelt to use your camera to scan book barcodes."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +21,10 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.kerk.bookfeltmobile"
+      "package": "com.kerk.bookfeltmobile",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -62,6 +68,12 @@
           ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b5012abf-bcaa-438c-bed8-7106a95374ed"
+      }
+    }
   }
 }
