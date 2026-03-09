@@ -20,8 +20,7 @@ import { useThemeColors } from '../hooks/use-theme-colors';
 import { useLibrary } from '../../features/books/hooks/use-library';
 import { useEntries } from '../../features/entries/hooks/use-entries';
 import TextScannerOverlay from '../../features/entries/components/TextScannerOverlay';
-import VoiceRecordingOverlay from '../../features/entries/components/VoiceRecordingOverlay';
-import TranscriptionOverlay from '../../features/entries/components/TranscriptionOverlay';
+import VoiceIsland from '../../features/entries/components/VoiceIsland';
 
 // Module-level store to pass large OCR text without URL params
 let _pendingSnippet: string | null = null;
@@ -114,11 +113,7 @@ export default function FloatingActionButton() {
   const progress = useSharedValue(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
-  const [isVoiceRecording, setIsVoiceRecording] = useState(false);
-  const [recordingResult, setRecordingResult] = useState<{
-    audioUri: string;
-    fileName: string;
-  } | null>(null);
+  const [isVoiceIslandOpen, setIsVoiceIslandOpen] = useState(false);
 
   const bottomOffset = TAB_BAR_HEIGHT + insets.bottom + 16;
 
@@ -146,7 +141,7 @@ export default function FloatingActionButton() {
   const handleAudio = () => {
     if (!primaryRead) return;
     collapse();
-    setIsVoiceRecording(true);
+    setIsVoiceIslandOpen(true);
   };
 
   const handleTextCaptured = (text: string) => {
@@ -157,15 +152,7 @@ export default function FloatingActionButton() {
     }, 300);
   };
 
-  const handleRecordingComplete = (audioUri: string, fileName: string) => {
-    setIsVoiceRecording(false);
-    setRecordingResult({ audioUri, fileName });
-  };
-
-  const handleTranscriptionSave = (
-    transcription: string,
-    audioUri: string
-  ) => {
+  const handleVoiceSave = (transcription: string, audioUri: string) => {
     if (!primaryRead) return;
     addEntry({
       bookId: primaryRead.id,
@@ -174,15 +161,12 @@ export default function FloatingActionButton() {
       audioUri,
       date: Date.now(),
     });
-    setRecordingResult(null);
+    setIsVoiceIslandOpen(false);
   };
 
-  const handleTranscriptionEdit = (
-    transcription: string,
-    audioUri: string
-  ) => {
+  const handleVoiceEdit = (transcription: string, audioUri: string) => {
     _pendingReflection = { transcription, audioUri };
-    setRecordingResult(null);
+    setIsVoiceIslandOpen(false);
     setTimeout(() => {
       router.navigate('/entry-detail');
     }, 300);
@@ -245,19 +229,14 @@ export default function FloatingActionButton() {
           onClose={() => setIsTextScannerOpen(false)}
         />
       )}
-      {isVoiceRecording && (
-        <VoiceRecordingOverlay
-          onRecordingComplete={handleRecordingComplete}
-          onClose={() => setIsVoiceRecording(false)}
-        />
-      )}
-      {recordingResult && (
-        <TranscriptionOverlay
-          audioUri={recordingResult.audioUri}
-          fileName={recordingResult.fileName}
-          onSave={handleTranscriptionSave}
-          onEdit={handleTranscriptionEdit}
-          onClose={() => setRecordingResult(null)}
+      {isVoiceIslandOpen && (
+        <VoiceIsland
+          bookCoverUrl={primaryRead?.coverUrl}
+          bookTitle={primaryRead?.title}
+          bookAuthor={primaryRead?.authors?.[0]}
+          onSave={handleVoiceSave}
+          onEdit={handleVoiceEdit}
+          onClose={() => setIsVoiceIslandOpen(false)}
         />
       )}
     </Portal>
