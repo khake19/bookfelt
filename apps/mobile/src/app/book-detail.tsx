@@ -7,14 +7,17 @@ import {
   View,
 } from "react-native";
 import Animated, {
+  FadeIn,
   FadeInDown,
+  FadeOut,
+  LinearTransition,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LinearGradient from "react-native-linear-gradient";
 import { EllipsisHorizontalIcon, MicrophoneIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
@@ -27,17 +30,34 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CloseButton, PillButton, RichTextPreview, ScreenWrapper, stripHtml, timeAgo, useThemeColors } from "../shared";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 
-function RippleDot({ color }: { color: string }) {
+function RippleDot({ color, delay = 0 }: { color: string; delay?: number }) {
   const ripple1 = useSharedValue(0);
   const ripple2 = useSharedValue(0);
+  const dotScale = useSharedValue(0);
 
   useEffect(() => {
-    ripple1.value = withRepeat(withTiming(1, { duration: 2000 }), -1, false);
+    dotScale.value = withDelay(
+      delay,
+      withTiming(1, { duration: 400 })
+    );
+    ripple1.value = withDelay(
+      delay + 500,
+      withRepeat(withTiming(1, { duration: 2400 }), -1, false)
+    );
     ripple2.value = withDelay(
-      700,
-      withRepeat(withTiming(1, { duration: 2000 }), -1, false)
+      delay + 1300,
+      withRepeat(withTiming(1, { duration: 2400 }), -1, false)
     );
   }, []);
+
+  const dotStyle = useAnimatedStyle(() => ({
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: color,
+    position: "absolute" as const,
+    transform: [{ scale: dotScale.value }],
+  }));
 
   const ring1Style = useAnimatedStyle(() => ({
     position: "absolute" as const,
@@ -46,7 +66,7 @@ function RippleDot({ color }: { color: string }) {
     borderRadius: 6,
     borderWidth: 1.5,
     borderColor: color,
-    opacity: 1 - ripple1.value,
+    opacity: (1 - ripple1.value) * 0.6,
     transform: [{ scale: 1 + ripple1.value * 1.2 }],
   }));
 
@@ -57,7 +77,7 @@ function RippleDot({ color }: { color: string }) {
     borderRadius: 6,
     borderWidth: 1.5,
     borderColor: color,
-    opacity: 1 - ripple2.value,
+    opacity: (1 - ripple2.value) * 0.6,
     transform: [{ scale: 1 + ripple2.value * 1.2 }],
   }));
 
@@ -65,10 +85,7 @@ function RippleDot({ color }: { color: string }) {
     <View className="w-3 h-3 items-center justify-center mt-1 z-10">
       <Animated.View style={ring1Style} />
       <Animated.View style={ring2Style} />
-      <View
-        className="w-3 h-3 rounded-full absolute"
-        style={{ backgroundColor: color }}
-      />
+      <Animated.View style={dotStyle} />
     </View>
   );
 }
@@ -81,6 +98,15 @@ const BookDetailScreen = () => {
   const { primary, background } = useThemeColors();
   const insets = useSafeAreaInsets();
   const book = books.find((b) => b.id === bookId);
+  const [showDraftsOnly, setShowDraftsOnly] = useState(false);
+
+  const voiceDraftCount = entries.filter(
+    (e) => e.audioUri && !e.snippet && !e.feeling
+  ).length;
+
+  const displayEntries = showDraftsOnly
+    ? entries.filter((e) => e.audioUri && !e.snippet && !e.feeling)
+    : entries;
 
   const handleEntryPress = (entryId: string) => {
     router.push({ pathname: "/entry-detail", params: { id: entryId, bookId } });
@@ -234,9 +260,33 @@ const BookDetailScreen = () => {
             entering={FadeInDown.duration(400).delay(150)}
             className="flex-row items-center justify-between px-5 pb-3"
           >
-            <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
-              Reflections ({entries.length})
-            </Text>
+            <View className="flex-row items-center gap-2">
+              <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
+                Reflections ({entries.length})
+              </Text>
+              {voiceDraftCount > 0 && (
+                <Pressable
+                  onPress={() => setShowDraftsOnly((v) => !v)}
+                  className={`flex-row items-center gap-1 rounded-full px-2 py-0.5 ${
+                    showDraftsOnly
+                      ? "bg-primary"
+                      : "bg-primary/10"
+                  }`}
+                >
+                  <MicrophoneIcon
+                    size={10}
+                    className={showDraftsOnly ? "text-background" : "text-primary"}
+                  />
+                  <Text
+                    className={`text-xs font-medium ${
+                      showDraftsOnly ? "text-background" : "text-primary"
+                    }`}
+                  >
+                    {voiceDraftCount}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
             <PillButton
               icon="plus"
               label="New"
@@ -352,15 +402,15 @@ const BookDetailScreen = () => {
                   </View>
                 </Animated.View>
               )}
-              {entries.map((entry, index) => {
+              {displayEntries.map((entry, index) => {
                 const emotion = entry.feeling
                   ? getEmotionByLabel(entry.feeling)
                   : undefined;
-                const nextEntry = entries[index + 1];
+                const nextEntry = displayEntries[index + 1];
                 const nextEmotion = nextEntry?.feeling
                   ? getEmotionByLabel(nextEntry.feeling)
                   : undefined;
-                const isLast = index === entries.length - 1 && !book.firstImpression;
+                const isLast = index === displayEntries.length - 1 && !book.firstImpression;
                 const isUnfinishedAudio = !!entry.audioUri && !entry.snippet && !entry.feeling;
                 const dotColor = emotion?.color ?? "#71717a";
 
@@ -368,12 +418,13 @@ const BookDetailScreen = () => {
                   <Animated.View
                     key={entry.id}
                     entering={FadeInDown.duration(400).delay(250 + index * 80)}
+                    layout={LinearTransition.duration(250)}
                   >
                     <View className="flex-row mb-6">
                       {/* Dot + Line segment */}
                       <View className="w-3 items-center">
                         {entry.audioUri ? (
-                          <RippleDot color={dotColor} />
+                          <RippleDot color={dotColor} delay={250 + index * 80} />
                         ) : (
                           <View
                             className="w-3 h-3 rounded-full mt-1 z-10"
