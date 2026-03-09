@@ -17,6 +17,7 @@ import { useLibrary } from "../features/books/hooks/use-library";
 import type { ReadingStatus } from "../features/books/types/book";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CloseButton, PillButton, RichTextPreview, ScreenWrapper, stripHtml, timeAgo, useThemeColors } from "../shared";
+import AudioPlayer from "../features/entries/components/AudioPlayer";
 
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
@@ -367,6 +368,12 @@ const BookDetailScreen = () => {
                           >
                             {stripHtml(entry.reflection)}
                           </Text>
+                        ) : null}
+
+                        {entry.audioUri ? (
+                          <View className="mt-2">
+                            <AudioPlayer uri={entry.audioUri} />
+                          </View>
                         ) : null}
 
                         {emotion && (

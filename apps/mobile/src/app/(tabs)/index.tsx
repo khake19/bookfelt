@@ -188,6 +188,7 @@ export default function HomeScreen() {
                   snippet={entry.snippet}
                   reaction={entry.reflection ?? ""}
                   feeling={entry.feeling}
+                  audioUri={entry.audioUri}
                   onPress={() => handlePress(entry.id)}
                   onLongPress={() => handleLongPress(entry.id)}
                 />

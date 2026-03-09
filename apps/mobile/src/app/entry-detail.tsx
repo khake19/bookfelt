@@ -20,6 +20,7 @@ import {
 } from "../shared/components/FloatingActionButton";
 import { CameraIcon } from "react-native-heroicons/outline";
 import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
+import AudioPlayer from "../features/entries/components/AudioPlayer";
 
 const EntryDetailScreen = () => {
   const { id, bookId } = useLocalSearchParams<{
@@ -313,6 +314,11 @@ const EntryDetailScreen = () => {
             </Text>
           )}
         </Pressable>
+        {audioUri && (
+          <View className="pb-3">
+            <AudioPlayer uri={audioUri} />
+          </View>
+        )}
       </ScrollView>
       {focusTarget === "snippet" && (
         <FocusModeOverlay

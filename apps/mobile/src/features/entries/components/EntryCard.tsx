@@ -16,6 +16,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { getEmotionByLabel } from "../constants/emotions";
+import AudioPlayer from "./AudioPlayer";
 
 const stripHtml = (html: string) =>
   html
@@ -31,6 +32,7 @@ export interface EntryCardData {
   snippet?: string;
   reaction: string;
   feeling?: string;
+  audioUri?: string;
 }
 
 interface EntryCardProps extends EntryCardData {
@@ -46,6 +48,7 @@ const EntryCard = (props: EntryCardProps) => {
     snippet,
     reaction,
     feeling,
+    audioUri,
     onPress,
     onLongPress,
   } = props;
@@ -112,6 +115,7 @@ const EntryCard = (props: EntryCardProps) => {
               {stripHtml(reaction)}
             </Text>
           ) : null}
+          {audioUri ? <AudioPlayer uri={audioUri} /> : null}
         </CardContent>
         {emotion && (
           <CardFooter>
