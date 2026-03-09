@@ -268,7 +268,7 @@ const EntryDetailScreen = () => {
         </View>
         <View className="h-px bg-border" />
         <View>
-          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+          <Text className="text-xs font-medium uppercase tracking-widest text-accent mb-1.5">
             How Does it feel?
           </Text>
           <View className="flex-row flex-wrap gap-2">

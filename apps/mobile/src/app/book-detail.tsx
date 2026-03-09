@@ -372,8 +372,8 @@ const BookDetailScreen = () => {
                     <View className="flex-row mb-6">
                       {/* Dot + Line segment */}
                       <View className="w-3 items-center">
-                        {isUnfinishedAudio ? (
-                          <RippleDot color={primary ?? dotColor} />
+                        {entry.audioUri ? (
+                          <RippleDot color={dotColor} />
                         ) : (
                           <View
                             className="w-3 h-3 rounded-full mt-1 z-10"
