@@ -6,9 +6,17 @@ import {
   Text,
   View,
 } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, {
+  FadeInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
+import { useEffect } from "react";
 import LinearGradient from "react-native-linear-gradient";
-import { EllipsisHorizontalIcon } from "react-native-heroicons/outline";
+import { EllipsisHorizontalIcon, MicrophoneIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
 import { SHEET_IDS } from "../shared/constants/sheet-ids";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -18,6 +26,52 @@ import type { ReadingStatus } from "../features/books/types/book";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CloseButton, PillButton, RichTextPreview, ScreenWrapper, stripHtml, timeAgo, useThemeColors } from "../shared";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
+
+function RippleDot({ color }: { color: string }) {
+  const ripple1 = useSharedValue(0);
+  const ripple2 = useSharedValue(0);
+
+  useEffect(() => {
+    ripple1.value = withRepeat(withTiming(1, { duration: 2000 }), -1, false);
+    ripple2.value = withDelay(
+      700,
+      withRepeat(withTiming(1, { duration: 2000 }), -1, false)
+    );
+  }, []);
+
+  const ring1Style = useAnimatedStyle(() => ({
+    position: "absolute" as const,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: color,
+    opacity: 1 - ripple1.value,
+    transform: [{ scale: 1 + ripple1.value * 1.2 }],
+  }));
+
+  const ring2Style = useAnimatedStyle(() => ({
+    position: "absolute" as const,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: color,
+    opacity: 1 - ripple2.value,
+    transform: [{ scale: 1 + ripple2.value * 1.2 }],
+  }));
+
+  return (
+    <View className="w-3 h-3 items-center justify-center mt-1 z-10">
+      <Animated.View style={ring1Style} />
+      <Animated.View style={ring2Style} />
+      <View
+        className="w-3 h-3 rounded-full absolute"
+        style={{ backgroundColor: color }}
+      />
+    </View>
+  );
+}
 
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
@@ -307,6 +361,8 @@ const BookDetailScreen = () => {
                   ? getEmotionByLabel(nextEntry.feeling)
                   : undefined;
                 const isLast = index === entries.length - 1 && !book.firstImpression;
+                const isUnfinishedAudio = !!entry.audioUri && !entry.snippet && !entry.feeling;
+                const dotColor = emotion?.color ?? "#71717a";
 
                 return (
                   <Animated.View
@@ -316,12 +372,14 @@ const BookDetailScreen = () => {
                     <View className="flex-row mb-6">
                       {/* Dot + Line segment */}
                       <View className="w-3 items-center">
-                        <View
-                          className="w-3 h-3 rounded-full mt-1 z-10"
-                          style={{
-                            backgroundColor: emotion?.color ?? "#71717a",
-                          }}
-                        />
+                        {isUnfinishedAudio ? (
+                          <RippleDot color={primary ?? dotColor} />
+                        ) : (
+                          <View
+                            className="w-3 h-3 rounded-full mt-1 z-10"
+                            style={{ backgroundColor: dotColor }}
+                          />
+                        )}
                         {!isLast && (
                           <View
                             className="absolute w-0.5"
@@ -349,6 +407,14 @@ const BookDetailScreen = () => {
                             <Text className="text-muted/40 text-xs">
                               · Ch. {entry.chapter}
                             </Text>
+                          )}
+                          {entry.audioUri && !entry.snippet && !entry.feeling && (
+                            <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
+                              <MicrophoneIcon size={10} className="text-primary" />
+                              <Text className="text-primary text-[10px] font-medium">
+                                Voice Draft
+                              </Text>
+                            </View>
                           )}
                         </View>
 

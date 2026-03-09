@@ -18,6 +18,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useThemeColors } from '../hooks/use-theme-colors';
 import { useLibrary } from '../../features/books/hooks/use-library';
+import { useEntries } from '../../features/entries/hooks/use-entries';
 import TextScannerOverlay from '../../features/entries/components/TextScannerOverlay';
 import VoiceRecordingOverlay from '../../features/entries/components/VoiceRecordingOverlay';
 import TranscriptionOverlay from '../../features/entries/components/TranscriptionOverlay';
@@ -109,6 +110,7 @@ export default function FloatingActionButton() {
   const router = useRouter();
   const { primary, foreground, card, border } = useThemeColors();
   const { primaryRead } = useLibrary();
+  const { addEntry } = useEntries();
   const progress = useSharedValue(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
@@ -160,7 +162,22 @@ export default function FloatingActionButton() {
     setRecordingResult({ audioUri, fileName });
   };
 
-  const handleTranscriptionComplete = (
+  const handleTranscriptionSave = (
+    transcription: string,
+    audioUri: string
+  ) => {
+    if (!primaryRead) return;
+    addEntry({
+      bookId: primaryRead.id,
+      bookTitle: primaryRead.title,
+      reflection: transcription,
+      audioUri,
+      date: Date.now(),
+    });
+    setRecordingResult(null);
+  };
+
+  const handleTranscriptionEdit = (
     transcription: string,
     audioUri: string
   ) => {
@@ -238,7 +255,8 @@ export default function FloatingActionButton() {
         <TranscriptionOverlay
           audioUri={recordingResult.audioUri}
           fileName={recordingResult.fileName}
-          onComplete={handleTranscriptionComplete}
+          onSave={handleTranscriptionSave}
+          onEdit={handleTranscriptionEdit}
           onClose={() => setRecordingResult(null)}
         />
       )}

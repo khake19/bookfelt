@@ -29,7 +29,8 @@ export default function HomeScreen() {
   const router = useRouter();
   const { muted } = useThemeColors();
   const { books, primaryRead: currentlyReading } = useLibrary();
-  const { entries, removeEntry } = useEntries();
+  const { entries: allEntries, removeEntry } = useEntries();
+  const entries = allEntries.filter((e) => e.snippet || e.feeling);
   const bookEntries = useEntries(currentlyReading?.id).entries;
   const latestFeeling = bookEntries[0]?.feeling;
   const latestEmotion = latestFeeling

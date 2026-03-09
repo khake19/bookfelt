@@ -15,14 +15,16 @@ import { transcribeAudio } from "@bookfelt/core";
 interface TranscriptionOverlayProps {
   audioUri: string;
   fileName: string;
-  onComplete: (transcription: string, audioUri: string) => void;
+  onSave: (transcription: string, audioUri: string) => void;
+  onEdit: (transcription: string, audioUri: string) => void;
   onClose: () => void;
 }
 
 const TranscriptionOverlay = ({
   audioUri,
   fileName,
-  onComplete,
+  onSave,
+  onEdit,
   onClose,
 }: TranscriptionOverlayProps) => {
   const [transcription, setTranscription] = useState<string | null>(null);
@@ -95,14 +97,24 @@ const TranscriptionOverlay = ({
                   {transcription}
                 </Text>
               </ScrollView>
-              <Button
-                onPress={() => onComplete(transcription, audioUri)}
-                shape="pill"
-              >
-                <Text className="text-background text-center font-medium">
-                  Continue
-                </Text>
-              </Button>
+              <View className="gap-3">
+                <Button
+                  onPress={() => onSave(transcription, audioUri)}
+                  shape="pill"
+                >
+                  <Text className="text-background text-center font-medium">
+                    Save
+                  </Text>
+                </Button>
+                <Pressable
+                  onPress={() => onEdit(transcription, audioUri)}
+                  className="items-center py-2"
+                >
+                  <Text className="text-muted text-sm">
+                    Edit before saving
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           )}
         </View>
