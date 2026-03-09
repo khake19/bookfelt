@@ -10,5 +10,9 @@ export function useEntries(bookId?: string) {
     ? entries.filter((e) => e.bookId === bookId)
     : entries;
 
-  return { entries: filtered, addEntry, removeEntry, updateEntry };
+  const sorted = [...filtered].sort(
+    (a, b) => b.date - a.date || b.createdAt - a.createdAt
+  );
+
+  return { entries: sorted, addEntry, removeEntry, updateEntry };
 }

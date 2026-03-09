@@ -362,10 +362,10 @@ const BookDetailScreen = () => {
 
                         {entry.reflection ? (
                           <Text
-                            className="text-muted/70 text-sm mt-1"
-                            numberOfLines={1}
+                            className="text-muted text-sm mt-1 leading-relaxed"
+                            numberOfLines={4}
                           >
-                            {entry.reflection}
+                            {stripHtml(entry.reflection)}
                           </Text>
                         ) : null}
 
