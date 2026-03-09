@@ -17,7 +17,10 @@ import {
 } from 'react-native-heroicons/solid';
 import { useRouter } from 'expo-router';
 import { useThemeColors } from '../hooks/use-theme-colors';
+import { useLibrary } from '../../features/books/hooks/use-library';
 import TextScannerOverlay from '../../features/entries/components/TextScannerOverlay';
+import VoiceRecordingOverlay from '../../features/entries/components/VoiceRecordingOverlay';
+import TranscriptionOverlay from '../../features/entries/components/TranscriptionOverlay';
 
 // Module-level store to pass large OCR text without URL params
 let _pendingSnippet: string | null = null;
@@ -25,6 +28,14 @@ export function consumePendingSnippet(): string | null {
   const text = _pendingSnippet;
   _pendingSnippet = null;
   return text;
+}
+
+// Module-level store for voice reflection data
+let _pendingReflection: { transcription: string; audioUri: string } | null = null;
+export function consumePendingReflection(): { transcription: string; audioUri: string } | null {
+  const data = _pendingReflection;
+  _pendingReflection = null;
+  return data;
 }
 
 const SPRING_CONFIG = { damping: 15, stiffness: 180 };
@@ -44,11 +55,12 @@ type FabOptionProps = {
   border: string | undefined;
   onPress?: () => void;
   isOpen: boolean;
+  disabled?: boolean;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-function FabOption({ label, icon: Icon, index, progress, foreground, card, border, onPress, isOpen }: FabOptionProps) {
+function FabOption({ label, icon: Icon, index, progress, foreground, card, border, onPress, isOpen, disabled }: FabOptionProps) {
   const animatedStyle = useAnimatedStyle(() => {
     const staggeredProgress = interpolate(
       progress.value,
@@ -70,14 +82,14 @@ function FabOption({ label, icon: Icon, index, progress, foreground, card, borde
       style={[styles.optionRow, { bottom: (index + 1) * OPTION_SPACING }, animatedStyle]}
       pointerEvents={isOpen ? 'auto' : 'none'}
     >
-      <Animated.Text style={[styles.optionLabel, { color: foreground }]}>
+      <Animated.Text style={[styles.optionLabel, { color: foreground, opacity: disabled ? 0.35 : 1 }]}>
         {label}
       </Animated.Text>
       <Pressable
-        onPress={onPress}
+        onPress={disabled ? undefined : onPress}
         style={[
           styles.optionCircle,
-          { backgroundColor: card, borderColor: border },
+          { backgroundColor: card, borderColor: border, opacity: disabled ? 0.35 : 1 },
         ]}
       >
         <Icon size={22} color={foreground} />
@@ -96,9 +108,15 @@ export default function FloatingActionButton() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { primary, foreground, card, border } = useThemeColors();
+  const { primaryRead } = useLibrary();
   const progress = useSharedValue(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
+  const [isVoiceRecording, setIsVoiceRecording] = useState(false);
+  const [recordingResult, setRecordingResult] = useState<{
+    audioUri: string;
+    fileName: string;
+  } | null>(null);
 
   const bottomOffset = TAB_BAR_HEIGHT + insets.bottom + 16;
 
@@ -123,9 +141,31 @@ export default function FloatingActionButton() {
     setIsTextScannerOpen(true);
   };
 
+  const handleAudio = () => {
+    if (!primaryRead) return;
+    collapse();
+    setIsVoiceRecording(true);
+  };
+
   const handleTextCaptured = (text: string) => {
     _pendingSnippet = text;
     setIsTextScannerOpen(false);
+    setTimeout(() => {
+      router.navigate('/entry-detail');
+    }, 300);
+  };
+
+  const handleRecordingComplete = (audioUri: string, fileName: string) => {
+    setIsVoiceRecording(false);
+    setRecordingResult({ audioUri, fileName });
+  };
+
+  const handleTranscriptionComplete = (
+    transcription: string,
+    audioUri: string
+  ) => {
+    _pendingReflection = { transcription, audioUri };
+    setRecordingResult(null);
     setTimeout(() => {
       router.navigate('/entry-detail');
     }, 300);
@@ -139,6 +179,8 @@ export default function FloatingActionButton() {
     opacity: interpolate(progress.value, [0, 1], [0, 1], 'clamp'),
     pointerEvents: progress.value > 0.01 ? 'auto' : 'none',
   }));
+
+  const hasNoPrimaryRead = !primaryRead;
 
   return (
     <Portal name="fab">
@@ -158,8 +200,17 @@ export default function FloatingActionButton() {
             foreground={foreground}
             card={card}
             border={border}
-            onPress={key === 'write' ? handleWrite : key === 'photo' ? handlePhoto : undefined}
+            onPress={
+              key === 'write'
+                ? handleWrite
+                : key === 'photo'
+                  ? handlePhoto
+                  : key === 'audio'
+                    ? handleAudio
+                    : undefined
+            }
             isOpen={isOpen}
+            disabled={key === 'audio' && hasNoPrimaryRead}
           />
         ))}
         <Pressable
@@ -175,6 +226,20 @@ export default function FloatingActionButton() {
         <TextScannerOverlay
           onCaptured={handleTextCaptured}
           onClose={() => setIsTextScannerOpen(false)}
+        />
+      )}
+      {isVoiceRecording && (
+        <VoiceRecordingOverlay
+          onRecordingComplete={handleRecordingComplete}
+          onClose={() => setIsVoiceRecording(false)}
+        />
+      )}
+      {recordingResult && (
+        <TranscriptionOverlay
+          audioUri={recordingResult.audioUri}
+          fileName={recordingResult.fileName}
+          onComplete={handleTranscriptionComplete}
+          onClose={() => setRecordingResult(null)}
         />
       )}
     </Portal>

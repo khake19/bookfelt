@@ -14,7 +14,10 @@ import {
   ScreenWrapper,
   stripHtml,
 } from "../shared";
-import { consumePendingSnippet } from "../shared/components/FloatingActionButton";
+import {
+  consumePendingSnippet,
+  consumePendingReflection,
+} from "../shared/components/FloatingActionButton";
 import { CameraIcon } from "react-native-heroicons/outline";
 import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
 
@@ -38,10 +41,19 @@ const EntryDetailScreen = () => {
     formState: { isValid },
   } = useEntryForm(existing);
 
+  const [audioUri, setAudioUri] = useState<string | undefined>(
+    existing?.audioUri
+  );
+
   useEffect(() => {
     const pending = consumePendingSnippet();
     if (pending) {
       setValue("snippet", pending);
+    }
+    const pendingReflection = consumePendingReflection();
+    if (pendingReflection) {
+      setValue("reflection", pendingReflection.transcription);
+      setAudioUri(pendingReflection.audioUri);
     }
   }, [setValue]);
 
@@ -66,6 +78,7 @@ const EntryDetailScreen = () => {
       snippet: values.snippet.trim() || undefined,
       feeling: values.feeling || undefined,
       reflection: values.reflection || undefined,
+      audioUri,
       date: values.date.getTime(),
     };
     if (isNew) {

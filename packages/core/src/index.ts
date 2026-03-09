@@ -8,3 +8,5 @@ export {
   searchGoogleBooksByIsbn,
 } from "./services/google-books";
 export type { GoogleBook, GoogleBooksResponse } from "./services/google-books";
+
+export { transcribeAudio } from "./services/whisper";

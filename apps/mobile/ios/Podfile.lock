@@ -1,6 +1,9 @@
 PODS:
   - BVLinearGradient (2.8.3):
     - React-Core
+  - EXAV (16.0.8):
+    - ExpoModulesCore
+    - ReactCommon/turbomodule/core
   - EXConstants (18.0.13):
     - ExpoModulesCore
   - Expo (54.0.33):
@@ -30,9 +33,11 @@ PODS:
     - Yoga
   - ExpoAsset (12.0.12):
     - ExpoModulesCore
-  - ExpoFileSystem (19.0.21):
+  - ExpoFileSystem (55.0.10):
     - ExpoModulesCore
   - ExpoFont (14.0.11):
+    - ExpoModulesCore
+  - ExpoHaptics (55.0.8):
     - ExpoModulesCore
   - ExpoHead (6.0.23):
     - ExpoModulesCore
@@ -69,57 +74,6 @@ PODS:
   - ExpoSystemUI (6.0.9):
     - ExpoModulesCore
   - FBLazyVector (0.81.5)
-  - GoogleDataTransport (9.4.1):
-    - GoogleUtilities/Environment (~> 7.7)
-    - nanopb (< 2.30911.0, >= 2.30908.0)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleMLKit/MLKitCore (5.0.0):
-    - MLKitCommon (~> 10.0.0)
-  - GoogleMLKit/TextRecognition (5.0.0):
-    - GoogleMLKit/MLKitCore
-    - MLKitTextRecognition (~> 3.0.0)
-  - GoogleMLKit/TextRecognitionChinese (5.0.0):
-    - GoogleMLKit/MLKitCore
-    - MLKitTextRecognitionChinese (~> 2.0.0)
-  - GoogleMLKit/TextRecognitionDevanagari (5.0.0):
-    - GoogleMLKit/MLKitCore
-    - MLKitTextRecognitionDevanagari (~> 2.0.0)
-  - GoogleMLKit/TextRecognitionJapanese (5.0.0):
-    - GoogleMLKit/MLKitCore
-    - MLKitTextRecognitionJapanese (~> 2.0.0)
-  - GoogleMLKit/TextRecognitionKorean (5.0.0):
-    - GoogleMLKit/MLKitCore
-    - MLKitTextRecognitionKorean (~> 2.0.0)
-  - GoogleMLKit/Translate (5.0.0):
-    - GoogleMLKit/MLKitCore
-    - MLKitTranslate (~> 4.0.0)
-  - GoogleToolboxForMac/DebugUtils (2.3.2):
-    - GoogleToolboxForMac/Defines (= 2.3.2)
-  - GoogleToolboxForMac/Defines (2.3.2)
-  - GoogleToolboxForMac/Logger (2.3.2):
-    - GoogleToolboxForMac/Defines (= 2.3.2)
-  - "GoogleToolboxForMac/NSData+zlib (2.3.2)":
-    - GoogleToolboxForMac/Defines (= 2.3.2)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.3.2)":
-    - GoogleToolboxForMac/DebugUtils (= 2.3.2)
-    - GoogleToolboxForMac/Defines (= 2.3.2)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.3.2)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.3.2)"
-  - GoogleToolboxForMac/StringEncoding (2.3.2):
-    - GoogleToolboxForMac/Defines (= 2.3.2)
-  - GoogleUtilities/Environment (7.13.3):
-    - GoogleUtilities/Privacy
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.13.3):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (7.13.3)
-  - GoogleUtilities/UserDefaults (7.13.3):
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Privacy
-  - GoogleUtilitiesComponents (1.1.0):
-    - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (3.5.0)
   - hermes-engine (0.81.5):
     - hermes-engine/Pre-built (= 0.81.5)
   - hermes-engine/Pre-built (0.81.5)
@@ -147,60 +101,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - MLImage (1.0.0-beta5)
-  - MLKitCommon (10.0.0):
-    - GoogleDataTransport (~> 9.0)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
-    - GoogleUtilities/UserDefaults (~> 7.0)
-    - GoogleUtilitiesComponents (~> 1.0)
-    - GTMSessionFetcher/Core (< 4.0, >= 1.1)
-  - MLKitNaturalLanguage (6.0.0):
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
-    - GoogleToolboxForMac/StringEncoding (~> 2.1)
-    - GTMSessionFetcher/Core (< 4.0, >= 1.1)
-    - MLKitCommon (~> 10.0)
-  - MLKitTextRecognition (3.0.0):
-    - MLKitCommon (~> 10.0)
-    - MLKitTextRecognitionCommon (= 2.0.0)
-    - MLKitVision (~> 6.0)
-  - MLKitTextRecognitionChinese (2.0.0):
-    - MLKitCommon (~> 10.0)
-    - MLKitTextRecognitionCommon (= 2.0.0)
-    - MLKitVision (~> 6.0)
-  - MLKitTextRecognitionCommon (2.0.0):
-    - MLKitCommon (~> 10.0)
-    - MLKitVision (~> 6.0)
-  - MLKitTextRecognitionDevanagari (2.0.0):
-    - MLKitCommon (~> 10.0)
-    - MLKitTextRecognitionCommon (= 2.0.0)
-    - MLKitVision (~> 6.0)
-  - MLKitTextRecognitionJapanese (2.0.0):
-    - MLKitCommon (~> 10.0)
-    - MLKitTextRecognitionCommon (= 2.0.0)
-    - MLKitVision (~> 6.0)
-  - MLKitTextRecognitionKorean (2.0.0):
-    - MLKitCommon (~> 10.0)
-    - MLKitTextRecognitionCommon (= 2.0.0)
-    - MLKitVision (~> 6.0)
-  - MLKitTranslate (4.0.0):
-    - MLKitNaturalLanguage (~> 6.0)
-    - SSZipArchive (< 3.0, >= 2.2.3)
-  - MLKitVision (6.0.0):
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - GTMSessionFetcher/Core (< 4.0, >= 1.1)
-    - MLImage (= 1.0.0-beta5)
-    - MLKitCommon (~> 10.0)
-  - nanopb (2.30910.0):
-    - nanopb/decode (= 2.30910.0)
-    - nanopb/encode (= 2.30910.0)
-  - nanopb/decode (2.30910.0)
-  - nanopb/encode (2.30910.0)
-  - PromisesObjC (2.4.0)
   - RCTDeprecation (0.81.5)
   - RCTRequired (0.81.5)
   - RCTTypeSafety (0.81.5):
@@ -1943,6 +1843,28 @@ PODS:
     - React-utils (= 0.81.5)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.81.5)
+  - RNCAsyncStorage (1.24.0):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNDateTimePicker (8.4.4):
     - hermes-engine
     - RCTRequired
@@ -2224,7 +2146,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - SSZipArchive (2.4.3)
   - tentap (1.0.1):
     - hermes-engine
     - RCTRequired
@@ -2259,24 +2180,17 @@ PODS:
   - VisionCamera/React (4.7.3):
     - React-Core
     - VisionCamera/FrameProcessors
-  - VisionCameraTextRecognition (3.1.1):
-    - GoogleMLKit/TextRecognition
-    - GoogleMLKit/TextRecognitionChinese
-    - GoogleMLKit/TextRecognitionDevanagari
-    - GoogleMLKit/TextRecognitionJapanese
-    - GoogleMLKit/TextRecognitionKorean
-    - GoogleMLKit/Translate
-    - React-Core
-    - VisionCamera
   - Yoga (0.0.0)
 
 DEPENDENCIES:
   - "BVLinearGradient (from `../../../node_modules/.pnpm/react-native-linear-gradient@2.8.3_react-native@0.81.5_@babel+core@7.29.0_@types+react@_35672df6713a7c5c5419f26ac5783b34/node_modules/react-native-linear-gradient`)"
+  - "EXAV (from `../../../node_modules/.pnpm/expo-av@16.0.8_expo@54.0.33_react-native-web@0.21.2_encoding@0.1.13_react-dom@19.1.0_re_986b0440bc470083d99e0d527e327429/node_modules/expo-av/ios`)"
   - "EXConstants (from `../../../node_modules/.pnpm/expo-constants@18.0.13_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0_/node_modules/expo-constants/ios`)"
   - "Expo (from `../../../node_modules/.pnpm/expo@54.0.33_@babel+core@7.29.0_@expo+metro-runtime@6.1.2_expo-router@6.0.23_react-nati_4d5ae94472295fa761ab223a1bc9fa77/node_modules/expo`)"
   - "ExpoAsset (from `../../../node_modules/.pnpm/expo-asset@12.0.12_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0__react@19.1.0/node_modules/expo-asset/ios`)"
-  - "ExpoFileSystem (from `../../../node_modules/.pnpm/expo-file-system@19.0.21_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0_/node_modules/expo-file-system/ios`)"
+  - "ExpoFileSystem (from `../../../node_modules/.pnpm/expo-file-system@55.0.10_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0_/node_modules/expo-file-system/ios`)"
   - "ExpoFont (from `../../../node_modules/.pnpm/expo-font@14.0.11_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0__react@19.1.0/node_modules/expo-font/ios`)"
+  - "ExpoHaptics (from `../../../node_modules/.pnpm/expo-haptics@55.0.8_expo@54.0.33/node_modules/expo-haptics/ios`)"
   - "ExpoHead (from `../../../node_modules/.pnpm/expo-router@6.0.23_84245f65bc96c96ed303e04ce7c4cf04/node_modules/expo-router/ios`)"
   - "ExpoKeepAwake (from `../../../node_modules/.pnpm/expo-keep-awake@15.0.8_expo@54.0.33_react@19.1.0/node_modules/expo-keep-awake/ios`)"
   - "ExpoLinking (from `../../../node_modules/.pnpm/expo-linking@8.0.11_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0__react@19.1.0/node_modules/expo-linking/ios`)"
@@ -2354,6 +2268,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios`)
   - "ReactCommon/turbomodule/core (from `../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0/node_modules/react-native/ReactCommon`)"
   - "ReactNativeDependencies (from `../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0/node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)"
+  - "RNCAsyncStorage (from `../../../node_modules/.pnpm/@react-native-async-storage+async-storage@1.24.0_react-native@0.81.5_@babel+core@7.29.0_4cd3dc21b62956986ad1f78294d95eef/node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../../../node_modules/.pnpm/@react-native-community+datetimepicker@8.4.4_expo@54.0.33_react-native@0.81.5_@babel+co_b3df99ebb9d8483eb6d8fcd5b08cd4d2/node_modules/@react-native-community/datetimepicker`)"
   - "RNGestureHandler (from `../../../node_modules/.pnpm/react-native-gesture-handler@2.28.0_react-native@0.81.5_@babel+core@7.29.0_@types+react_a1534e93299625a086481ed288f43401/node_modules/react-native-gesture-handler`)"
   - "RNReanimated (from `../../../node_modules/.pnpm/react-native-reanimated@4.1.6_@babel+core@7.29.0_react-native-worklets@0.7.4_@babel+cor_668dde2be34e31a33282d4ef8160361a/node_modules/react-native-reanimated`)"
@@ -2362,36 +2277,17 @@ DEPENDENCIES:
   - "RNWorklets (from `../../../node_modules/.pnpm/react-native-worklets@0.7.4_@babel+core@7.29.0_react-native@0.81.5_@babel+core@7.29.0_@_ea53e965e1733efb13c45a2c270760c8/node_modules/react-native-worklets`)"
   - "tentap (from `../../../node_modules/.pnpm/@10play+tentap-editor@1.0.1_@floating-ui+dom@1.7.5_@types+react-dom@19.2.3_@types+react_10c1f6785979d5b4e2c078973b5a1ef5/node_modules/@10play/tentap-editor`)"
   - "VisionCamera (from `../../../node_modules/.pnpm/react-native-vision-camera@4.7.3_react-native-reanimated@4.1.6_@babel+core@7.29.0_react_097b096718de46c57b83cc251fefdbb8/node_modules/react-native-vision-camera`)"
-  - "VisionCameraTextRecognition (from `../../../node_modules/.pnpm/react-native-vision-camera-text-recognition@3.1.1_react-native@0.81.5_@babel+core@7.29._ae8f7649bee7948d4c96aec1f938d338/node_modules/react-native-vision-camera-text-recognition`)"
   - "Yoga (from `../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0/node_modules/react-native/ReactCommon/yoga`)"
 
 SPEC REPOS:
   trunk:
-    - GoogleDataTransport
-    - GoogleMLKit
-    - GoogleToolboxForMac
-    - GoogleUtilities
-    - GoogleUtilitiesComponents
-    - GTMSessionFetcher
     - lottie-ios
-    - MLImage
-    - MLKitCommon
-    - MLKitNaturalLanguage
-    - MLKitTextRecognition
-    - MLKitTextRecognitionChinese
-    - MLKitTextRecognitionCommon
-    - MLKitTextRecognitionDevanagari
-    - MLKitTextRecognitionJapanese
-    - MLKitTextRecognitionKorean
-    - MLKitTranslate
-    - MLKitVision
-    - nanopb
-    - PromisesObjC
-    - SSZipArchive
 
 EXTERNAL SOURCES:
   BVLinearGradient:
     :path: "../../../node_modules/.pnpm/react-native-linear-gradient@2.8.3_react-native@0.81.5_@babel+core@7.29.0_@types+react@_35672df6713a7c5c5419f26ac5783b34/node_modules/react-native-linear-gradient"
+  EXAV:
+    :path: "../../../node_modules/.pnpm/expo-av@16.0.8_expo@54.0.33_react-native-web@0.21.2_encoding@0.1.13_react-dom@19.1.0_re_986b0440bc470083d99e0d527e327429/node_modules/expo-av/ios"
   EXConstants:
     :path: "../../../node_modules/.pnpm/expo-constants@18.0.13_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0_/node_modules/expo-constants/ios"
   Expo:
@@ -2399,9 +2295,11 @@ EXTERNAL SOURCES:
   ExpoAsset:
     :path: "../../../node_modules/.pnpm/expo-asset@12.0.12_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0__react@19.1.0/node_modules/expo-asset/ios"
   ExpoFileSystem:
-    :path: "../../../node_modules/.pnpm/expo-file-system@19.0.21_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0_/node_modules/expo-file-system/ios"
+    :path: "../../../node_modules/.pnpm/expo-file-system@55.0.10_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0_/node_modules/expo-file-system/ios"
   ExpoFont:
     :path: "../../../node_modules/.pnpm/expo-font@14.0.11_expo@54.0.33_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0__react@19.1.0/node_modules/expo-font/ios"
+  ExpoHaptics:
+    :path: "../../../node_modules/.pnpm/expo-haptics@55.0.8_expo@54.0.33/node_modules/expo-haptics/ios"
   ExpoHead:
     :path: "../../../node_modules/.pnpm/expo-router@6.0.23_84245f65bc96c96ed303e04ce7c4cf04/node_modules/expo-router/ios"
   ExpoKeepAwake:
@@ -2555,6 +2453,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0/node_modules/react-native/ReactCommon"
   ReactNativeDependencies:
     :podspec: "../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0/node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec"
+  RNCAsyncStorage:
+    :path: "../../../node_modules/.pnpm/@react-native-async-storage+async-storage@1.24.0_react-native@0.81.5_@babel+core@7.29.0_4cd3dc21b62956986ad1f78294d95eef/node_modules/@react-native-async-storage/async-storage"
   RNDateTimePicker:
     :path: "../../../node_modules/.pnpm/@react-native-community+datetimepicker@8.4.4_expo@54.0.33_react-native@0.81.5_@babel+co_b3df99ebb9d8483eb6d8fcd5b08cd4d2/node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
@@ -2571,18 +2471,18 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.pnpm/@10play+tentap-editor@1.0.1_@floating-ui+dom@1.7.5_@types+react-dom@19.2.3_@types+react_10c1f6785979d5b4e2c078973b5a1ef5/node_modules/@10play/tentap-editor"
   VisionCamera:
     :path: "../../../node_modules/.pnpm/react-native-vision-camera@4.7.3_react-native-reanimated@4.1.6_@babel+core@7.29.0_react_097b096718de46c57b83cc251fefdbb8/node_modules/react-native-vision-camera"
-  VisionCameraTextRecognition:
-    :path: "../../../node_modules/.pnpm/react-native-vision-camera-text-recognition@3.1.1_react-native@0.81.5_@babel+core@7.29._ae8f7649bee7948d4c96aec1f938d338/node_modules/react-native-vision-camera-text-recognition"
   Yoga:
     :path: "../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@types+react@19.2.14_react@19.1.0/node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
+  EXAV: b60fcf142fae6684d295bc28cd7cfcb3335570ea
   EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   Expo: aadbcc8c6c14ff3105a9154f1683cb1424ff0d2a
   ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18
-  ExpoFileSystem: 858a44267a3e6e9057e0888ad7c7cfbf55d52063
+  ExpoFileSystem: e1a42d7f69f7faae33f4d7d01708f7861f7bd757
   ExpoFont: f543ce20a228dd702813668b1a07b46f51878d47
+  ExpoHaptics: 8952528daeafbb20d147c33f8cc6ab648cd34c58
   ExpoHead: 7e19b2272edf492262acf8afb391a295198a6b23
   ExpoKeepAwake: 55f75eca6499bb9e4231ebad6f3e9cb8f99c0296
   ExpoLinking: 8f0aaf69aa56f832913030503b6263dc6f647f37
@@ -2590,28 +2490,9 @@ SPEC CHECKSUMS:
   ExpoSplashScreen: bc3cffefca2716e5f22350ca109badd7e50ec14d
   ExpoSystemUI: 2ad325f361a2fcd96a464e8574e19935c461c9cc
   FBLazyVector: e95a291ad2dadb88e42b06e0c5fb8262de53ec12
-  GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
-  GoogleMLKit: 90ba06e028795a50261f29500d238d6061538711
-  GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
-  GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
-  GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
-  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172
   lottie-ios: 8f959969761e9c45d70353667d00af0e5b9cadb3
   lottie-react-native: 6a080b2f109ef611c75c503a33ebb8ea75db0c91
-  MLImage: 1824212150da33ef225fbd3dc49f184cf611046c
-  MLKitCommon: afcd11b6c0735066a0dde8b4bf2331f6197cbca2
-  MLKitNaturalLanguage: b9a77b1811edf35bfba52ec1ce2c25a463aa45e0
-  MLKitTextRecognition: 91706574e4db9b48cd2e66cbbcc6b58956156b0a
-  MLKitTextRecognitionChinese: 19d3a70799f17cf2115b6381964b87e874d96dcd
-  MLKitTextRecognitionCommon: 3bd8375160d21dc9f9cc512d1fab2530ecc43dde
-  MLKitTextRecognitionDevanagari: 9c689b259f6654fdaa1004a769dcec55b257a02a
-  MLKitTextRecognitionJapanese: 9afa94ad6d622a69c2043def562fffa9be8d269d
-  MLKitTextRecognitionKorean: 4b37d1a034af61bf9699d791ae8bcf04cb1e97b7
-  MLKitTranslate: 52e52e7c4800e853c274711c9034306b80abba88
-  MLKitVision: 90922bca854014a856f8b649d1f1f04f63fd9c79
-  nanopb: 438bc412db1928dac798aa6fd75726007be04262
-  PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCTDeprecation: 943572d4be82d480a48f4884f670135ae30bf990
   RCTRequired: 8f3cfc90cc25cf6e420ddb3e7caaaabc57df6043
   RCTTypeSafety: 16a4144ca3f959583ab019b57d5633df10b5e97c
@@ -2679,18 +2560,17 @@ SPEC CHECKSUMS:
   ReactCodegen: 5c1ca8a927b55065253d3da28fc69edb48a08948
   ReactCommon: 08810150b1206cc44aecf5f6ae19af32f29151a8
   ReactNativeDependencies: 71ce9c28beb282aa720ea7b46980fff9669f428a
+  RNCAsyncStorage: 7a5a6094f9f6b9158e72f1855cd86e769413d851
   RNDateTimePicker: be0e44bcb9ed0607c7c5f47dbedd88cf091f6791
   RNGestureHandler: 2914750df066d89bf9d8f48a10ad5f0051108ac3
   RNReanimated: 361b49086d5bd8291f98f9b2ec2cda98942e8d36
   RNScreens: d8d6f1792f6e7ac12b0190d33d8d390efc0c1845
   RNSVG: 31d6639663c249b7d5abc9728dde2041eb2a3c34
   RNWorklets: 0cafca1355c4020e7e8330c4bd730a691c03b140
-  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   tentap: 60c7b42c6b4c3e91ebccb9917a0217a8009b8112
   VisionCamera: 0044a94f7489f19e19d5938e97dfc36f4784af3c
-  VisionCameraTextRecognition: d183547eed78b904622eac9e6860d0690a0c3f0c
   Yoga: 5934998fbeaef7845dbf698f698518695ab4cd1a
 
-PODFILE CHECKSUM: bf14b968b5f92d93bb5d2ad184b95339fe6b6757
+PODFILE CHECKSUM: 7f9d413cf9f14bcfb1a7407f53c734a043e56ced
 
 COCOAPODS: 1.16.2
