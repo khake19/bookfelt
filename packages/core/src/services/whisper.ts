@@ -1,5 +1,4 @@
-// TODO: Move to env variable
-const OPENAI_API_KEY = "sk-placeholder-replace-with-real-key";
+const OPENAI_API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY!;
 
 export async function transcribeAudio(
   fileUri: string,
@@ -30,5 +29,5 @@ export async function transcribeAudio(
     throw new Error(`Transcription failed: ${error}`);
   }
 
-  return response.json();
+  return response.json() as Promise<{ text: string }>;
 }

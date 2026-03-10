@@ -58,3 +58,8 @@ cache/
 
 
 test-output
+
+Environment variables
+.env
+.env.local
+.env.*.local

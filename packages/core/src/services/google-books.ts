@@ -37,7 +37,7 @@ export interface GoogleBook {
 
 // --- Client ---
 
-const GOOGLE_BOOKS_API_KEY = "AIzaSyAkFPsaogCpPLPNDQQRkKzoM_ohatf7eXo";
+const GOOGLE_BOOKS_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_BOOKS_API_KEY!;
 
 const googleBooksClient = createHttpClient({
   baseURL: "https://www.googleapis.com/books/v1",
