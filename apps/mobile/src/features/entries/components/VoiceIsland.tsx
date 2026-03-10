@@ -21,6 +21,7 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
+  type SharedValue,
 } from "react-native-reanimated";
 import { StopIcon } from "react-native-heroicons/solid";
 import { XMarkIcon } from "react-native-heroicons/outline";
@@ -588,7 +589,7 @@ function WaveformBar({
   warningProgress,
 }: {
   level: number;
-  warningProgress: Animated.SharedValue<number>;
+  warningProgress: SharedValue<number>;
 }) {
   const minHeight = 4;
   const maxHeight = 28;

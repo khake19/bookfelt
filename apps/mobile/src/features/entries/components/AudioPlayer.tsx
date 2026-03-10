@@ -2,11 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { Audio, AVPlaybackStatus } from "expo-av";
 import { PlayIcon, PauseIcon } from "react-native-heroicons/solid";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
 import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
 
 interface AudioPlayerProps {
@@ -28,7 +23,7 @@ function generateBars(uri: string): number[] {
 }
 
 const AudioPlayer = ({ uri }: AudioPlayerProps) => {
-  const { primary, muted, foreground } = useThemeColors();
+  const { primary, muted } = useThemeColors();
   const soundRef = useRef<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [durationMs, setDurationMs] = useState(0);
@@ -120,7 +115,7 @@ const AudioPlayer = ({ uri }: AudioPlayerProps) => {
           ? isPlaying
             ? formatTime(positionMs)
             : formatTime(durationMs)
-          : "—"}
+          : ""}
       </Text>
     </View>
   );

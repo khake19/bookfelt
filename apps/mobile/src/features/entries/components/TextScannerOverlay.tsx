@@ -131,7 +131,7 @@ const TextScannerOverlay = ({
       // In that case, screen Y maps to image X (inverted)
       const isLandscape = photo.width > photo.height;
 
-      const blocks = result?.blocks as Array<{
+      const blocks = result?.blocks as unknown as Array<{
         blockText: string;
         blockFrame: { x: number; y: number; height: number; width: number };
       }>;

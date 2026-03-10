@@ -27,7 +27,7 @@ const STATUS_OPTIONS: { value: ReadingStatus; label: string }[] = [
 
 export default function AddBookScreen() {
   const router = useRouter();
-  const { muted, primary } = useThemeColors();
+  const { primary } = useThemeColors();
   const { addBook, isInLibrary } = useLibrary();
 
   const [mode, setMode] = useState<ScreenMode>({ kind: "search" });

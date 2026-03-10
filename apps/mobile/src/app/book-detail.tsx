@@ -275,7 +275,7 @@ const BookDetailScreen = () => {
                 >
                   <MicrophoneIcon
                     size={10}
-                    className={showDraftsOnly ? "text-background" : "text-primary"}
+                    color={showDraftsOnly ? background : primary}
                   />
                   <Text
                     className={`text-xs font-medium ${
@@ -461,7 +461,7 @@ const BookDetailScreen = () => {
                           )}
                           {entry.audioUri && !entry.snippet && !entry.feeling && (
                             <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
-                              <MicrophoneIcon size={10} className="text-primary" />
+                              <MicrophoneIcon size={10} color={primary} />
                               <Text className="text-primary text-[10px] font-medium">
                                 Voice Draft
                               </Text>

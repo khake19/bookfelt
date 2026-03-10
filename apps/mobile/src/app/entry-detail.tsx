@@ -13,6 +13,7 @@ import {
   RichTextPreview,
   ScreenWrapper,
   stripHtml,
+  useThemeColors,
 } from "../shared";
 import {
   consumePendingSnippet,
@@ -23,6 +24,7 @@ import TextScannerOverlay from "../features/entries/components/TextScannerOverla
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 
 const EntryDetailScreen = () => {
+  const { mutedForeground } = useThemeColors();
   const { id, bookId } = useLocalSearchParams<{
     id: string;
     bookId?: string;
@@ -251,7 +253,7 @@ const EntryDetailScreen = () => {
               hitSlop={8}
               className="p-1"
             >
-              <CameraIcon size={18} className="text-muted" />
+              <CameraIcon size={18} color={mutedForeground} />
             </Pressable>
           </View>
           <Pressable onPress={() => setFocusTarget("snippet")}>

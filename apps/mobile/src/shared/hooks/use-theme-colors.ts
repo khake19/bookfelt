@@ -9,6 +9,7 @@ export function useThemeColors() {
   return {
     primary: useHslColor("--primary"),
     muted: useHslColor("--muted"),
+    mutedForeground: useHslColor("--muted-foreground"),
     foreground: useHslColor("--foreground"),
     background: useHslColor("--background"),
     border: useHslColor("--border"),
