@@ -11,6 +11,7 @@
   "dependencies": {
     "@10play/tentap-editor": "^1.0.1",
     "@bookfelt/core": "workspace:*",
+    "@bookfelt/database": "workspace:*",
     "@bookfelt/ui": "workspace:*",
     "@expo/metro-config": "*",
     "@expo/vector-icons": "^15.0.3",

@@ -118,7 +118,7 @@ export default function AddBookScreen() {
     setMode({ kind: "confirm", book });
   };
 
-  const handleManualAdd = () => {
+  const handleManualAdd = async () => {
     Keyboard.dismiss();
     const book: Book = {
       id: `manual-${Date.now()}`,
@@ -126,15 +126,15 @@ export default function AddBookScreen() {
       authors: manualAuthor.trim() ? [manualAuthor.trim()] : ["Unknown author"],
       source: "manual",
     };
-    addBook(book, selectedStatus);
+    await addBook(book, selectedStatus);
     router.replace({
       pathname: "/first-impression",
       params: { bookId: book.id },
     });
   };
 
-  const handleAdd = (book: Book) => {
-    addBook(book, selectedStatus);
+  const handleAdd = async (book: Book) => {
+    await addBook(book, selectedStatus);
     router.replace({
       pathname: "/first-impression",
       params: { bookId: book.id },

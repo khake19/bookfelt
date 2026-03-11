@@ -5,6 +5,7 @@
     "types": ["node"],
     "rootDir": "src",
     "jsx": "react-jsx",
+    "experimentalDecorators": true,
     "noUnusedLocals": false,
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
   },
@@ -43,6 +44,9 @@
     },
     {
       "path": "../../packages/core/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/database/tsconfig.lib.json"
     }
   ]
 }
