@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -22,6 +22,7 @@ const BookEditScreen = () => {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { isValid },
   } = useForm<BookFormValues>({
     resolver: zodResolver(bookFormSchema),
@@ -34,6 +35,18 @@ const BookEditScreen = () => {
     },
     mode: "onChange",
   });
+
+  useEffect(() => {
+    if (book) {
+      reset({
+        title: book.title,
+        authors: book.authors.join(", "),
+        description: book.description ?? "",
+        firstImpression: book.firstImpression ?? "",
+        finalThought: book.finalThought ?? "",
+      });
+    }
+  }, [book, reset]);
 
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isFirstImpressionFocusMode, setIsFirstImpressionFocusMode] = useState(false);
