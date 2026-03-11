@@ -23,7 +23,7 @@ import {
 import {
   consumePendingReflection,
   consumePendingSnippet,
-} from "../shared/components/FloatingActionButton";
+} from "../shared/utils/pending-state";
 
 const EntryDetailScreen = () => {
   const { mutedForeground } = useThemeColors();

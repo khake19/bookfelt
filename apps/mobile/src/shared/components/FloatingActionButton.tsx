@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Portal } from '@rn-primitives/portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
@@ -16,37 +16,20 @@ import {
   MicrophoneIcon,
 } from 'react-native-heroicons/solid';
 import { useRouter } from 'expo-router';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useThemeColors } from '../hooks/use-theme-colors';
 import { useLibrary } from '../../features/books/hooks/use-library';
 import { useEntries } from '../../features/entries/hooks/use-entries';
 import TextScannerOverlay from '../../features/entries/components/TextScannerOverlay';
 import VoiceIsland from '../../features/entries/components/VoiceIsland';
-
-// Module-level store to pass large OCR text without URL params
-let _pendingSnippet: string | null = null;
-export function consumePendingSnippet(): string | null {
-  const text = _pendingSnippet;
-  _pendingSnippet = null;
-  return text;
-}
-
-// Module-level store for voice reflection data
-let _pendingReflection: { transcription: string; audioUri: string } | null = null;
-export function consumePendingReflection(): { transcription: string; audioUri: string } | null {
-  const data = _pendingReflection;
-  _pendingReflection = null;
-  return data;
-}
+import { setPendingSnippet, setPendingReflection } from '../utils/pending-state';
 
 const SPRING_CONFIG = { damping: 15, stiffness: 180 };
-const TAB_BAR_HEIGHT = 49;
 const FAB_SIZE = 56;
 const OPTION_SIZE = 48;
 const OPTION_SPACING = 60;
-const RIGHT_OFFSET = 20;
 
 type FabOptionProps = {
-  label: string;
   icon: typeof PencilSquareIcon;
   index: number;
   progress: SharedValue<number>;
@@ -60,7 +43,7 @@ type FabOptionProps = {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-function FabOption({ label, icon: Icon, index, progress, foreground, card, border, onPress, isOpen, disabled }: FabOptionProps) {
+function FabOption({ icon: Icon, index, progress, foreground, card, border, onPress, isOpen, disabled }: FabOptionProps) {
   const animatedStyle = useAnimatedStyle(() => {
     const staggeredProgress = interpolate(
       progress.value,
@@ -78,44 +61,32 @@ function FabOption({ label, icon: Icon, index, progress, foreground, card, borde
   });
 
   return (
-    <Animated.View
-      style={[styles.optionRow, { bottom: (index + 1) * OPTION_SPACING }, animatedStyle]}
+    <AnimatedPressable
+      style={[styles.optionCircle, { backgroundColor: card, borderColor: border, opacity: disabled ? 0.35 : 1, bottom: (index + 1) * OPTION_SPACING }, animatedStyle]}
       pointerEvents={isOpen ? 'auto' : 'none'}
+      onPress={disabled ? undefined : onPress}
     >
-      <Animated.Text style={[styles.optionLabel, { color: foreground, opacity: disabled ? 0.35 : 1 }]}>
-        {label}
-      </Animated.Text>
-      <Pressable
-        onPress={disabled ? undefined : onPress}
-        style={[
-          styles.optionCircle,
-          { backgroundColor: card, borderColor: border, opacity: disabled ? 0.35 : 1 },
-        ]}
-      >
-        <Icon size={22} color={foreground} />
-      </Pressable>
-    </Animated.View>
+      <Icon size={22} color={foreground} />
+    </AnimatedPressable>
   );
 }
 
-const OPTIONS = [
-  { label: 'Write', icon: PencilSquareIcon, index: 0, key: 'write' },
-  { label: 'Photo', icon: CameraIcon, index: 1, key: 'photo' },
-  { label: 'Audio', icon: MicrophoneIcon, index: 2, key: 'audio' },
+const FAB_OPTIONS = [
+  { icon: PencilSquareIcon, index: 0, key: 'write' },
+  { icon: CameraIcon, index: 1, key: 'photo' },
+  { icon: MicrophoneIcon, index: 2, key: 'audio' },
 ] as const;
 
-export default function FloatingActionButton() {
+export default function FloatingActionButton({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { primary, foreground, card, border } = useThemeColors();
+  const { primary, muted, foreground, background, card, border } = useThemeColors();
   const { primaryRead } = useLibrary();
   const { addEntry } = useEntries();
   const progress = useSharedValue(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
   const [isVoiceIslandOpen, setIsVoiceIslandOpen] = useState(false);
-
-  const bottomOffset = TAB_BAR_HEIGHT + insets.bottom + 16;
 
   const toggle = () => {
     const opening = progress.value <= 0.5;
@@ -145,7 +116,7 @@ export default function FloatingActionButton() {
   };
 
   const handleTextCaptured = (text: string) => {
-    _pendingSnippet = text;
+    setPendingSnippet(text);
     setIsTextScannerOpen(false);
     setTimeout(() => {
       router.navigate('/entry-detail');
@@ -165,7 +136,7 @@ export default function FloatingActionButton() {
   };
 
   const handleVoiceEdit = (transcription: string, audioUri: string) => {
-    _pendingReflection = { transcription, audioUri };
+    setPendingReflection({ transcription, audioUri });
     setIsVoiceIslandOpen(false);
     setTimeout(() => {
       router.navigate('/entry-detail');
@@ -184,73 +155,132 @@ export default function FloatingActionButton() {
   const hasNoPrimaryRead = !primaryRead;
 
   return (
-    <Portal name="fab">
-      <AnimatedPressable
-        style={[styles.backdrop, backdropStyle]}
-        onPress={collapse}
-      />
-      <View
-        style={[styles.container, { bottom: bottomOffset, right: RIGHT_OFFSET }]}
-        pointerEvents="box-none"
-      >
-        {OPTIONS.map(({ key, ...option }) => (
-          <FabOption
-            key={option.label}
-            {...option}
-            progress={progress}
-            foreground={foreground}
-            card={card}
-            border={border}
-            onPress={
-              key === 'write'
-                ? handleWrite
-                : key === 'photo'
-                  ? handlePhoto
-                  : key === 'audio'
-                    ? handleAudio
-                    : undefined
-            }
-            isOpen={isOpen}
-            disabled={key === 'audio' && hasNoPrimaryRead}
-          />
-        ))}
-        <Pressable
-          style={[styles.mainButton, { backgroundColor: primary }]}
-          onPress={toggle}
+    <View style={[styles.tabBar, { backgroundColor: background, borderTopColor: border, paddingBottom: insets.bottom }]}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const isFocused = state.index === index;
+        const color = isFocused ? primary : muted;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name, route.params);
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+          });
+        };
+
+        return (
+          <React.Fragment key={route.key}>
+            {index === 1 && (
+              <View style={styles.fabWrapper}>
+                <Pressable
+                  style={[styles.mainButton, { backgroundColor: primary }]}
+                  onPress={toggle}
+                >
+                  <Animated.View style={mainIconStyle}>
+                    <PlusIcon size={28} color="#fff" />
+                  </Animated.View>
+                </Pressable>
+              </View>
+            )}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={isFocused ? { selected: true } : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              style={styles.tabItem}
+            >
+              {options.tabBarIcon?.({ color: color!, size: 24, focused: isFocused })}
+              <Text style={[styles.tabLabel, { color }]}>{options.title ?? route.name}</Text>
+            </Pressable>
+          </React.Fragment>
+        );
+      })}
+
+      {/* Portal for backdrop + FAB options + overlays */}
+      <Portal name="fab">
+        <AnimatedPressable
+          style={[styles.backdrop, backdropStyle]}
+          onPress={collapse}
+        />
+        <View
+          style={[styles.fabOptionsContainer, { bottom: insets.bottom + 56 + 16 }]}
+          pointerEvents="box-none"
         >
-          <Animated.View style={mainIconStyle}>
-            <PlusIcon size={28} color="#fff" />
-          </Animated.View>
-        </Pressable>
-      </View>
-      {isTextScannerOpen && (
-        <TextScannerOverlay
-          onCaptured={handleTextCaptured}
-          onClose={() => setIsTextScannerOpen(false)}
-        />
-      )}
-      {isVoiceIslandOpen && (
-        <VoiceIsland
-          bookCoverUrl={primaryRead?.coverUrl}
-          bookTitle={primaryRead?.title}
-          bookAuthor={primaryRead?.authors?.[0]}
-          onSave={handleVoiceSave}
-          onEdit={handleVoiceEdit}
-          onClose={() => setIsVoiceIslandOpen(false)}
-        />
-      )}
-    </Portal>
+          {FAB_OPTIONS.map(({ key, ...option }) => (
+            <FabOption
+              key={key}
+              {...option}
+              progress={progress}
+              foreground={foreground}
+              card={card}
+              border={border}
+              onPress={
+                key === 'write'
+                  ? handleWrite
+                  : key === 'photo'
+                    ? handlePhoto
+                    : key === 'audio'
+                      ? handleAudio
+                      : undefined
+              }
+              isOpen={isOpen}
+              disabled={key === 'audio' && hasNoPrimaryRead}
+            />
+          ))}
+        </View>
+        {isTextScannerOpen && (
+          <TextScannerOverlay
+            onCaptured={handleTextCaptured}
+            onClose={() => setIsTextScannerOpen(false)}
+          />
+        )}
+        {isVoiceIslandOpen && (
+          <VoiceIsland
+            bookCoverUrl={primaryRead?.coverUrl}
+            bookTitle={primaryRead?.title}
+            bookAuthor={primaryRead?.authors?.[0]}
+            onSave={handleVoiceSave}
+            onEdit={handleVoiceEdit}
+            onClose={() => setIsVoiceIslandOpen(false)}
+          />
+        )}
+      </Portal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-  },
-  container: {
-    position: 'absolute',
+  tabBar: {
+    flexDirection: 'row',
+    borderTopWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+  },
+  tabLabel: {
+    fontSize: 10,
+    marginTop: 2,
+  },
+  fabWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -28,
   },
   mainButton: {
     width: FAB_SIZE,
@@ -264,18 +294,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  optionRow: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    right: (FAB_SIZE - OPTION_SIZE) / 2,
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
-  optionLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginRight: 12,
+  fabOptionsContainer: {
+    position: 'absolute',
+    alignSelf: 'center',
+    alignItems: 'center',
   },
   optionCircle: {
+    position: 'absolute',
     width: OPTION_SIZE,
     height: OPTION_SIZE,
     borderRadius: OPTION_SIZE / 2,

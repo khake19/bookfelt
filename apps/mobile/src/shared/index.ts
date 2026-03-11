@@ -6,3 +6,4 @@ export { FocusModeOverlay, RichTextPreview } from './components/editor';
 export { ScreenWrapper } from './components/ScreenWrapper';
 export { useThemeColors } from './hooks/use-theme-colors';
 export { stripHtml, timeAgo } from './utils/time';
+export { consumePendingSnippet, consumePendingReflection } from './utils/pending-state';
