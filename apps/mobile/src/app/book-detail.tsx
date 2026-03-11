@@ -519,18 +519,18 @@ const BookDetailScreen = () => {
                             )}
                         </View>
 
-                        {entry.snippet ? (
+                        {entry.snippet && stripHtml(entry.snippet) ? (
                           <Text
-                            className="text-foreground font-serif text-sm italic mt-1.5 leading-relaxed"
+                            className="text-muted/70 font-serif-italic text-sm italic mt-1.5 leading-relaxed"
                             numberOfLines={2}
                           >
                             "{stripHtml(entry.snippet)}"
                           </Text>
                         ) : null}
 
-                        {entry.reflection ? (
+                        {entry.reflection && stripHtml(entry.reflection) ? (
                           <Text
-                            className="text-muted text-sm mt-1 leading-relaxed"
+                            className="text-foreground text-sm mt-1 leading-relaxed"
                             numberOfLines={4}
                           >
                             {stripHtml(entry.reflection)}
