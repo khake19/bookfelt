@@ -390,7 +390,7 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onEdit, onCl
             {/* Stop button */}
             <Pressable
               onPress={stopRecording}
-              className="w-9 h-9 rounded-full bg-red-500 items-center justify-center"
+              className="w-9 h-9 rounded-full bg-primary items-center justify-center"
             >
               <StopIcon size={14} color="white" />
             </Pressable>
