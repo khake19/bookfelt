@@ -47,6 +47,8 @@ RULES:
 - Do NOT imply failure or that they should try again
 - Do NOT use words like: tapestry, journey, embrace, profound, transforming
 - Do NOT write one long block of text
+- Each paragraph must use a different emotional word
+- Never suggest or imply the reader should return to the book
 - No emojis`;
 
   const userPrompt = `Book: "${input.title}" by ${input.authors.join(", ")}
