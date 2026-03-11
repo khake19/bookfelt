@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-reanimated";
-import { CameraIcon } from "react-native-heroicons/outline";
+import { CameraIcon, MicrophoneIcon } from "react-native-heroicons/outline";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { EntryFormValues } from "../features/entries";
 import { CORE_EMOTIONS, SECONDARY_EMOTIONS, useEntries, useEntryForm } from "../features/entries";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
+import VoiceIsland from "../features/entries/components/VoiceIsland";
 import {
   CloseButton,
   FocusModeOverlay,
@@ -65,6 +66,7 @@ const EntryDetailScreen = () => {
     "snippet" | "reflection" | null
   >(null);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
+  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [showMoreEmotions, setShowMoreEmotions] = useState(false);
   const [androidPickerMode, setAndroidPickerMode] = useState<
     "date" | "time" | null
@@ -351,26 +353,34 @@ const EntryDetailScreen = () => {
           </Animated.View>
         </View>
         <View className="h-px bg-border" />
-        <Pressable
-          onPress={() => setFocusTarget("reflection")}
-          className="py-3"
-        >
-          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-            Your Reflection
-          </Text>
-          {reflection ? (
-            <RichTextPreview html={reflection} />
-          ) : (
-            <Text className="text-sm text-muted/60 italic">
-              Tap to write what this made you feel..
+        <View className="py-3">
+          <View className="flex-row items-center justify-between mb-1.5">
+            <Text className="text-xs font-medium uppercase tracking-widest text-muted">
+              Your Reflection
             </Text>
-          )}
-        </Pressable>
-        {audioUri && (
-          <View className="pb-3">
-            <AudioPlayer uri={audioUri} />
+            <Pressable
+              onPress={() => setIsVoiceOpen(true)}
+              hitSlop={8}
+              className="p-1"
+            >
+              <MicrophoneIcon size={18} color={mutedForeground} />
+            </Pressable>
           </View>
-        )}
+          <Pressable onPress={() => setFocusTarget("reflection")}>
+            {reflection ? (
+              <RichTextPreview html={reflection} />
+            ) : (
+              <Text className="text-sm text-muted/60 italic">
+                Tap to write what this made you feel..
+              </Text>
+            )}
+          </Pressable>
+          {audioUri && (
+            <View className="pt-2">
+              <AudioPlayer uri={audioUri} />
+            </View>
+          )}
+        </View>
       </ScrollView>
       {focusTarget === "snippet" && (
         <FocusModeOverlay
@@ -396,6 +406,24 @@ const EntryDetailScreen = () => {
             setIsTextScannerOpen(false);
           }}
           onClose={() => setIsTextScannerOpen(false)}
+        />
+      )}
+      {isVoiceOpen && (
+        <VoiceIsland
+          bookCoverUrl={book?.coverUrl}
+          bookTitle={book?.title}
+          bookAuthor={book?.authors?.[0]}
+          onSave={(transcription, uri) => {
+            setValue("reflection", transcription);
+            setAudioUri(uri);
+            setIsVoiceOpen(false);
+          }}
+          onEdit={(transcription, uri) => {
+            setValue("reflection", transcription);
+            setAudioUri(uri);
+            setIsVoiceOpen(false);
+          }}
+          onClose={() => setIsVoiceOpen(false)}
         />
       )}
     </ScreenWrapper>
