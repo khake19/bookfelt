@@ -4,10 +4,11 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
+import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-reanimated";
 import { CameraIcon } from "react-native-heroicons/outline";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { EntryFormValues } from "../features/entries";
-import { EMOTIONS, useEntries, useEntryForm } from "../features/entries";
+import { CORE_EMOTIONS, SECONDARY_EMOTIONS, useEntries, useEntryForm } from "../features/entries";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
 import {
@@ -64,6 +65,7 @@ const EntryDetailScreen = () => {
     "snippet" | "reflection" | null
   >(null);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
+  const [showMoreEmotions, setShowMoreEmotions] = useState(false);
   const [androidPickerMode, setAndroidPickerMode] = useState<
     "date" | "time" | null
   >(null);
@@ -275,8 +277,8 @@ const EntryDetailScreen = () => {
           <Text className="text-xs font-medium uppercase tracking-widest text-accent mb-1.5">
             How Does it feel?
           </Text>
-          <View className="flex-row flex-wrap gap-2">
-            {EMOTIONS.map((emotion) => {
+          <Animated.View layout={LinearTransition.duration(250)} className="flex-row flex-wrap gap-2">
+            {CORE_EMOTIONS.map((emotion) => {
               const isSelected = selectedFeeling === emotion.label;
               return (
                 <Pressable
@@ -303,7 +305,50 @@ const EntryDetailScreen = () => {
                 </Pressable>
               );
             })}
-          </View>
+            {showMoreEmotions &&
+              SECONDARY_EMOTIONS.map((emotion, index) => {
+                const isSelected = selectedFeeling === emotion.label;
+                return (
+                  <Animated.View
+                    key={emotion.label}
+                    entering={FadeInDown.duration(250).delay(index * 30)}
+                    exiting={FadeOutUp.duration(200)}
+                  >
+                    <Pressable
+                      onPress={() =>
+                        setValue("feeling", isSelected ? "" : emotion.label, {
+                          shouldValidate: true,
+                        })
+                      }
+                      className={`flex-row items-center gap-1.5 rounded-full px-3 py-1.5 ${isSelected ? "" : "bg-secondary border border-border"}`}
+                      style={
+                        isSelected
+                          ? { backgroundColor: emotion.color + "30" }
+                          : undefined
+                      }
+                    >
+                      <Text>{emotion.emoji}</Text>
+                      <Text
+                        className={`text-xs font-medium ${isSelected ? "" : "text-foreground"}`}
+                        style={isSelected ? { color: emotion.color } : undefined}
+                      >
+                        {emotion.label}
+                      </Text>
+                    </Pressable>
+                  </Animated.View>
+                );
+              })}
+            <Animated.View layout={LinearTransition.duration(250).delay(200)}>
+              <Pressable
+                onPress={() => setShowMoreEmotions((v) => !v)}
+                className="flex-row items-center gap-1 rounded-full px-3 py-1.5 bg-secondary border border-border"
+              >
+                <Text className="text-xs font-medium text-muted">
+                  {showMoreEmotions ? "Less" : "More"}
+                </Text>
+              </Pressable>
+            </Animated.View>
+          </Animated.View>
         </View>
         <View className="h-px bg-border" />
         <Pressable
