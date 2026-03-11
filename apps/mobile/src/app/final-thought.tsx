@@ -1,29 +1,31 @@
+import { useState } from "react";
 import { Button } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { useLibrary } from "../features/books/hooks/use-library";
-import { FocusModeOverlay, RichTextPreview, ScreenWrapper } from "../shared";
+import { FocusModeOverlay, RichTextPreview, ScreenWrapper, stripHtml } from "../shared";
 
-export default function FirstImpressionScreen() {
+export default function FinalThoughtScreen() {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
-  const { books, updateBook } = useLibrary();
+  const { books, updateBook, updateStatus } = useLibrary();
   const book = books.find((b) => b.id === bookId);
 
-  const [firstImpression, setFirstImpression] = useState("");
+  const [finalThought, setFinalThought] = useState("");
   const [isFocusMode, setIsFocusMode] = useState(false);
 
   const handleSave = () => {
-    if (firstImpression.trim()) {
-      updateBook(bookId, { firstImpression: firstImpression.trim() });
+    if (finalThought.trim()) {
+      updateBook(bookId, { finalThought: finalThought.trim() });
     }
-    router.dismissAll();
+    updateStatus(bookId, "finished");
+    router.push({ pathname: "/book-summary", params: { bookId, source: "finished" } });
   };
 
   const handleSkip = () => {
-    router.dismissAll();
+    updateStatus(bookId, "finished");
+    router.push({ pathname: "/book-summary", params: { bookId, source: "finished" } });
   };
 
   if (!book) {
@@ -45,10 +47,7 @@ export default function FirstImpressionScreen() {
       >
         <View className="items-center">
           {/* Book cover + info */}
-          <Animated.View
-            entering={FadeInDown.duration(500).delay(100)}
-            className="items-center"
-          >
+          <Animated.View entering={FadeInDown.duration(500).delay(100)} className="items-center">
             {book.coverUrl && (
               <Image
                 source={{ uri: book.coverUrl }}
@@ -65,51 +64,53 @@ export default function FirstImpressionScreen() {
           </Animated.View>
 
           {/* Gold divider */}
-          <Animated.View
-            entering={FadeInDown.duration(500).delay(300)}
-            className="my-6 w-16 h-px bg-primary/20"
-          />
+          <Animated.View entering={FadeInDown.duration(500).delay(300)} className="my-6 w-16 h-px bg-primary/20" />
+
+          {/* First impression recall */}
+          {book.firstImpression && (
+            <Animated.View entering={FadeInDown.duration(500).delay(400)} className="w-full mb-6">
+              <View className="bg-card rounded-2xl px-4 py-3">
+                <Text className="text-muted/60 text-xs uppercase tracking-widest mb-1">
+                  First Impression
+                </Text>
+                <Text className="text-muted italic text-sm leading-relaxed">
+                  "{stripHtml(book.firstImpression)}"
+                </Text>
+              </View>
+            </Animated.View>
+          )}
 
           {/* Prompts */}
-          <Animated.View
-            entering={FadeInDown.duration(500).delay(500)}
-            className="items-center mb-6"
-          >
+          <Animated.View entering={FadeInDown.duration(500).delay(500)} className="items-center mb-6">
             <Text className="text-foreground font-serif-italic text-base italic">
-              The journey begins.
+              The journey is complete.
             </Text>
             <Text className="text-muted text-sm mt-2 text-center px-6">
-              What is your first impression of this story?
+              What are your final thoughts on this story?
             </Text>
           </Animated.View>
 
           {/* Writing card */}
-          <Animated.View
-            entering={FadeInDown.duration(500).delay(700)}
-            className="w-full"
-          >
+          <Animated.View entering={FadeInDown.duration(500).delay(700)} className="w-full">
             <Pressable
               onPress={() => setIsFocusMode(true)}
               className="border border-primary/30 rounded-2xl bg-card p-5 min-h-[120px]"
             >
-              {firstImpression ? (
-                <RichTextPreview html={firstImpression} />
+              {finalThought ? (
+                <RichTextPreview html={finalThought} />
               ) : (
                 <Text className="text-sm text-muted/60 italic">
-                  Tap to write your first impression...
+                  Tap to write your final thought...
                 </Text>
               )}
             </Pressable>
           </Animated.View>
 
           {/* Actions */}
-          <Animated.View
-            entering={FadeInDown.duration(500).delay(900)}
-            className="w-full mt-8"
-          >
+          <Animated.View entering={FadeInDown.duration(500).delay(900)} className="w-full mt-8">
             <Button onPress={handleSave} shape="pill" className="w-full">
               <Text className="text-background text-center font-medium text-base">
-                Begin the Journey
+                Complete the Journey
               </Text>
             </Button>
             <Pressable onPress={handleSkip} className="mt-4 items-center py-2">
@@ -121,10 +122,10 @@ export default function FirstImpressionScreen() {
 
       {isFocusMode && (
         <FocusModeOverlay
-          content={firstImpression}
-          onChangeContent={setFirstImpression}
+          content={finalThought}
+          onChangeContent={setFinalThought}
           onDone={() => setIsFocusMode(false)}
-          placeholder="What do you expect from this book?"
+          placeholder="How did this book leave you feeling?"
         />
       )}
     </ScreenWrapper>

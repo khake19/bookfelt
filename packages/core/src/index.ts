@@ -10,3 +10,5 @@ export {
 export type { GoogleBook, GoogleBooksResponse } from "./services/google-books";
 
 export { transcribeAudio } from "./services/whisper";
+
+export { generateBookSummary } from "./services/summarize";

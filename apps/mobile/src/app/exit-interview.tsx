@@ -28,7 +28,7 @@ export default function ExitInterviewScreen() {
       updateBook(bookId, { exitNote: exitNote.trim() });
     }
     updateStatus(bookId, "dnf");
-    router.dismissAll();
+    router.push({ pathname: "/book-summary", params: { bookId, source: "dnf" } });
   };
 
   const handleSkip = () => {

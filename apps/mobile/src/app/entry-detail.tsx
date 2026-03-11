@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
 import { Button, Input } from "@bookfelt/ui";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
-import { EMOTIONS, useEntries, useEntryForm } from "../features/entries";
-import type { EntryFormValues } from "../features/entries";
+import { CameraIcon } from "react-native-heroicons/outline";
 import { useLibrary } from "../features/books/hooks/use-library";
+import type { EntryFormValues } from "../features/entries";
+import { EMOTIONS, useEntries, useEntryForm } from "../features/entries";
+import AudioPlayer from "../features/entries/components/AudioPlayer";
+import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
 import {
   CloseButton,
   FocusModeOverlay,
@@ -16,12 +19,9 @@ import {
   useThemeColors,
 } from "../shared";
 import {
-  consumePendingSnippet,
   consumePendingReflection,
+  consumePendingSnippet,
 } from "../shared/components/FloatingActionButton";
-import { CameraIcon } from "react-native-heroicons/outline";
-import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
-import AudioPlayer from "../features/entries/components/AudioPlayer";
 
 const EntryDetailScreen = () => {
   const { mutedForeground } = useThemeColors();
@@ -45,7 +45,7 @@ const EntryDetailScreen = () => {
   } = useEntryForm(existing);
 
   const [audioUri, setAudioUri] = useState<string | undefined>(
-    existing?.audioUri
+    existing?.audioUri,
   );
 
   useEffect(() => {
@@ -60,7 +60,9 @@ const EntryDetailScreen = () => {
     }
   }, [setValue]);
 
-  const [focusTarget, setFocusTarget] = useState<"snippet" | "reflection" | null>(null);
+  const [focusTarget, setFocusTarget] = useState<
+    "snippet" | "reflection" | null
+  >(null);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
   const [androidPickerMode, setAndroidPickerMode] = useState<
     "date" | "time" | null
@@ -304,7 +306,10 @@ const EntryDetailScreen = () => {
           </View>
         </View>
         <View className="h-px bg-border" />
-        <Pressable onPress={() => setFocusTarget("reflection")} className="py-3">
+        <Pressable
+          onPress={() => setFocusTarget("reflection")}
+          className="py-3"
+        >
           <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
             Your Reflection
           </Text>

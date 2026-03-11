@@ -3,13 +3,11 @@ import type { ReadingStatus } from "../features/books/types/book";
 import DeleteConfirmSheet from "./components/DeleteConfirmSheet";
 import BookOptionsSheet from "../features/books/components/BookOptionsSheet";
 import ChangeStatusSheet from "../features/books/components/ChangeStatusSheet";
-import FinalThoughtSheet from "../features/books/components/FinalThoughtSheet";
 import { SHEET_IDS } from "./constants/sheet-ids";
 
 registerSheet(SHEET_IDS.DELETE_ENTRY, DeleteConfirmSheet);
 registerSheet(SHEET_IDS.ENTRY_OPTIONS, BookOptionsSheet);
 registerSheet(SHEET_IDS.CHANGE_STATUS, ChangeStatusSheet);
-registerSheet(SHEET_IDS.FINAL_THOUGHT, FinalThoughtSheet);
 
 declare module "react-native-actions-sheet" {
   interface Sheets {
@@ -32,12 +30,6 @@ declare module "react-native-actions-sheet" {
       payload: {
         onChangeStatus: (status: ReadingStatus | "put-down") => void;
         currentStatus: ReadingStatus;
-      };
-    }>;
-    "final-thought-sheet": SheetDefinition<{
-      payload: {
-        firstImpression: string;
-        onSave: (text: string) => void;
       };
     }>;
   }

@@ -1,3 +1,5 @@
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   Image,
   ImageBackground,
@@ -6,10 +8,14 @@ import {
   Text,
   View,
 } from "react-native";
+import { SheetManager } from "react-native-actions-sheet";
+import {
+  EllipsisHorizontalIcon,
+  MicrophoneIcon,
+} from "react-native-heroicons/outline";
+import LinearGradient from "react-native-linear-gradient";
 import Animated, {
-  FadeIn,
   FadeInDown,
-  FadeOut,
   LinearTransition,
   useAnimatedStyle,
   useSharedValue,
@@ -17,18 +23,21 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
-import { useEffect, useState } from "react";
-import LinearGradient from "react-native-linear-gradient";
-import { EllipsisHorizontalIcon, MicrophoneIcon } from "react-native-heroicons/outline";
-import { SheetManager } from "react-native-actions-sheet";
-import { SHEET_IDS } from "../shared/constants/sheet-ids";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { getEmotionByLabel, useEntries } from "../features/entries";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { ReadingStatus } from "../features/books/types/book";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { CloseButton, PillButton, RichTextPreview, ScreenWrapper, stripHtml, timeAgo, useThemeColors } from "../shared";
+import { getEmotionByLabel, useEntries } from "../features/entries";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
+import {
+  CloseButton,
+  PillButton,
+  RichTextPreview,
+  ScreenWrapper,
+  stripHtml,
+  timeAgo,
+  useThemeColors,
+} from "../shared";
+import { SHEET_IDS } from "../shared/constants/sheet-ids";
 
 function RippleDot({ color, delay = 0 }: { color: string; delay?: number }) {
   const ripple1 = useSharedValue(0);
@@ -36,17 +45,14 @@ function RippleDot({ color, delay = 0 }: { color: string; delay?: number }) {
   const dotScale = useSharedValue(0);
 
   useEffect(() => {
-    dotScale.value = withDelay(
-      delay,
-      withTiming(1, { duration: 400 })
-    );
+    dotScale.value = withDelay(delay, withTiming(1, { duration: 400 }));
     ripple1.value = withDelay(
       delay + 500,
-      withRepeat(withTiming(1, { duration: 2400 }), -1, false)
+      withRepeat(withTiming(1, { duration: 2400 }), -1, false),
     );
     ripple2.value = withDelay(
       delay + 1300,
-      withRepeat(withTiming(1, { duration: 2400 }), -1, false)
+      withRepeat(withTiming(1, { duration: 2400 }), -1, false),
     );
   }, []);
 
@@ -93,7 +99,7 @@ function RippleDot({ color, delay = 0 }: { color: string; delay?: number }) {
 const BookDetailScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
-  const { books, updateStatus, removeBook, updateBook } = useLibrary();
+  const { books, updateStatus, removeBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
   const { primary, background } = useThemeColors();
   const insets = useSafeAreaInsets();
@@ -101,7 +107,7 @@ const BookDetailScreen = () => {
   const [showDraftsOnly, setShowDraftsOnly] = useState(false);
 
   const voiceDraftCount = entries.filter(
-    (e) => e.audioUri && !e.snippet && !e.feeling
+    (e) => e.audioUri && !e.feeling,
   ).length;
 
   const displayEntries = showDraftsOnly
@@ -126,7 +132,8 @@ const BookDetailScreen = () => {
     if (!book) return;
     SheetManager.show(SHEET_IDS.ENTRY_OPTIONS, {
       payload: {
-        onEdit: () => router.push({ pathname: "/book-edit", params: { bookId } }),
+        onEdit: () =>
+          router.push({ pathname: "/book-edit", params: { bookId } }),
         onDelete: () => {
           removeBook(bookId);
           router.back();
@@ -136,15 +143,11 @@ const BookDetailScreen = () => {
             router.push({ pathname: "/exit-interview", params: { bookId } });
             return;
           }
-          updateStatus(bookId, status);
           if (status === "finished") {
-            SheetManager.show(SHEET_IDS.FINAL_THOUGHT, {
-              payload: {
-                firstImpression: book.firstImpression ?? "",
-                onSave: (text) => updateBook(bookId, { finalThought: text }),
-              },
-            });
+            router.push({ pathname: "/final-thought", params: { bookId } });
+            return;
           }
+          updateStatus(bookId, status);
         },
         currentStatus: book.status,
       },
@@ -154,7 +157,10 @@ const BookDetailScreen = () => {
   if (!book) {
     return (
       <ScreenWrapper>
-        <View className="flex-row items-center pb-3" style={{ paddingTop: insets.top }}>
+        <View
+          className="flex-row items-center pb-3"
+          style={{ paddingTop: insets.top }}
+        >
           <CloseButton onPress={() => router.back()} />
         </View>
         <View className="flex-1 items-center justify-center">
@@ -166,7 +172,11 @@ const BookDetailScreen = () => {
 
   return (
     <View className="flex-1 bg-background">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="pb-6" stickyHeaderIndices={[1]}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName="pb-6"
+        stickyHeaderIndices={[1]}
+      >
         {/* Header with blurred cover background */}
         <Animated.View entering={FadeInDown.duration(400)}>
           {book.coverUrl ? (
@@ -189,8 +199,14 @@ const BookDetailScreen = () => {
               >
                 <View className="px-5 pb-8" style={{ paddingTop: insets.top }}>
                   <View className="flex-row items-center justify-between">
-                    <CloseButton onPress={() => router.back()} variant="overlay" />
-                    <Pressable onPress={handleBookOptions} className="w-9 h-9 rounded-full bg-white/20 items-center justify-center">
+                    <CloseButton
+                      onPress={() => router.back()}
+                      variant="overlay"
+                    />
+                    <Pressable
+                      onPress={handleBookOptions}
+                      className="w-9 h-9 rounded-full bg-white/20 items-center justify-center"
+                    >
                       <EllipsisHorizontalIcon size={20} color="white" />
                     </Pressable>
                   </View>
@@ -225,8 +241,14 @@ const BookDetailScreen = () => {
             >
               <View className="px-5 pb-8" style={{ paddingTop: insets.top }}>
                 <View className="flex-row items-center justify-between">
-                  <CloseButton onPress={() => router.back()} variant="overlay" />
-                  <Pressable onPress={handleBookOptions} className="w-9 h-9 rounded-full bg-white/20 items-center justify-center">
+                  <CloseButton
+                    onPress={() => router.back()}
+                    variant="overlay"
+                  />
+                  <Pressable
+                    onPress={handleBookOptions}
+                    className="w-9 h-9 rounded-full bg-white/20 items-center justify-center"
+                  >
                     <EllipsisHorizontalIcon size={20} color="white" />
                   </Pressable>
                 </View>
@@ -268,9 +290,7 @@ const BookDetailScreen = () => {
                 <Pressable
                   onPress={() => setShowDraftsOnly((v) => !v)}
                   className={`flex-row items-center gap-1 rounded-full px-2 py-0.5 ${
-                    showDraftsOnly
-                      ? "bg-primary"
-                      : "bg-primary/10"
+                    showDraftsOnly ? "bg-primary" : "bg-primary/10"
                   }`}
                 >
                   <MicrophoneIcon
@@ -287,11 +307,7 @@ const BookDetailScreen = () => {
                 </Pressable>
               )}
             </View>
-            <PillButton
-              icon="plus"
-              label="New"
-              onPress={handleNewEntry}
-            />
+            <PillButton icon="plus" label="New" onPress={handleNewEntry} />
           </Animated.View>
         </View>
 
@@ -342,6 +358,33 @@ const BookDetailScreen = () => {
           {/* Timeline */}
           {entries.length > 0 ? (
             <View className="relative">
+              {/* AI Summary node */}
+              {book.summary && (
+                <Animated.View entering={FadeInDown.duration(400).delay(200)}>
+                  <View className="flex-row mb-6">
+                    <View className="w-3 items-center">
+                      <View className="w-3 h-3 rounded-full mt-1 z-10 bg-primary/60" />
+                      <View
+                        className="absolute w-0.5"
+                        style={{
+                          top: 16,
+                          bottom: -28,
+                          backgroundColor: primary,
+                          opacity: 0.3,
+                        }}
+                      />
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <Text className="text-primary/80 text-xs font-medium">
+                        Journey Summary
+                      </Text>
+                      <Text className="text-muted text-sm mt-1.5 leading-relaxed">
+                        {book.summary}
+                      </Text>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
               {/* Final Thought cap */}
               {book.finalThought && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
@@ -410,8 +453,10 @@ const BookDetailScreen = () => {
                 const nextEmotion = nextEntry?.feeling
                   ? getEmotionByLabel(nextEntry.feeling)
                   : undefined;
-                const isLast = index === displayEntries.length - 1 && !book.firstImpression;
-                const isUnfinishedAudio = !!entry.audioUri && !entry.snippet && !entry.feeling;
+                const isLast =
+                  index === displayEntries.length - 1 && !book.firstImpression;
+                const isUnfinishedAudio =
+                  !!entry.audioUri && !entry.snippet && !entry.feeling;
                 const dotColor = emotion?.color ?? "#71717a";
 
                 return (
@@ -424,7 +469,10 @@ const BookDetailScreen = () => {
                       {/* Dot + Line segment */}
                       <View className="w-3 items-center">
                         {entry.audioUri ? (
-                          <RippleDot color={dotColor} delay={250 + index * 80} />
+                          <RippleDot
+                            color={dotColor}
+                            delay={250 + index * 80}
+                          />
                         ) : (
                           <View
                             className="w-3 h-3 rounded-full mt-1 z-10"
@@ -459,14 +507,16 @@ const BookDetailScreen = () => {
                               · Ch. {entry.chapter}
                             </Text>
                           )}
-                          {entry.audioUri && !entry.snippet && !entry.feeling && (
-                            <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
-                              <MicrophoneIcon size={10} color={primary} />
-                              <Text className="text-primary text-[10px] font-medium">
-                                Voice Draft
-                              </Text>
-                            </View>
-                          )}
+                          {entry.audioUri &&
+                            !entry.snippet &&
+                            !entry.feeling && (
+                              <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
+                                <MicrophoneIcon size={10} color={primary} />
+                                <Text className="text-primary text-[10px] font-medium">
+                                  Voice Draft
+                                </Text>
+                              </View>
+                            )}
                         </View>
 
                         {entry.snippet ? (
@@ -507,7 +557,9 @@ const BookDetailScreen = () => {
               {/* First Impression anchor */}
               {book.firstImpression && (
                 <Animated.View
-                  entering={FadeInDown.duration(400).delay(250 + entries.length * 80)}
+                  entering={FadeInDown.duration(400).delay(
+                    250 + entries.length * 80,
+                  )}
                 >
                   <View className="flex-row">
                     <View className="w-3 items-center">
@@ -535,6 +587,23 @@ const BookDetailScreen = () => {
             </View>
           ) : (
             <>
+              {book.summary && (
+                <Animated.View entering={FadeInDown.duration(400).delay(200)}>
+                  <View className="flex-row mb-6">
+                    <View className="w-3 items-center">
+                      <View className="w-3 h-3 rounded-full mt-1 z-10 bg-primary/60" />
+                    </View>
+                    <View className="flex-1 ml-4">
+                      <Text className="text-primary/80 text-xs font-medium">
+                        Journey Summary
+                      </Text>
+                      <Text className="text-muted text-sm mt-1.5 leading-relaxed">
+                        {book.summary}
+                      </Text>
+                    </View>
+                  </View>
+                </Animated.View>
+              )}
               {book.finalThought && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">

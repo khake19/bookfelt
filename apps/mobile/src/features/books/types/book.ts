@@ -19,4 +19,5 @@ export interface LibraryBook extends Book {
   firstImpression?: string;
   finalThought?: string;
   exitNote?: string;
+  summary?: string;
 }
