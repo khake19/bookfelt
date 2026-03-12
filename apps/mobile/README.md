@@ -17,6 +17,19 @@ npx expo run:ios
 npx expo run:android
 ```
 
+## EAS Build
+
+```bash
+# Preview APK (internal testing, shareable)
+eas build --platform android --profile preview
+
+# Development client (dev tools enabled)
+eas build --platform android --profile development
+
+# Production app-bundle (Play Store)
+eas build --platform android --profile production
+```
+
 ## Troubleshooting
 
 ### Native module version mismatch

@@ -11,6 +11,7 @@ export { migrations } from "./migrations";
 export { BookModel } from "./models/book.model";
 export { EntryModel } from "./models/entry.model";
 export { SettingModel } from "./models/setting.model";
+export { DatabaseProvider, useDatabase } from "./DatabaseProvider";
 
 const adapter = new SQLiteAdapter({
   schema,
