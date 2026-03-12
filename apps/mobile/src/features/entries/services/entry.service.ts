@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { database, EntryModel } from "@bookfelt/database";
 import { Q } from "@nozbe/watermelondb";
 import type { Entry } from "../types/entry";
@@ -11,17 +12,50 @@ const entriesCollection = database.get<EntryModel>("entries");
 
 // ── Reads ────────────────────────────────────────────────────────
 
-export async function fetchEntries(bookId?: string): Promise<Entry[]> {
-  const query = bookId
-    ? entriesCollection.query(Q.where("book_id", bookId))
-    : entriesCollection.query();
+export function useObserveRecentEntries(limit: number): Entry[] {
+  const [entries, setEntries] = useState<Entry[]>([]);
 
-  const records = await query.fetch();
-  return records.map(entryModelToEntry);
+  useEffect(() => {
+    const subscription = entriesCollection
+      .query(
+        Q.sortBy("date", Q.desc),
+        Q.sortBy("entry_created_at", Q.desc),
+        Q.take(limit),
+      )
+      .observe()
+      .subscribe((records) => {
+        setEntries(records.map(entryModelToEntry));
+      });
+
+    return () => subscription.unsubscribe();
+  }, [limit]);
+
+  return entries;
 }
 
-export function subscribeToEntries(cb: () => void): () => void {
-  return entriesCollection.experimentalSubscribe(cb);
+export function useObserveEntries(bookId?: string): Entry[] {
+  const [entries, setEntries] = useState<Entry[]>([]);
+
+  useEffect(() => {
+    const query = bookId
+      ? entriesCollection.query(Q.where("book_id", bookId))
+      : entriesCollection.query();
+
+    const subscription = query.observe().subscribe((records) => {
+      setEntries(records.map(entryModelToEntry));
+    });
+
+    return () => subscription.unsubscribe();
+  }, [bookId]);
+
+  return entries;
+}
+
+export async function fetchEntries(bookId: string): Promise<Entry[]> {
+  const records = await entriesCollection
+    .query(Q.where("book_id", bookId))
+    .fetch();
+  return records.map(entryModelToEntry);
 }
 
 // ── Writes ───────────────────────────────────────────────────────

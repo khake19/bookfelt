@@ -1,22 +1,25 @@
+import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   Pressable,
-  ScrollView,
   Text,
   View,
 } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { BookOpenIcon } from "react-native-heroicons/outline";
 import LinearGradient from "react-native-linear-gradient";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import {
   EntryCard,
   getEmotionByLabel,
   useEntries,
+  useRecentEntries,
 } from "../../features/entries";
+import type { Entry } from "../../features/entries";
 import {
   PillButton,
   ScreenWrapper,
@@ -29,8 +32,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { muted } = useThemeColors();
   const { books, primaryRead: currentlyReading } = useLibrary();
-  const { entries: allEntries, removeEntry } = useEntries();
-  const entries = allEntries.filter((e) => e.snippet || e.feeling);
+  const { entries, loadMore, hasMore, removeEntry } = useRecentEntries();
   const bookEntries = useEntries(currentlyReading?.id).entries;
   const latestFeeling = bookEntries[0]?.feeling;
   const latestEmotion = latestFeeling
@@ -57,8 +59,25 @@ export default function HomeScreen() {
     });
   };
 
-  return (
-    <ScreenWrapper>
+  const renderItem = ({ item }: { item: Entry }) => (
+    <Animated.View entering={FadeIn.duration(300)}>
+      <EntryCard
+        id={item.id}
+        title={item.bookTitle}
+        chapter={item.chapter ? `Chapter ${item.chapter}` : ""}
+        date={timeAgo(item.date)}
+        snippet={item.snippet}
+        reaction={item.reflection ?? ""}
+        feeling={item.feeling}
+        audioUri={item.audioUri}
+        onPress={() => handlePress(item.id)}
+        onLongPress={() => handleLongPress(item.id)}
+      />
+    </Animated.View>
+  );
+
+  const ListHeader = (
+    <>
       <Animated.Text
         entering={FadeInDown.duration(400)}
         className="text-foreground font-mono-bold text-xl mt-2 mb-4"
@@ -159,72 +178,66 @@ export default function HomeScreen() {
         </Animated.View>
       )}
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerClassName="pb-6"
+      <Animated.View
+        entering={FadeInDown.duration(400).delay(250)}
+        className="flex-row items-center justify-between mb-3"
       >
-        <Animated.View
-          entering={FadeInDown.duration(400).delay(250)}
-          className="flex-row items-center justify-between mb-3"
-        >
-          <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
-            Recent reflections
+        <Text className="text-xs font-medium uppercase tracking-widest text-muted/70">
+          Recent reflections
+        </Text>
+        {currentlyReading && (
+          <PillButton icon="plus" label="New" onPress={handleNewEntry} />
+        )}
+      </Animated.View>
+    </>
+  );
+
+  const ListEmpty = (
+    <Animated.View entering={FadeIn.duration(400)} className="items-center py-12">
+      {books.length === 0 ? (
+        <>
+          <BookOpenIcon size={40} color={muted} />
+          <Text className="text-muted text-sm text-center leading-relaxed mt-4">
+            Your library is empty.{"\n"}Add your first book to get
+            started.
           </Text>
-          {currentlyReading && (
-            <PillButton icon="plus" label="New" onPress={handleNewEntry} />
-          )}
-        </Animated.View>
-        <View className="gap-3">
-          {entries.length > 0 ? (
-            entries.map((entry, index) => (
-              <Animated.View
-                key={entry.id}
-                entering={FadeInDown.duration(400).delay(350 + index * 100)}
-              >
-                <EntryCard
-                  id={entry.id}
-                  title={entry.bookTitle}
-                  chapter={entry.chapter ? `Chapter ${entry.chapter}` : ""}
-                  date={timeAgo(entry.date)}
-                  snippet={entry.snippet}
-                  reaction={entry.reflection ?? ""}
-                  feeling={entry.feeling}
-                  audioUri={entry.audioUri}
-                  onPress={() => handlePress(entry.id)}
-                  onLongPress={() => handleLongPress(entry.id)}
-                />
-              </Animated.View>
-            ))
-          ) : (
-            <Animated.View
-              entering={FadeInDown.duration(400).delay(350)}
-              className="items-center py-12"
-            >
-              {books.length === 0 ? (
-                <>
-                  <BookOpenIcon size={40} color={muted} />
-                  <Text className="text-muted text-sm text-center leading-relaxed mt-4">
-                    Your library is empty.{"\n"}Add your first book to get
-                    started.
-                  </Text>
-                  <Pressable
-                    onPress={() => router.push("/add-book")}
-                    className="flex-row items-center gap-2 bg-primary/10 rounded-full px-4 py-2 mt-4"
-                  >
-                    <Text className="text-primary text-sm font-medium">
-                      Add a Book
-                    </Text>
-                  </Pressable>
-                </>
-              ) : (
-                <Text className="text-muted text-sm text-center leading-relaxed">
-                  No reflections yet.{"\n"}Tap + to log your first one.
-                </Text>
-              )}
-            </Animated.View>
-          )}
-        </View>
-      </ScrollView>
+          <Pressable
+            onPress={() => router.push("/add-book")}
+            className="flex-row items-center gap-2 bg-primary/10 rounded-full px-4 py-2 mt-4"
+          >
+            <Text className="text-primary text-sm font-medium">
+              Add a Book
+            </Text>
+          </Pressable>
+        </>
+      ) : (
+        <Text className="text-muted text-sm text-center leading-relaxed">
+          No reflections yet.{"\n"}Tap + to log your first one.
+        </Text>
+      )}
+    </Animated.View>
+  );
+
+  return (
+    <ScreenWrapper>
+      <FlashList
+        data={entries}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        ListHeaderComponent={ListHeader}
+        ListEmptyComponent={ListEmpty}
+        ListFooterComponent={
+          hasMore ? (
+            <ActivityIndicator className="py-4" />
+          ) : null
+        }
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        estimatedItemSize={120}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 24 }}
+        ItemSeparatorComponent={() => <View className="h-3" />}
+      />
     </ScreenWrapper>
   );
 }
