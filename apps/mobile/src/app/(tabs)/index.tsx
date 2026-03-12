@@ -15,7 +15,7 @@ import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { useLibrary } from "../../features/books/hooks/use-library";
 import {
   EntryCard,
-  getEmotionByLabel,
+  useEmotionMap,
   useEntries,
   useRecentEntries,
 } from "../../features/entries";
@@ -34,9 +34,10 @@ export default function HomeScreen() {
   const { books, primaryRead: currentlyReading } = useLibrary();
   const { entries, loadMore, hasMore, removeEntry } = useRecentEntries();
   const bookEntries = useEntries(currentlyReading?.id).entries;
+  const emotionMap = useEmotionMap();
   const latestFeeling = bookEntries[0]?.feeling;
   const latestEmotion = latestFeeling
-    ? getEmotionByLabel(latestFeeling)
+    ? emotionMap.get(latestFeeling)
     : undefined;
 
   const handlePress = (id: string) => {

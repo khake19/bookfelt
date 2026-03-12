@@ -15,7 +15,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { getEmotionByLabel } from "../constants/emotions";
+import { useEmotionMap } from "../services/emotion.service";
 import AudioPlayer from "./AudioPlayer";
 
 const stripHtml = (html: string) =>
@@ -53,7 +53,8 @@ const EntryCard = (props: EntryCardProps) => {
     onLongPress,
   } = props;
 
-  const emotion = feeling ? getEmotionByLabel(feeling) : undefined;
+  const emotionMap = useEmotionMap();
+  const emotion = feeling ? emotionMap.get(feeling) : undefined;
   const color = emotion?.color;
 
   const badgeScale = useSharedValue(1);

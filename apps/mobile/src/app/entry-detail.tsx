@@ -8,7 +8,7 @@ import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-
 import { CameraIcon, MicrophoneIcon } from "react-native-heroicons/outline";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { EntryFormValues } from "../features/entries";
-import { CORE_EMOTIONS, SECONDARY_EMOTIONS, useEntries, useEntryForm } from "../features/entries";
+import { useObserveEmotions, useEntries, useEntryForm } from "../features/entries";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
 import VoiceIsland from "../features/entries/components/VoiceIsland";
@@ -97,6 +97,10 @@ const EntryDetailScreen = () => {
     }
     router.back();
   };
+
+  const emotions = useObserveEmotions();
+  const coreEmotions = emotions.filter((e) => e.group === "core");
+  const secondaryEmotions = emotions.filter((e) => e.group === "secondary");
 
   const selectedFeeling = watch("feeling");
   const snippet = watch("snippet");
@@ -280,7 +284,7 @@ const EntryDetailScreen = () => {
             How Does it feel?
           </Text>
           <Animated.View layout={LinearTransition.duration(250)} className="flex-row flex-wrap gap-2">
-            {CORE_EMOTIONS.map((emotion) => {
+            {coreEmotions.map((emotion) => {
               const isSelected = selectedFeeling === emotion.label;
               return (
                 <Pressable
@@ -308,7 +312,7 @@ const EntryDetailScreen = () => {
               );
             })}
             {showMoreEmotions &&
-              SECONDARY_EMOTIONS.map((emotion, index) => {
+              secondaryEmotions.map((emotion, index) => {
                 const isSelected = selectedFeeling === emotion.label;
                 return (
                   <Animated.View

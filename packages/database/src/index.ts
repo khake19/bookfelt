@@ -5,13 +5,15 @@ import { migrations } from "./migrations";
 import { BookModel } from "./models/book.model";
 import { EntryModel } from "./models/entry.model";
 import { SettingModel } from "./models/setting.model";
+import { EmotionModel } from "./models/emotion.model";
 
 export { schema } from "./schema";
 export { migrations } from "./migrations";
 export { BookModel } from "./models/book.model";
 export { EntryModel } from "./models/entry.model";
 export { SettingModel } from "./models/setting.model";
-
+export { EmotionModel } from "./models/emotion.model";
+export { seedEmotions } from "./seed";
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -24,5 +26,5 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses: [BookModel, EntryModel, SettingModel],
+  modelClasses: [BookModel, EntryModel, SettingModel, EmotionModel],
 });

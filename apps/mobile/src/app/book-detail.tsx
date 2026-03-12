@@ -26,7 +26,7 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { ReadingStatus } from "../features/books/types/book";
-import { getEmotionByLabel, useEntries } from "../features/entries";
+import { useEmotionMap, useEntries } from "../features/entries";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 import {
   CloseButton,
@@ -102,6 +102,7 @@ const BookDetailScreen = () => {
   const { books, updateStatus, removeBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
   const { primary, background } = useThemeColors();
+  const emotionMap = useEmotionMap();
   const insets = useSafeAreaInsets();
   const book = books.find((b) => b.id === bookId);
   const [showDraftsOnly, setShowDraftsOnly] = useState(false);
@@ -447,11 +448,11 @@ const BookDetailScreen = () => {
               )}
               {displayEntries.map((entry, index) => {
                 const emotion = entry.feeling
-                  ? getEmotionByLabel(entry.feeling)
+                  ? emotionMap.get(entry.feeling)
                   : undefined;
                 const nextEntry = displayEntries[index + 1];
                 const nextEmotion = nextEntry?.feeling
-                  ? getEmotionByLabel(nextEntry.feeling)
+                  ? emotionMap.get(nextEntry.feeling)
                   : undefined;
                 const isLast =
                   index === displayEntries.length - 1 && !book.firstImpression;
