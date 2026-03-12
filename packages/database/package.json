@@ -18,8 +18,5 @@
   },
   "dependencies": {
     "@nozbe/watermelondb": "^0.28.0"
-  },
-  "peerDependencies": {
-    "react": "*"
   }
 }

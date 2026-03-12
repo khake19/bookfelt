@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { Database } from "@nozbe/watermelondb";
-import { database } from "./index";
+import { database } from "@bookfelt/database";
 
 const DatabaseContext = createContext<Database>(database);
 

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { PortalHost } from '@rn-primitives/portal';
 import { SheetProvider } from 'react-native-actions-sheet';
-import { DatabaseProvider } from '@bookfelt/database';
+import { DatabaseProvider } from '../providers/DatabaseProvider';
 
 const queryClient = new QueryClient();
 
