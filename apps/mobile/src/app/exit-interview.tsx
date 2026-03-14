@@ -109,20 +109,17 @@ export default function ExitInterviewScreen() {
 
           {/* Writing card */}
           <Animated.View entering={FadeInDown.duration(500).delay(700)} className="w-full">
-            <View className="flex-row items-center justify-between mb-1.5">
-              <View />
-              <Pressable
-                onPress={() => setIsVoiceOpen(true)}
-                hitSlop={8}
-                className="p-1"
-              >
-                <MicrophoneIcon size={18} color={mutedForeground} />
-              </Pressable>
-            </View>
             <Pressable
               onPress={() => setIsFocusMode(true)}
               className="border border-muted/30 rounded-2xl bg-card p-5 min-h-[120px]"
             >
+              <Pressable
+                onPress={() => setIsVoiceOpen(true)}
+                hitSlop={8}
+                className="absolute top-3 right-3 z-10 p-1"
+              >
+                <MicrophoneIcon size={18} color={mutedForeground} />
+              </Pressable>
               {exitNote ? (
                 <RichTextPreview html={exitNote} />
               ) : (
