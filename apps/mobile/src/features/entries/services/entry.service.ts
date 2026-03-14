@@ -62,16 +62,18 @@ export async function fetchEntries(bookId: string): Promise<Entry[]> {
 
 export async function addEntry(
   entry: Omit<Entry, "id" | "createdAt">,
-): Promise<void> {
+): Promise<string | null> {
   try {
-    await database.write(async () => {
-      await entriesCollection.create((record: EntryModel) => {
+    const record = await database.write(async () => {
+      return entriesCollection.create((record: EntryModel) => {
         const fields = entryToCreateRaw(entry, record.id);
         Object.assign(record._raw, fields);
       });
     });
+    return record.id;
   } catch (error) {
     console.error("addEntry failed:", error);
+    return null;
   }
 }
 

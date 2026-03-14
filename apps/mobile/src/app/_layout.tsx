@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { PortalHost } from '@rn-primitives/portal';
 import { SheetProvider } from 'react-native-actions-sheet';
+import Toast from '../shared/components/Toast';
 import { useEffect } from 'react';
 import { database, seedEmotions } from '@bookfelt/database';
 import { DatabaseProvider } from '../providers/DatabaseProvider';
@@ -21,6 +22,7 @@ export default function RootLayout() {
         <SheetProvider>
           <Stack screenOptions={{ headerShown: false }} />
           <PortalHost />
+          <Toast />
         </SheetProvider>
       </QueryClientProvider>
     </DatabaseProvider>

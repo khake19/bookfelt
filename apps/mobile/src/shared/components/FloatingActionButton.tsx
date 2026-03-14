@@ -22,7 +22,8 @@ import { useLibrary } from '../../features/books/hooks/use-library';
 import { useEntries } from '../../features/entries/hooks/use-entries';
 import TextScannerOverlay from '../../features/entries/components/TextScannerOverlay';
 import VoiceIsland from '../../features/entries/components/VoiceIsland';
-import { setPendingSnippet, setPendingReflection } from '../utils/pending-state';
+import { setPendingSnippet } from '../utils/pending-state';
+import { useTranscriptionStore } from '../stores/transcription.store';
 
 const SPRING_CONFIG = { damping: 15, stiffness: 180 };
 const FAB_SIZE = 56;
@@ -123,24 +124,20 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
     }, 300);
   };
 
-  const handleVoiceSave = (transcription: string, audioUri: string) => {
+  const handleVoiceSave = async (audioUri: string) => {
     if (!primaryRead) return;
-    addEntry({
+    const entryId = await addEntry({
       bookId: primaryRead.id,
       bookTitle: primaryRead.title,
-      reflection: transcription,
       audioUri,
       date: Date.now(),
     });
     setIsVoiceIslandOpen(false);
-  };
-
-  const handleVoiceEdit = (transcription: string, audioUri: string) => {
-    setPendingReflection({ transcription, audioUri });
-    setIsVoiceIslandOpen(false);
-    setTimeout(() => {
-      router.navigate('/entry-detail');
-    }, 300);
+    if (entryId) {
+      const { startTranscription, registerEntryId } = useTranscriptionStore.getState();
+      startTranscription(audioUri);
+      registerEntryId(entryId);
+    }
   };
 
   const mainIconStyle = useAnimatedStyle(() => ({
@@ -252,7 +249,6 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
             bookTitle={primaryRead?.title}
             bookAuthor={primaryRead?.authors?.[0]}
             onSave={handleVoiceSave}
-            onEdit={handleVoiceEdit}
             onClose={() => setIsVoiceIslandOpen(false)}
           />
         )}

@@ -20,10 +20,8 @@ import {
   stripHtml,
   useThemeColors,
 } from "../shared";
-import {
-  consumePendingReflection,
-  consumePendingSnippet,
-} from "../shared/utils/pending-state";
+import { consumePendingSnippet } from "../shared/utils/pending-state";
+import { useTranscriptionStore } from "../shared/stores/transcription.store";
 
 const EntryDetailScreen = () => {
   const { mutedForeground } = useThemeColors();
@@ -55,12 +53,18 @@ const EntryDetailScreen = () => {
     if (pending) {
       setValue("snippet", pending);
     }
-    const pendingReflection = consumePendingReflection();
-    if (pendingReflection) {
-      setValue("reflection", pendingReflection.transcription);
-      setAudioUri(pendingReflection.audioUri);
-    }
   }, [setValue]);
+
+  const transcriptionStatus = useTranscriptionStore((s) => s.status);
+  const transcriptionText = useTranscriptionStore((s) => s.text);
+  const startTranscription = useTranscriptionStore((s) => s.startTranscription);
+  const registerEntryId = useTranscriptionStore((s) => s.registerEntryId);
+
+  useEffect(() => {
+    if (transcriptionStatus === "completed" && transcriptionText) {
+      setValue("reflection", transcriptionText);
+    }
+  }, [transcriptionStatus, transcriptionText, setValue]);
 
   const [focusTarget, setFocusTarget] = useState<
     "snippet" | "reflection" | null
@@ -76,7 +80,7 @@ const EntryDetailScreen = () => {
 
   const canSave = isValid && book != null;
 
-  const onSubmit = (values: EntryFormValues) => {
+  const onSubmit = async (values: EntryFormValues) => {
     if (!book) return;
     const data = {
       bookId: book.id,
@@ -91,7 +95,10 @@ const EntryDetailScreen = () => {
       date: values.date.getTime(),
     };
     if (isNew) {
-      addEntry(data);
+      const entryId = await addEntry(data);
+      if (entryId && transcriptionStatus !== "idle") {
+        registerEntryId(entryId);
+      }
     } else {
       updateEntry(existing.id, data);
     }
@@ -417,14 +424,9 @@ const EntryDetailScreen = () => {
           bookCoverUrl={book?.coverUrl}
           bookTitle={book?.title}
           bookAuthor={book?.authors?.[0]}
-          onSave={(transcription, uri) => {
-            setValue("reflection", transcription);
+          onSave={(uri) => {
             setAudioUri(uri);
-            setIsVoiceOpen(false);
-          }}
-          onEdit={(transcription, uri) => {
-            setValue("reflection", transcription);
-            setAudioUri(uri);
+            startTranscription(uri);
             setIsVoiceOpen(false);
           }}
           onClose={() => setIsVoiceOpen(false)}
