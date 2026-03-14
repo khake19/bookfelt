@@ -9,17 +9,25 @@ import type { ReadingStatus } from "../types/book";
 
 type StatusOption = ReadingStatus | "put-down";
 
-const STATUS_OPTIONS: { value: StatusOption; label: string }[] = [
+const ALL_STATUS_OPTIONS: { value: StatusOption; label: string }[] = [
   { value: "reading", label: "Reading" },
   { value: "finished", label: "Finished" },
   { value: "put-down", label: "Put Down" },
 ];
+
+function getAvailableOptions(currentStatus?: string) {
+  if (currentStatus === "finished" || currentStatus === "dnf") {
+    return ALL_STATUS_OPTIONS.filter((o) => o.value === "reading");
+  }
+  return ALL_STATUS_OPTIONS;
+}
 
 export default function ChangeStatusSheet({
   sheetId,
   payload,
 }: SheetProps<"change-status-sheet">) {
   const { background } = useThemeColors();
+  const options = getAvailableOptions(payload?.currentStatus);
 
   return (
     <ActionSheet
@@ -34,7 +42,7 @@ export default function ChangeStatusSheet({
         </View>
 
         <View className="bg-card rounded-xl overflow-hidden">
-          {STATUS_OPTIONS.map((option, index) => {
+          {options.map((option, index) => {
             const isActive = option.value === payload?.currentStatus;
             return (
               <Pressable
