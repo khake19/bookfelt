@@ -14,6 +14,7 @@ export interface Book {
 export type ReadingStatus = "reading" | "want-to-read" | "finished" | "paused" | "dnf";
 
 export interface LibraryBook extends Book {
+  originalId: string;
   status: ReadingStatus;
   addedAt: number;
   firstImpression?: string;

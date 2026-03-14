@@ -19,6 +19,6 @@ export function useLibrary() {
     updateBook: libraryService.updateBook,
     fetchBook: libraryService.fetchBook,
     setPrimaryRead: libraryService.setPrimaryRead,
-    isInLibrary: (bookId: string) => books.some((b) => b.id === bookId),
+    isInLibrary: (bookId: string) => books.some((b) => b.originalId === bookId),
   };
 }

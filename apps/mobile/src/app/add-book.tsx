@@ -126,18 +126,20 @@ export default function AddBookScreen() {
       authors: manualAuthor.trim() ? [manualAuthor.trim()] : ["Unknown author"],
       source: "manual",
     };
-    await addBook(book, selectedStatus);
+    const bookId = await addBook(book, selectedStatus);
+    if (!bookId) return;
     router.replace({
       pathname: "/first-impression",
-      params: { bookId: book.id },
+      params: { bookId },
     });
   };
 
   const handleAdd = async (book: Book) => {
-    await addBook(book, selectedStatus);
+    const bookId = await addBook(book, selectedStatus);
+    if (!bookId) return;
     router.replace({
       pathname: "/first-impression",
-      params: { bookId: book.id },
+      params: { bookId },
     });
   };
 

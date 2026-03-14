@@ -96,14 +96,14 @@ export function useObservePrimaryReadId(): string | null {
 export async function addBook(
   book: Book,
   status: ReadingStatus,
-): Promise<void> {
+): Promise<string | null> {
   try {
     const existing = await booksCollection
       .query(Q.where("original_id", book.id))
       .fetch();
-    if (existing.length > 0) return;
+    if (existing.length > 0) return existing[0].id;
 
-    await database.write(async () => {
+    return await database.write(async () => {
       const readingBooks = await booksCollection
         .query(Q.where("status", "reading"))
         .fetch();
@@ -119,9 +119,12 @@ export async function addBook(
       if (shouldSetPrimary) {
         await upsertPrimaryRead(created.id);
       }
+
+      return created.id;
     });
   } catch (error) {
     console.error("addBook failed:", error);
+    return null;
   }
 }
 

@@ -22,6 +22,7 @@ export interface BookRawFields {
 export function bookModelToLibraryBook(record: BookModel): LibraryBook {
   return {
     id: record.id,
+    originalId: record.originalId,
     title: record.title,
     authors: record.authors,
     description: record.description ?? undefined,
