@@ -69,7 +69,8 @@
             "./assets/fonts/SourceSans3-Bold.ttf"
           ]
         }
-      ]
+      ],
+      "@react-native-google-signin/google-signin"
     ],
     "extra": {
       "router": {},
