@@ -5,12 +5,36 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { PortalHost } from '@rn-primitives/portal';
 import { SheetProvider } from 'react-native-actions-sheet';
 import Toast from '../shared/components/Toast';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { AppState } from 'react-native';
 import { database, seedEmotions } from '@bookfelt/database';
 import { DatabaseProvider } from '../providers/DatabaseProvider';
 import { AuthProvider, useAuth } from '../providers/AuthProvider';
+import { syncDatabase } from '../lib/sync';
 
 const queryClient = new QueryClient();
+
+function SyncManager() {
+  const { user } = useAuth();
+  const appState = useRef(AppState.currentState);
+
+  useEffect(() => {
+    if (!user) return;
+
+    syncDatabase(user.id);
+
+    const sub = AppState.addEventListener('change', (nextState) => {
+      if (appState.current !== 'active' && nextState === 'active') {
+        syncDatabase(user.id);
+      }
+      appState.current = nextState;
+    });
+
+    return () => sub.remove();
+  }, [user]);
+
+  return null;
+}
 
 function AuthGate({ children }: { children: React.ReactNode }) {
   const { session, isLoading } = useAuth();
@@ -41,6 +65,7 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
+      <SyncManager />
       <DatabaseProvider>
         <QueryClientProvider client={queryClient}>
           <SheetProvider>

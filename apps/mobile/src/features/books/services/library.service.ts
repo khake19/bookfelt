@@ -98,8 +98,10 @@ export async function addBook(
   status: ReadingStatus,
 ): Promise<void> {
   try {
-    const existing = await booksCollection.find(book.id).catch(() => null);
-    if (existing) return;
+    const existing = await booksCollection
+      .query(Q.where("original_id", book.id))
+      .fetch();
+    if (existing.length > 0) return;
 
     await database.write(async () => {
       const readingBooks = await booksCollection
@@ -130,6 +132,10 @@ export async function removeBook(bookId: string): Promise<void> {
       const primarySetting = await getPrimaryReadSetting();
       const isPrimary = primarySetting?.value === bookId;
 
+      const entries = await record.entries.fetch();
+      for (const entry of entries) {
+        await entry.markAsDeleted();
+      }
       await record.markAsDeleted();
 
       if (isPrimary) {
