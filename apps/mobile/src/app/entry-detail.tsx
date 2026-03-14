@@ -48,6 +48,13 @@ const EntryDetailScreen = () => {
     existing?.audioUri,
   );
 
+  // Sync audioUri when existing entry loads (observer emits after mount)
+  useEffect(() => {
+    if (existing?.audioUri && !audioUri) {
+      setAudioUri(existing.audioUri);
+    }
+  }, [existing?.audioUri]);
+
   useEffect(() => {
     const pending = consumePendingSnippet();
     if (pending) {

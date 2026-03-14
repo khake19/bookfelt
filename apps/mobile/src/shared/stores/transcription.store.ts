@@ -9,6 +9,8 @@ interface TranscriptionState {
   status: TranscriptionStatus;
   text: string | null;
   entryId: string | null;
+  /** Generation counter — prevents stale async handlers from updating state */
+  _gen: number;
   startTranscription: (audioUri: string) => void;
   registerEntryId: (entryId: string) => void;
   reset: () => void;
@@ -18,13 +20,16 @@ export const useTranscriptionStore = create<TranscriptionState>((set, get) => ({
   status: 'idle',
   text: null,
   entryId: null,
+  _gen: 0,
 
   startTranscription: (audioUri) => {
-    set({ status: 'transcribing', text: null, entryId: null });
+    const gen = get()._gen + 1;
+    set({ status: 'transcribing', text: null, entryId: null, _gen: gen });
     const fileName = `voice-${Date.now()}.m4a`;
 
     transcribeAudio(audioUri, fileName)
       .then(async (result) => {
+        if (get()._gen !== gen) return;
         const { entryId } = get();
         set({ status: 'completed', text: result.text });
 
@@ -33,7 +38,8 @@ export const useTranscriptionStore = create<TranscriptionState>((set, get) => ({
           useToastStore.getState().show('Reflection transcribed', 'success');
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        if (get()._gen !== gen) return;
         const { entryId } = get();
         set({ status: 'failed', text: null });
 
@@ -56,5 +62,5 @@ export const useTranscriptionStore = create<TranscriptionState>((set, get) => ({
     }
   },
 
-  reset: () => set({ status: 'idle', text: null, entryId: null }),
+  reset: () => set({ status: 'idle', text: null, entryId: null, _gen: get()._gen + 1 }),
 }));

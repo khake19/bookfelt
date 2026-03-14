@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { Audio, AVPlaybackStatus } from "expo-av";
 import { PlayIcon, PauseIcon } from "react-native-heroicons/solid";
@@ -28,7 +28,7 @@ const AudioPlayer = ({ uri }: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [durationMs, setDurationMs] = useState(0);
   const [positionMs, setPositionMs] = useState(0);
-  const bars = useRef(generateBars(uri)).current;
+  const bars = useMemo(() => generateBars(uri), [uri]);
 
   const progress = durationMs > 0 ? positionMs / durationMs : 0;
 
@@ -44,10 +44,17 @@ const AudioPlayer = ({ uri }: AudioPlayerProps) => {
   }, []);
 
   useEffect(() => {
+    // Reset when uri changes — unload previous sound
+    soundRef.current?.unloadAsync().catch(() => {});
+    soundRef.current = null;
+    setIsPlaying(false);
+    setPositionMs(0);
+    setDurationMs(0);
+
     return () => {
       soundRef.current?.unloadAsync().catch(() => {});
     };
-  }, []);
+  }, [uri]);
 
   const togglePlay = async () => {
     if (isPlaying) {
