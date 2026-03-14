@@ -27,10 +27,16 @@ import {
   useThemeColors,
 } from "../../shared";
 import { SHEET_IDS } from "../../shared/constants/sheet-ids";
+import { useAuth } from "../../providers/AuthProvider";
 
 export default function HomeScreen() {
   const router = useRouter();
   const { muted } = useThemeColors();
+  const { user } = useAuth();
+  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+  const displayName =
+    (user?.user_metadata?.full_name as string | undefined) ?? user?.email;
+  const initial = (displayName ?? "?")[0].toUpperCase();
   const { books, primaryRead: currentlyReading } = useLibrary();
   const { entries, loadMore, hasMore, removeEntry } = useRecentEntries();
   const bookEntries = useEntries(currentlyReading?.id).entries;
@@ -79,12 +85,28 @@ export default function HomeScreen() {
 
   const ListHeader = (
     <>
-      <Animated.Text
+      <Animated.View
         entering={FadeInDown.duration(400)}
-        className="text-foreground font-mono-bold text-xl mt-2 mb-4"
+        className="flex-row items-center justify-between mt-2 mb-4 pr-1"
       >
-        bookfelt
-      </Animated.Text>
+        <Text className="text-foreground font-mono-bold text-xl">
+          bookfelt
+        </Text>
+        <Pressable onPress={() => SheetManager.show(SHEET_IDS.PROFILE)}>
+          <View className="w-9 h-9 rounded-full overflow-hidden items-center justify-center bg-primary">
+            {avatarUrl ? (
+              <Image
+                source={{ uri: avatarUrl }}
+                className="w-full h-full"
+              />
+            ) : (
+              <Text className="text-primary-foreground text-sm font-bold">
+                {initial}
+              </Text>
+            )}
+          </View>
+        </Pressable>
+      </Animated.View>
 
       {currentlyReading && (
         <Animated.View entering={FadeInDown.duration(500).delay(100)}>

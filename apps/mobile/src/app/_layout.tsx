@@ -31,7 +31,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
   if (isLoading) return null;
 
-  return <>{children}</>;
+  return children;
 }
 
 export default function RootLayout() {

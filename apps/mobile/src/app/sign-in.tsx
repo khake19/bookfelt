@@ -73,8 +73,8 @@ export default function SignInScreen() {
           <Text className="text-foreground font-serif text-3xl font-bold">
             Bookfelt
           </Text>
-          <Text className="text-muted-foreground text-sm mt-2">
-            {isSignUp ? "Create your account" : "Welcome back"}
+          <Text className="text-muted-foreground text-sm mt-2 font-serif-italic">
+            Your reading companion app
           </Text>
         </View>
 
