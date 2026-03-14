@@ -266,7 +266,7 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onClose }: V
 
             {/* Timer */}
             <Text className="text-white/60 text-[10px] font-mono tracking-wider min-w-[34px] text-right">
-              {formatTime(elapsed)}
+              {formatTime(MAX_DURATION_S - elapsed)}
             </Text>
 
             {/* Stop button */}
@@ -317,7 +317,7 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onClose }: V
               </View>
             )}
             <Text className="text-white/50 text-[10px] font-mono">
-              {formatTime(elapsed)}
+              {formatTime(MAX_DURATION_S - elapsed)}
             </Text>
             <View className="flex-1" />
             <Pressable onPress={onClose} hitSlop={8} className="py-2 px-3">
