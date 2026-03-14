@@ -22,9 +22,7 @@ import { Portal } from "@rn-primitives/portal";
 import { Button } from "@bookfelt/ui";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
-const VF_H_MARGIN = SCREEN_W * 0.075;
-const VF_WIDTH = SCREEN_W * 0.85;
-const MIN_VF_HEIGHT = 80;
+const MIN_VF_HEIGHT = 40;
 const HANDLE_HEIGHT = 44;
 
 interface TextScannerOverlayProps {
@@ -44,8 +42,8 @@ const TextScannerOverlay = ({
   const [error, setError] = useState("");
 
   // Resizable viewfinder
-  const vfTop = useSharedValue(SCREEN_H * 0.28);
-  const vfHeight = useSharedValue(SCREEN_H * 0.3);
+  const vfTop = useSharedValue(SCREEN_H * 0.4);
+  const vfHeight = useSharedValue(SCREEN_H * 0.05);
 
   const topGesture = Gesture.Pan().onChange((e) => {
     const maxTop = vfTop.value + vfHeight.value - MIN_VF_HEIGHT;
@@ -66,8 +64,8 @@ const TextScannerOverlay = ({
   const viewfinderStyle = useAnimatedStyle(() => ({
     position: "absolute" as const,
     top: vfTop.value,
-    left: VF_H_MARGIN,
-    width: VF_WIDTH,
+    left: 0,
+    width: SCREEN_W,
     height: vfHeight.value,
   }));
 
@@ -90,23 +88,6 @@ const TextScannerOverlay = ({
     backgroundColor: "rgba(0,0,0,0.5)",
   }));
 
-  const leftOverlayStyle = useAnimatedStyle(() => ({
-    position: "absolute" as const,
-    top: vfTop.value,
-    left: 0,
-    width: VF_H_MARGIN,
-    height: vfHeight.value,
-    backgroundColor: "rgba(0,0,0,0.5)",
-  }));
-
-  const rightOverlayStyle = useAnimatedStyle(() => ({
-    position: "absolute" as const,
-    top: vfTop.value,
-    right: 0,
-    width: VF_H_MARGIN,
-    height: vfHeight.value,
-    backgroundColor: "rgba(0,0,0,0.5)",
-  }));
 
   const handleRequestPermission = useCallback(async () => {
     const granted = await requestPermission();
@@ -208,12 +189,10 @@ const TextScannerOverlay = ({
             {/* Dim overlays outside viewfinder */}
             <Animated.View style={topOverlayStyle} pointerEvents="none" />
             <Animated.View style={bottomOverlayStyle} pointerEvents="none" />
-            <Animated.View style={leftOverlayStyle} pointerEvents="none" />
-            <Animated.View style={rightOverlayStyle} pointerEvents="none" />
 
             {/* Resizable viewfinder */}
             <Animated.View style={viewfinderStyle} pointerEvents="box-none">
-              <View className="flex-1 rounded-2xl border-2 border-white/80" />
+              <View className="flex-1 border-y-2 border-white/80" />
 
               {/* Top drag handle */}
               <GestureDetector gesture={topGesture}>
