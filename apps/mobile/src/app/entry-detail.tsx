@@ -66,12 +66,17 @@ const EntryDetailScreen = () => {
   const transcriptionText = useTranscriptionStore((s) => s.text);
   const startTranscription = useTranscriptionStore((s) => s.startTranscription);
   const registerEntryId = useTranscriptionStore((s) => s.registerEntryId);
+  const resetTranscription = useTranscriptionStore((s) => s.reset);
 
   useEffect(() => {
     if (transcriptionStatus === "completed" && transcriptionText) {
       setValue("reflection", transcriptionText);
     }
   }, [transcriptionStatus, transcriptionText, setValue]);
+
+  useEffect(() => {
+    return () => resetTranscription();
+  }, []);
 
   const [focusTarget, setFocusTarget] = useState<
     "snippet" | "reflection" | null

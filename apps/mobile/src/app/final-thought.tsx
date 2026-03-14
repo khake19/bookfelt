@@ -25,12 +25,17 @@ export default function FinalThoughtScreen() {
   const transcriptionStatus = useTranscriptionStore((s) => s.status);
   const transcriptionText = useTranscriptionStore((s) => s.text);
   const startTranscription = useTranscriptionStore((s) => s.startTranscription);
+  const resetTranscription = useTranscriptionStore((s) => s.reset);
 
   useEffect(() => {
     if (transcriptionStatus === "completed" && transcriptionText) {
       setFinalThought(transcriptionText);
     }
   }, [transcriptionStatus, transcriptionText]);
+
+  useEffect(() => {
+    return () => resetTranscription();
+  }, []);
 
   const handleSave = () => {
     if (finalThought.trim()) {

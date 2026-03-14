@@ -25,12 +25,17 @@ export default function ExitInterviewScreen() {
   const transcriptionStatus = useTranscriptionStore((s) => s.status);
   const transcriptionText = useTranscriptionStore((s) => s.text);
   const startTranscription = useTranscriptionStore((s) => s.startTranscription);
+  const resetTranscription = useTranscriptionStore((s) => s.reset);
 
   useEffect(() => {
     if (transcriptionStatus === "completed" && transcriptionText) {
       setExitNote(transcriptionText);
     }
   }, [transcriptionStatus, transcriptionText]);
+
+  useEffect(() => {
+    return () => resetTranscription();
+  }, []);
 
   const handlePause = () => {
     if (exitNote.trim()) {

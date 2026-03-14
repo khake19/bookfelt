@@ -126,6 +126,7 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
 
   const handleVoiceSave = async (audioUri: string) => {
     if (!primaryRead) return;
+    useTranscriptionStore.getState().reset();
     const entryId = await addEntry({
       bookId: primaryRead.id,
       bookTitle: primaryRead.title,
