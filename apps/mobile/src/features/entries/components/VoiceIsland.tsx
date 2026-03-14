@@ -22,8 +22,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { StopIcon } from "react-native-heroicons/solid";
 
-const MAX_DURATION_S = 60;
-const WARNING_THRESHOLD_S = 50;
+const DEFAULT_MAX_DURATION_S = 60;
 const NUM_BARS = 32;
 const PILL_H_MARGIN = 16;
 
@@ -37,11 +36,13 @@ interface VoiceIslandProps {
   bookCoverUrl?: string;
   bookTitle?: string;
   bookAuthor?: string;
+  maxDurationS?: number;
+  countUp?: boolean;
   onSave: (audioUri: string) => void;
   onClose: () => void;
 }
 
-const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onClose }: VoiceIslandProps) => {
+const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, maxDurationS = DEFAULT_MAX_DURATION_S, countUp = false, onSave, onClose }: VoiceIslandProps) => {
   const insets = useSafeAreaInsets();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const recordingRef = useRef<Audio.Recording | null>(null);
@@ -119,7 +120,7 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onClose }: V
         const normalized = normalizeMetering(metering);
         setMeteringLevels((prev) => [...prev.slice(1), normalized]);
 
-        if (seconds >= MAX_DURATION_S) {
+        if (seconds >= maxDurationS) {
           stopRecording();
         }
       },
@@ -136,12 +137,13 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onClose }: V
     }
   }, [phase, startRecording]);
 
-  // Warning animation at 50s
+  // Warning animation near end
+  const warningThresholdS = maxDurationS - 10;
   useEffect(() => {
-    if (elapsed >= WARNING_THRESHOLD_S) {
+    if (elapsed >= warningThresholdS) {
       warningProgress.value = withTiming(1, { duration: 2000 });
     }
-  }, [elapsed >= WARNING_THRESHOLD_S]);
+  }, [elapsed >= warningThresholdS]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -266,7 +268,7 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onClose }: V
 
             {/* Timer */}
             <Text className="text-white/60 text-[10px] font-mono tracking-wider min-w-[34px] text-right">
-              {formatTime(MAX_DURATION_S - elapsed)}
+              {formatTime(countUp ? elapsed : maxDurationS - elapsed)}
             </Text>
 
             {/* Stop button */}
@@ -317,7 +319,7 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, onSave, onClose }: V
               </View>
             )}
             <Text className="text-white/50 text-[10px] font-mono">
-              {formatTime(MAX_DURATION_S - elapsed)}
+              {formatTime(countUp ? elapsed : maxDurationS - elapsed)}
             </Text>
             <View className="flex-1" />
             <Pressable onPress={onClose} hitSlop={8} className="py-2 px-3">

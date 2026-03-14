@@ -166,6 +166,8 @@ export default function FinalThoughtScreen() {
           bookCoverUrl={book.coverUrl}
           bookTitle={book.title}
           bookAuthor={book.authors?.[0]}
+          maxDurationS={300}
+          countUp
           onSave={(uri) => {
             setAudioUri(uri);
             startTranscription(uri);
