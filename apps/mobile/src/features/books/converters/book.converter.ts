@@ -5,7 +5,6 @@ import type { Book, LibraryBook, ReadingStatus } from "../types/book";
 type RawRecord = any;
 
 export interface BookRawFields {
-  id: string;
   original_id: string;
   title: string;
   authors_json: string;
@@ -46,7 +45,6 @@ export function bookModelToLibraryBook(record: BookModel): LibraryBook {
 
 export function bookToCreateRaw(book: Book, status: ReadingStatus): BookRawFields {
   return {
-    id: book.id,
     original_id: book.id,
     title: book.title,
     authors_json: JSON.stringify(book.authors ?? []),

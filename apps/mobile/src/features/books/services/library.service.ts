@@ -112,12 +112,12 @@ export async function addBook(
       const shouldSetPrimary = readingBooks.length === 0 && !hasPrimary;
 
       const fields = bookToCreateRaw(book, status);
-      await booksCollection.create((record: BookModel) => {
+      const created = await booksCollection.create((record: BookModel) => {
         Object.assign(record._raw, fields);
       });
 
       if (shouldSetPrimary) {
-        await upsertPrimaryRead(book.id);
+        await upsertPrimaryRead(created.id);
       }
     });
   } catch (error) {
