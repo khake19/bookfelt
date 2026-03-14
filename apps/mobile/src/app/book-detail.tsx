@@ -360,7 +360,7 @@ const BookDetailScreen = () => {
           {entries.length > 0 ? (
             <View className="relative">
               {/* AI Summary node */}
-              {book.summary && (
+              {book.status === "finished" && book.summary && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -387,7 +387,7 @@ const BookDetailScreen = () => {
                 </Animated.View>
               )}
               {/* Final Thought cap */}
-              {book.finalThought && (
+              {book.status === "finished" && book.finalThought && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -422,7 +422,7 @@ const BookDetailScreen = () => {
                 </Animated.View>
               )}
               {/* Exit Note node */}
-              {book.exitNote && (
+              {(book.status === "dnf" || book.status === "paused") && book.exitNote && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -603,7 +603,7 @@ const BookDetailScreen = () => {
             </View>
           ) : (
             <>
-              {book.summary && (
+              {book.status === "finished" && book.summary && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -620,7 +620,7 @@ const BookDetailScreen = () => {
                   </View>
                 </Animated.View>
               )}
-              {book.finalThought && (
+              {book.status === "finished" && book.finalThought && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -645,7 +645,7 @@ const BookDetailScreen = () => {
                   </View>
                 </Animated.View>
               )}
-              {book.exitNote && (
+              {(book.status === "dnf" || book.status === "paused") && book.exitNote && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">

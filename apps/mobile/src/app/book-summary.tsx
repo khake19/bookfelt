@@ -78,7 +78,7 @@ export default function BookSummaryScreen() {
                 className="mt-8 bg-primary rounded-full px-10 py-3"
               >
                 <Text className="text-background text-center font-medium text-base">
-                  Done
+                  {isFinished ? "Finish the Book" : "Close the Chapter"}
                 </Text>
               </Pressable>
             </Animated.View>
