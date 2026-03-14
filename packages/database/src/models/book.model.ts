@@ -28,6 +28,9 @@ export class BookModel extends Model {
   @text("final_thought") finalThought!: string | null;
   @text("exit_note") exitNote!: string | null;
   @text("summary") summary!: string | null;
+  @text("first_impression_audio_uri") firstImpressionAudioUri!: string | null;
+  @text("final_thought_audio_uri") finalThoughtAudioUri!: string | null;
+  @text("exit_note_audio_uri") exitNoteAudioUri!: string | null;
 
   @children("entries") entries: any;
 }

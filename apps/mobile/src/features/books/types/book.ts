@@ -20,4 +20,7 @@ export interface LibraryBook extends Book {
   finalThought?: string;
   exitNote?: string;
   summary?: string;
+  firstImpressionAudioUri?: string;
+  finalThoughtAudioUri?: string;
+  exitNoteAudioUri?: string;
 }

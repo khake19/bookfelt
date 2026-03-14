@@ -412,6 +412,11 @@ const BookDetailScreen = () => {
                       <View className="mt-1.5">
                         <RichTextPreview html={book.finalThought} />
                       </View>
+                      {book.finalThoughtAudioUri && (
+                        <View className="mt-2">
+                          <AudioPlayer uri={book.finalThoughtAudioUri} />
+                        </View>
+                      )}
                     </View>
                   </View>
                 </Animated.View>
@@ -442,6 +447,11 @@ const BookDetailScreen = () => {
                       <View className="mt-1.5">
                         <RichTextPreview html={book.exitNote} />
                       </View>
+                      {book.exitNoteAudioUri && (
+                        <View className="mt-2">
+                          <AudioPlayer uri={book.exitNoteAudioUri} />
+                        </View>
+                      )}
                     </View>
                   </View>
                 </Animated.View>
@@ -581,6 +591,11 @@ const BookDetailScreen = () => {
                       <View className="mt-1.5">
                         <RichTextPreview html={book.firstImpression} />
                       </View>
+                      {book.firstImpressionAudioUri && (
+                        <View className="mt-2">
+                          <AudioPlayer uri={book.firstImpressionAudioUri} />
+                        </View>
+                      )}
                     </View>
                   </View>
                 </Animated.View>
@@ -621,6 +636,11 @@ const BookDetailScreen = () => {
                       <View className="mt-1.5">
                         <RichTextPreview html={book.finalThought} />
                       </View>
+                      {book.finalThoughtAudioUri && (
+                        <View className="mt-2">
+                          <AudioPlayer uri={book.finalThoughtAudioUri} />
+                        </View>
+                      )}
                     </View>
                   </View>
                 </Animated.View>
@@ -644,6 +664,11 @@ const BookDetailScreen = () => {
                       <View className="mt-1.5">
                         <RichTextPreview html={book.exitNote} />
                       </View>
+                      {book.exitNoteAudioUri && (
+                        <View className="mt-2">
+                          <AudioPlayer uri={book.exitNoteAudioUri} />
+                        </View>
+                      )}
                     </View>
                   </View>
                 </Animated.View>
@@ -684,6 +709,11 @@ const BookDetailScreen = () => {
                       <View className="mt-1.5">
                         <RichTextPreview html={book.firstImpression} />
                       </View>
+                      {book.firstImpressionAudioUri && (
+                        <View className="mt-2">
+                          <AudioPlayer uri={book.firstImpressionAudioUri} />
+                        </View>
+                      )}
                     </View>
                   </View>
                 </Animated.View>

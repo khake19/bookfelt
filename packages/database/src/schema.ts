@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from "@nozbe/watermelondb";
 
 export const schema = appSchema({
-  version: 3,
+  version: 5,
   tables: [
     tableSchema({
       name: "books",
@@ -22,6 +22,9 @@ export const schema = appSchema({
         { name: "final_thought", type: "string", isOptional: true },
         { name: "exit_note", type: "string", isOptional: true },
         { name: "summary", type: "string", isOptional: true },
+        { name: "first_impression_audio_uri", type: "string", isOptional: true },
+        { name: "final_thought_audio_uri", type: "string", isOptional: true },
+        { name: "exit_note_audio_uri", type: "string", isOptional: true },
       ],
     }),
     tableSchema({

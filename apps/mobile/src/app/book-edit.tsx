@@ -9,6 +9,7 @@ import {
   bookFormSchema,
   type BookFormValues,
 } from "../features/books/schemas/book-form";
+import AudioPlayer from "../features/entries/components/AudioPlayer";
 import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper } from "../shared";
 
 const BookEditScreen = () => {
@@ -171,6 +172,11 @@ const BookEditScreen = () => {
               What's your first impression?
             </Text>
           )}
+          {book.firstImpressionAudioUri && (
+            <View className="pt-2">
+              <AudioPlayer uri={book.firstImpressionAudioUri} />
+            </View>
+          )}
         </Pressable>
         {book.status === "finished" && (
           <>
@@ -185,6 +191,11 @@ const BookEditScreen = () => {
                 <Text className="text-sm text-muted/60 italic">
                   Any final thoughts?
                 </Text>
+              )}
+              {book.finalThoughtAudioUri && (
+                <View className="pt-2">
+                  <AudioPlayer uri={book.finalThoughtAudioUri} />
+                </View>
               )}
             </Pressable>
           </>

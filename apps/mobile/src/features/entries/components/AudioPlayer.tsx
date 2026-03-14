@@ -62,6 +62,11 @@ const AudioPlayer = ({ uri }: AudioPlayerProps) => {
       return;
     }
 
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+    });
+
     if (!soundRef.current) {
       const { sound } = await Audio.Sound.createAsync(
         { uri },

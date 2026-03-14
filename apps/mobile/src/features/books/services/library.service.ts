@@ -59,7 +59,7 @@ export function useObserveBooks(): LibraryBook[] {
   useEffect(() => {
     const subscription = booksCollection
       .query()
-      .observeWithColumns(["status", "title", "cover_url", "first_impression", "final_thought", "exit_note", "summary"])
+      .observeWithColumns(["status", "title", "cover_url", "first_impression", "final_thought", "exit_note", "summary", "first_impression_audio_uri", "final_thought_audio_uri", "exit_note_audio_uri"])
       .subscribe((records) => {
         const mapped = records.map(bookModelToLibraryBook);
         _cachedBooks = mapped;

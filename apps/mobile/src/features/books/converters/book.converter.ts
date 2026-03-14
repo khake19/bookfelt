@@ -38,6 +38,9 @@ export function bookModelToLibraryBook(record: BookModel): LibraryBook {
     finalThought: record.finalThought ?? undefined,
     exitNote: record.exitNote ?? undefined,
     summary: record.summary ?? undefined,
+    firstImpressionAudioUri: record.firstImpressionAudioUri ?? undefined,
+    finalThoughtAudioUri: record.finalThoughtAudioUri ?? undefined,
+    exitNoteAudioUri: record.exitNoteAudioUri ?? undefined,
   };
 }
 
@@ -84,5 +87,11 @@ export function bookUpdatesToRaw(
   if (updates.exitNote !== undefined)
     raw.exit_note = updates.exitNote ?? null;
   if (updates.summary !== undefined) raw.summary = updates.summary ?? null;
+  if (updates.firstImpressionAudioUri !== undefined)
+    raw.first_impression_audio_uri = updates.firstImpressionAudioUri ?? null;
+  if (updates.finalThoughtAudioUri !== undefined)
+    raw.final_thought_audio_uri = updates.finalThoughtAudioUri ?? null;
+  if (updates.exitNoteAudioUri !== undefined)
+    raw.exit_note_audio_uri = updates.exitNoteAudioUri ?? null;
   return raw;
 }

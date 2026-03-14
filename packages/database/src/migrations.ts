@@ -1,11 +1,35 @@
 import {
   schemaMigrations,
+  addColumns,
   createTable,
   unsafeExecuteSql,
 } from "@nozbe/watermelondb/Schema/migrations";
 
 export const migrations = schemaMigrations({
   migrations: [
+    {
+      toVersion: 5,
+      steps: [
+        addColumns({
+          table: "books",
+          columns: [
+            { name: "exit_note_audio_uri", type: "string", isOptional: true },
+          ],
+        }),
+      ],
+    },
+    {
+      toVersion: 4,
+      steps: [
+        addColumns({
+          table: "books",
+          columns: [
+            { name: "first_impression_audio_uri", type: "string", isOptional: true },
+            { name: "final_thought_audio_uri", type: "string", isOptional: true },
+          ],
+        }),
+      ],
+    },
     {
       toVersion: 3,
       steps: [

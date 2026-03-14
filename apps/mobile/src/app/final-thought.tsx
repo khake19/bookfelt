@@ -1,23 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@bookfelt/ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { MicrophoneIcon } from "react-native-heroicons/outline";
 import { useLibrary } from "../features/books/hooks/use-library";
-import { FocusModeOverlay, RichTextPreview, ScreenWrapper, stripHtml } from "../shared";
+import AudioPlayer from "../features/entries/components/AudioPlayer";
+import VoiceIsland from "../features/entries/components/VoiceIsland";
+import { FocusModeOverlay, RichTextPreview, ScreenWrapper, stripHtml, useThemeColors } from "../shared";
+import { useTranscriptionStore } from "../shared/stores/transcription.store";
 
 export default function FinalThoughtScreen() {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
   const router = useRouter();
   const { books, updateBook, updateStatus } = useLibrary();
   const book = books.find((b) => b.id === bookId);
+  const { mutedForeground } = useThemeColors();
 
   const [finalThought, setFinalThought] = useState("");
   const [isFocusMode, setIsFocusMode] = useState(false);
+  const [audioUri, setAudioUri] = useState<string | undefined>();
+  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+
+  const transcriptionStatus = useTranscriptionStore((s) => s.status);
+  const transcriptionText = useTranscriptionStore((s) => s.text);
+  const startTranscription = useTranscriptionStore((s) => s.startTranscription);
+
+  useEffect(() => {
+    if (transcriptionStatus === "completed" && transcriptionText) {
+      setFinalThought(transcriptionText);
+    }
+  }, [transcriptionStatus, transcriptionText]);
 
   const handleSave = () => {
     if (finalThought.trim()) {
-      updateBook(bookId, { finalThought: finalThought.trim() });
+      updateBook(bookId, {
+        finalThought: finalThought.trim(),
+        finalThoughtAudioUri: audioUri,
+      });
     }
     updateStatus(bookId, "finished");
     router.push({ pathname: "/book-summary", params: { bookId, source: "finished" } });
@@ -92,6 +112,16 @@ export default function FinalThoughtScreen() {
 
           {/* Writing card */}
           <Animated.View entering={FadeInDown.duration(500).delay(700)} className="w-full">
+            <View className="flex-row items-center justify-between mb-1.5">
+              <View />
+              <Pressable
+                onPress={() => setIsVoiceOpen(true)}
+                hitSlop={8}
+                className="p-1"
+              >
+                <MicrophoneIcon size={18} color={mutedForeground} />
+              </Pressable>
+            </View>
             <Pressable
               onPress={() => setIsFocusMode(true)}
               className="border border-primary/30 rounded-2xl bg-card p-5 min-h-[120px]"
@@ -104,6 +134,11 @@ export default function FinalThoughtScreen() {
                 </Text>
               )}
             </Pressable>
+            {audioUri && (
+              <View className="pt-2">
+                <AudioPlayer uri={audioUri} />
+              </View>
+            )}
           </Animated.View>
 
           {/* Actions */}
@@ -126,6 +161,20 @@ export default function FinalThoughtScreen() {
           onChangeContent={setFinalThought}
           onDone={() => setIsFocusMode(false)}
           placeholder="How did this book leave you feeling?"
+        />
+      )}
+
+      {isVoiceOpen && (
+        <VoiceIsland
+          bookCoverUrl={book.coverUrl}
+          bookTitle={book.title}
+          bookAuthor={book.authors?.[0]}
+          onSave={(uri) => {
+            setAudioUri(uri);
+            startTranscription(uri);
+            setIsVoiceOpen(false);
+          }}
+          onClose={() => setIsVoiceOpen(false)}
         />
       )}
     </ScreenWrapper>
