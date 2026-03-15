@@ -16,7 +16,7 @@ export class EntryModel extends Model {
   @text("snippet") snippet!: string | null;
   @text("feeling") feeling!: string | null;
   @text("reflection") reflection!: string | null;
-  @text("audio_uri") audioUri!: string | null;
+  @text("reflection_uri") reflectionUri!: string | null;
   @field("date") date!: number;
   @field("entry_created_at") entryCreatedAt!: number;
 

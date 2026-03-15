@@ -44,16 +44,16 @@ const EntryDetailScreen = () => {
     formState: { isValid },
   } = useEntryForm(existing);
 
-  const [audioUri, setAudioUri] = useState<string | undefined>(
-    existing?.audioUri,
+  const [reflectionUri, setReflectionUri] = useState<string | undefined>(
+    existing?.reflectionUri,
   );
 
-  // Sync audioUri when existing entry loads (observer emits after mount)
+  // Sync reflectionUri when existing entry loads (observer emits after mount)
   useEffect(() => {
-    if (existing?.audioUri && !audioUri) {
-      setAudioUri(existing.audioUri);
+    if (existing?.reflectionUri && !reflectionUri) {
+      setReflectionUri(existing.reflectionUri);
     }
-  }, [existing?.audioUri]);
+  }, [existing?.reflectionUri]);
 
   useEffect(() => {
     const pending = consumePendingSnippet();
@@ -103,7 +103,7 @@ const EntryDetailScreen = () => {
       snippet: values.snippet.trim() || undefined,
       feeling: values.feeling || undefined,
       reflection: values.reflection || undefined,
-      audioUri,
+      reflectionUri,
       date: values.date.getTime(),
     };
     if (isNew) {
@@ -398,9 +398,9 @@ const EntryDetailScreen = () => {
               </Text>
             )}
           </Pressable>
-          {audioUri && (
+          {reflectionUri && (
             <View className="pt-2">
-              <AudioPlayer uri={audioUri} />
+              <AudioPlayer uri={reflectionUri} />
             </View>
           )}
         </View>
@@ -437,7 +437,7 @@ const EntryDetailScreen = () => {
           bookTitle={book?.title}
           bookAuthor={book?.authors?.[0]}
           onSave={(uri) => {
-            setAudioUri(uri);
+            setReflectionUri(uri);
             startTranscription(uri);
             setIsVoiceOpen(false);
           }}

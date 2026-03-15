@@ -108,11 +108,11 @@ const BookDetailScreen = () => {
   const [showDraftsOnly, setShowDraftsOnly] = useState(false);
 
   const voiceDraftCount = entries.filter(
-    (e) => e.audioUri && !e.feeling,
+    (e) => e.reflectionUri && !e.feeling,
   ).length;
 
   const displayEntries = showDraftsOnly
-    ? entries.filter((e) => e.audioUri && !e.snippet && !e.feeling)
+    ? entries.filter((e) => e.reflectionUri && !e.snippet && !e.feeling)
     : entries;
 
   const handleEntryPress = (entryId: string) => {
@@ -467,7 +467,7 @@ const BookDetailScreen = () => {
                 const isLast =
                   index === displayEntries.length - 1 && !book.firstImpression;
                 const isUnfinishedAudio =
-                  !!entry.audioUri && !entry.snippet && !entry.feeling;
+                  !!entry.reflectionUri && !entry.snippet && !entry.feeling;
                 const dotColor = emotion?.color ?? "#71717a";
 
                 return (
@@ -479,7 +479,7 @@ const BookDetailScreen = () => {
                     <View className="flex-row mb-6">
                       {/* Dot + Line segment */}
                       <View className="w-3 items-center">
-                        {entry.audioUri ? (
+                        {entry.reflectionUri ? (
                           <RippleDot
                             color={dotColor}
                             delay={250 + index * 80}
@@ -518,7 +518,7 @@ const BookDetailScreen = () => {
                               · Ch. {entry.chapter}
                             </Text>
                           )}
-                          {entry.audioUri &&
+                          {entry.reflectionUri &&
                             !entry.snippet &&
                             !entry.feeling && (
                               <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
@@ -548,9 +548,9 @@ const BookDetailScreen = () => {
                           </Text>
                         ) : null}
 
-                        {entry.audioUri ? (
+                        {entry.reflectionUri ? (
                           <View className="mt-2">
-                            <AudioPlayer uri={entry.audioUri} />
+                            <AudioPlayer uri={entry.reflectionUri} />
                           </View>
                         ) : null}
 

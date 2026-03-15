@@ -32,7 +32,7 @@ export interface EntryCardData {
   snippet?: string;
   reaction: string;
   feeling?: string;
-  audioUri?: string;
+  reflectionUri?: string;
 }
 
 interface EntryCardProps extends EntryCardData {
@@ -48,7 +48,7 @@ const EntryCard = (props: EntryCardProps) => {
     snippet,
     reaction,
     feeling,
-    audioUri,
+    reflectionUri,
     onPress,
     onLongPress,
   } = props;
@@ -116,7 +116,7 @@ const EntryCard = (props: EntryCardProps) => {
               {stripHtml(reaction)}
             </Text>
           ) : null}
-          {audioUri ? <AudioPlayer uri={audioUri} /> : null}
+          {reflectionUri ? <AudioPlayer uri={reflectionUri} /> : null}
         </CardContent>
         {emotion && (
           <CardFooter>

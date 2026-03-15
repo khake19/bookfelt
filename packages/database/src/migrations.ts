@@ -8,6 +8,20 @@ import {
 export const migrations = schemaMigrations({
   migrations: [
     {
+      toVersion: 6,
+      steps: [
+        addColumns({
+          table: "entries",
+          columns: [
+            { name: "reflection_uri", type: "string", isOptional: true },
+          ],
+        }),
+        unsafeExecuteSql(
+          "UPDATE entries SET reflection_uri = audio_uri WHERE audio_uri IS NOT NULL;",
+        ),
+      ],
+    },
+    {
       toVersion: 5,
       steps: [
         addColumns({

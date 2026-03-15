@@ -14,7 +14,7 @@ export interface EntryRawFields {
   snippet: string | null;
   feeling: string | null;
   reflection: string | null;
-  audio_uri: string | null;
+  reflection_uri: string | null;
   date: number;
   entry_created_at: number;
 }
@@ -30,7 +30,7 @@ export function entryModelToEntry(record: EntryModel): Entry {
     snippet: record.snippet ?? undefined,
     feeling: record.feeling ?? undefined,
     reflection: record.reflection ?? undefined,
-    audioUri: record.audioUri ?? undefined,
+    reflectionUri: record.reflectionUri ?? undefined,
     date: record.date,
     createdAt: record.entryCreatedAt,
   };
@@ -50,7 +50,7 @@ export function entryToCreateRaw(
     snippet: entry.snippet ?? null,
     feeling: entry.feeling ?? null,
     reflection: entry.reflection ?? null,
-    audio_uri: entry.audioUri ?? null,
+    reflection_uri: entry.reflectionUri ?? null,
     date: entry.date,
     entry_created_at: Date.now(),
   };
@@ -69,7 +69,7 @@ export function entryUpdatesToRaw(
   if (updates.feeling !== undefined) raw.feeling = updates.feeling ?? null;
   if (updates.reflection !== undefined)
     raw.reflection = updates.reflection ?? null;
-  if (updates.audioUri !== undefined) raw.audio_uri = updates.audioUri ?? null;
+  if (updates.reflectionUri !== undefined) raw.reflection_uri = updates.reflectionUri ?? null;
   if (updates.date !== undefined) raw.date = updates.date;
   return raw;
 }

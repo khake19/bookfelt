@@ -130,7 +130,7 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
     const entryId = await addEntry({
       bookId: primaryRead.id,
       bookTitle: primaryRead.title,
-      audioUri,
+      reflectionUri: audioUri,
       date: Date.now(),
     });
     setIsVoiceIslandOpen(false);

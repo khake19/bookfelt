@@ -8,7 +8,7 @@ export interface Entry {
   snippet?: string;
   feeling?: string;
   reflection?: string;
-  audioUri?: string;
+  reflectionUri?: string;
   date: number;
   createdAt: number;
 }

@@ -1,6 +1,7 @@
 import { synchronize } from "@nozbe/watermelondb/sync";
 import { database } from "@bookfelt/database";
 import { supabase } from "./supabase";
+import { uploadPendingAudioFiles } from "./audio-sync";
 
 const SYNCED_TABLES = ["books", "entries", "settings"] as const;
 
@@ -22,6 +23,8 @@ export async function syncDatabase(userId: string): Promise<void> {
   syncInProgress = true;
 
   try {
+    await uploadPendingAudioFiles(userId);
+
     await synchronize({
       database,
       sendCreatedAsUpdated: true,
