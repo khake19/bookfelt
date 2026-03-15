@@ -28,6 +28,53 @@ export function getStoragePath(
   return `${userId}/${table}/${recordId}-${field}.m4a`;
 }
 
+function extractStoragePath(uri: string): string | null {
+  try {
+    const url = new URL(uri);
+    const match = url.pathname.match(
+      /\/storage\/v1\/object\/sign\/audio-files\/(.+)/
+    );
+    return match?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteAudioFiles(
+  audioUris: (string | null | undefined)[]
+): Promise<void> {
+  const storagePaths: string[] = [];
+
+  for (const uri of audioUris) {
+    if (!uri) continue;
+
+    if (isLocalUri(uri)) {
+      try {
+        const file = new File(uri);
+        if (await file.exists()) await file.delete();
+      } catch (err) {
+        console.error(`[audio-sync] local delete failed for ${uri}:`, err);
+      }
+    } else {
+      const path = extractStoragePath(uri);
+      if (path) storagePaths.push(path);
+    }
+  }
+
+  if (storagePaths.length > 0) {
+    const { error } = await supabase.storage
+      .from("audio-files")
+      .remove(storagePaths);
+
+    if (error) {
+      console.error(
+        `[audio-sync] storage delete failed:`,
+        error.message
+      );
+    }
+  }
+}
+
 export async function uploadPendingAudioFiles(
   userId: string
 ): Promise<void> {

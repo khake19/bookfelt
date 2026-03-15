@@ -7,6 +7,7 @@ import {
   entryToCreateRaw,
   entryUpdatesToRaw,
 } from "../converters/entry.converter";
+import { deleteAudioFiles } from "../../../lib/audio-sync";
 
 const entriesCollection = database.get<EntryModel>("entries");
 
@@ -79,9 +80,12 @@ export async function addEntry(
 
 export async function removeEntry(entryId: string): Promise<void> {
   try {
+    const record = await entriesCollection.find(entryId);
+    await deleteAudioFiles([record.reflectionUri]);
+
     await database.write(async () => {
-      const record = await entriesCollection.find(entryId);
-      await record.markAsDeleted();
+      const fresh = await entriesCollection.find(entryId);
+      await fresh.markAsDeleted();
     });
   } catch (error) {
     console.error("removeEntry failed:", error);

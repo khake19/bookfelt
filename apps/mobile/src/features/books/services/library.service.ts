@@ -7,6 +7,7 @@ import {
   bookToCreateRaw,
   bookUpdatesToRaw,
 } from "../converters/book.converter";
+import { deleteAudioFiles } from "../../../lib/audio-sync";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RawRecord = any;
@@ -130,16 +131,27 @@ export async function addBook(
 
 export async function removeBook(bookId: string): Promise<void> {
   try {
+    const record = await booksCollection.find(bookId);
+    const entries = await record.entries.fetch();
+
+    const allUris: (string | null)[] = [
+      record.firstImpressionAudioUri,
+      record.finalThoughtAudioUri,
+      record.exitNoteAudioUri,
+      ...entries.map((e: any) => e.reflectionUri as string | null),
+    ];
+    await deleteAudioFiles(allUris);
+
     await database.write(async () => {
-      const record = await booksCollection.find(bookId);
+      const freshRecord = await booksCollection.find(bookId);
       const primarySetting = await getPrimaryReadSetting();
       const isPrimary = primarySetting?.value === bookId;
 
-      const entries = await record.entries.fetch();
-      for (const entry of entries) {
+      const freshEntries = await freshRecord.entries.fetch();
+      for (const entry of freshEntries) {
         await entry.markAsDeleted();
       }
-      await record.markAsDeleted();
+      await freshRecord.markAsDeleted();
 
       if (isPrimary) {
         const nextReading = await booksCollection
