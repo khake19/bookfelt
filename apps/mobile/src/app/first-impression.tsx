@@ -7,7 +7,7 @@ import { MicrophoneIcon } from "react-native-heroicons/outline";
 import { useLibrary } from "../features/books/hooks/use-library";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 import VoiceIsland from "../features/entries/components/VoiceIsland";
-import { FocusModeOverlay, RichTextPreview, ScreenWrapper, useThemeColors } from "../shared";
+import { FocusModeOverlay, RichTextPreview, ScreenWrapper, TranscribingIndicator, useThemeColors } from "../shared";
 import { useTranscriptionStore } from "../shared/stores/transcription.store";
 
 export default function FirstImpressionScreen() {
@@ -124,7 +124,9 @@ export default function FirstImpressionScreen() {
               >
                 <MicrophoneIcon size={18} color={mutedForeground} />
               </Pressable>
-              {firstImpression ? (
+              {transcriptionStatus === "transcribing" ? (
+                <TranscribingIndicator />
+              ) : firstImpression ? (
                 <RichTextPreview html={firstImpression} />
               ) : (
                 <Text className="text-sm text-muted/60 italic">

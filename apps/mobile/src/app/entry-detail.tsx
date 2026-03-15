@@ -17,6 +17,7 @@ import {
   FocusModeOverlay,
   RichTextPreview,
   ScreenWrapper,
+  TranscribingIndicator,
   stripHtml,
   useThemeColors,
 } from "../shared";
@@ -390,7 +391,9 @@ const EntryDetailScreen = () => {
             </Pressable>
           </View>
           <Pressable onPress={() => setFocusTarget("reflection")}>
-            {reflection ? (
+            {transcriptionStatus === "transcribing" ? (
+              <TranscribingIndicator />
+            ) : reflection ? (
               <RichTextPreview html={reflection} />
             ) : (
               <Text className="text-sm text-muted/60 italic">

@@ -7,7 +7,7 @@ import { MicrophoneIcon } from "react-native-heroicons/outline";
 import { useLibrary } from "../features/books/hooks/use-library";
 import AudioPlayer from "../features/entries/components/AudioPlayer";
 import VoiceIsland from "../features/entries/components/VoiceIsland";
-import { FocusModeOverlay, RichTextPreview, ScreenWrapper, stripHtml, useThemeColors } from "../shared";
+import { FocusModeOverlay, RichTextPreview, ScreenWrapper, TranscribingIndicator, stripHtml, useThemeColors } from "../shared";
 import { useTranscriptionStore } from "../shared/stores/transcription.store";
 
 export default function FinalThoughtScreen() {
@@ -128,7 +128,9 @@ export default function FinalThoughtScreen() {
               >
                 <MicrophoneIcon size={18} color={mutedForeground} />
               </Pressable>
-              {finalThought ? (
+              {transcriptionStatus === "transcribing" ? (
+                <TranscribingIndicator />
+              ) : finalThought ? (
                 <RichTextPreview html={finalThought} />
               ) : (
                 <Text className="text-sm text-muted/60 italic">
