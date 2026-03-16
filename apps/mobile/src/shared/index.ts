@@ -6,5 +6,6 @@ export { default as TranscribingIndicator } from './components/TranscribingIndic
 export { FocusModeOverlay, RichTextPreview } from './components/editor';
 export { ScreenWrapper } from './components/ScreenWrapper';
 export { useThemeColors } from './hooks/use-theme-colors';
+export { useObservable } from './hooks/use-observable';
 export { stripHtml, timeAgo } from './utils/time';
 export { consumePendingSnippet } from './utils/pending-state';

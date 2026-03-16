@@ -15,7 +15,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { useEmotionMap } from "../services/emotion.service";
+import { useEmotionMap } from "../hooks/use-emotions";
 import AudioPlayer from "./AudioPlayer";
 
 const stripHtml = (html: string) =>

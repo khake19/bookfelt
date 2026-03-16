@@ -1,11 +1,18 @@
 import { useState, useMemo, useCallback, useRef } from "react";
+import { useObservable } from "../../../shared";
 import * as entryService from "../services/entry.service";
 
 const PAGE_SIZE = 20;
 
 export function useRecentEntries() {
   const [limit, setLimit] = useState(PAGE_SIZE);
-  const rawEntries = entryService.useObserveRecentEntries(limit);
+
+  const entries$ = useMemo(
+    () => entryService.observeRecentEntries(limit),
+    [limit],
+  );
+
+  const rawEntries = useObservable(entries$, []);
   const hasMore = rawEntries.length >= limit;
   const hasMoreRef = useRef(hasMore);
   hasMoreRef.current = hasMore;

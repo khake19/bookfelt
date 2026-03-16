@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { map, shareReplay } from "rxjs";
+import type { Observable } from "rxjs";
 import { database, BookModel, SettingModel } from "@bookfelt/database";
 import { Q } from "@nozbe/watermelondb";
 import type { Book, LibraryBook, ReadingStatus } from "../types/book";
@@ -40,6 +41,24 @@ async function upsertPrimaryRead(value: string | null): Promise<void> {
   }
 }
 
+// ── Observables ─────────────────────────────────────────────────
+
+export const books$: Observable<LibraryBook[]> = booksCollection
+  .query()
+  .observeWithColumns(["status", "title", "cover_url", "first_impression", "final_thought", "exit_note", "summary", "first_impression_audio_uri", "final_thought_audio_uri", "exit_note_audio_uri"])
+  .pipe(
+    map((records) => records.map(bookModelToLibraryBook)),
+    shareReplay(1),
+  );
+
+export const primaryReadId$: Observable<string | null> = settingsCollection
+  .query(Q.where("key", "primary_read_id"))
+  .observeWithColumns(["value"])
+  .pipe(
+    map((records) => records[0]?.value ?? null),
+    shareReplay(1),
+  );
+
 // ── Reads ────────────────────────────────────────────────────────
 
 export async function fetchBook(bookId: string): Promise<LibraryBook | null> {
@@ -49,47 +68,6 @@ export async function fetchBook(bookId: string): Promise<LibraryBook | null> {
   } catch {
     return null;
   }
-}
-
-let _cachedBooks: LibraryBook[] = [];
-let _cachedPrimaryReadId: string | null = null;
-
-export function useObserveBooks(): LibraryBook[] {
-  const [books, setBooks] = useState<LibraryBook[]>(_cachedBooks);
-
-  useEffect(() => {
-    const subscription = booksCollection
-      .query()
-      .observeWithColumns(["status", "title", "cover_url", "first_impression", "final_thought", "exit_note", "summary", "first_impression_audio_uri", "final_thought_audio_uri", "exit_note_audio_uri"])
-      .subscribe((records) => {
-        const mapped = records.map(bookModelToLibraryBook);
-        _cachedBooks = mapped;
-        setBooks(mapped);
-      });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  return books;
-}
-
-export function useObservePrimaryReadId(): string | null {
-  const [primaryReadId, setPrimaryReadId] = useState<string | null>(_cachedPrimaryReadId);
-
-  useEffect(() => {
-    const subscription = settingsCollection
-      .query(Q.where("key", "primary_read_id"))
-      .observeWithColumns(["value"])
-      .subscribe((records) => {
-        const id = records[0]?.value ?? null;
-        _cachedPrimaryReadId = id;
-        setPrimaryReadId(id);
-      });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  return primaryReadId;
 }
 
 // ── Writes ───────────────────────────────────────────────────────

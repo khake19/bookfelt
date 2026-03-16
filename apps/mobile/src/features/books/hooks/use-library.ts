@@ -1,14 +1,18 @@
-import { useMemo } from "react";
+import { combineLatest, map } from "rxjs";
+import { useObservable } from "../../../shared";
 import * as libraryService from "../services/library.service";
+import type { LibraryBook } from "../types/book";
+
+const primaryRead$ = combineLatest([
+  libraryService.books$,
+  libraryService.primaryReadId$,
+]).pipe(
+  map(([books, id]) => books.find((b) => b.id === id)),
+);
 
 export function useLibrary() {
-  const books = libraryService.useObserveBooks();
-  const primaryReadId = libraryService.useObservePrimaryReadId();
-
-  const primaryRead = useMemo(
-    () => books.find((b) => b.id === primaryReadId),
-    [books, primaryReadId],
-  );
+  const books = useObservable(libraryService.books$, []);
+  const primaryRead = useObservable(primaryRead$, undefined as LibraryBook | undefined);
 
   return {
     books,

@@ -5,7 +5,7 @@ export { MOCK_ENTRIES } from "./constants/mock-entries";
 export { useEntries } from "./hooks/use-entries";
 export { useEntryForm } from "./hooks/use-entry-form";
 export { useRecentEntries } from "./queries/use-recent-entries";
-export { useObserveEmotions, useEmotionMap } from "./services/emotion.service";
+export { useObserveEmotions, useEmotionMap } from "./hooks/use-emotions";
 export type { EmotionRecord } from "./services/emotion.service";
 export type { Entry } from "./types/entry";
 export type { EntryFormValues } from "./schemas/entry-form";

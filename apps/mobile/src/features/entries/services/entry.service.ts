@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { map } from "rxjs";
+import type { Observable } from "rxjs";
 import { database, EntryModel } from "@bookfelt/database";
 import { Q } from "@nozbe/watermelondb";
 import type { Entry } from "../types/entry";
@@ -13,43 +14,23 @@ const entriesCollection = database.get<EntryModel>("entries");
 
 // ── Reads ────────────────────────────────────────────────────────
 
-export function useObserveRecentEntries(limit: number): Entry[] {
-  const [entries, setEntries] = useState<Entry[]>([]);
-
-  useEffect(() => {
-    const subscription = entriesCollection
-      .query(
-        Q.sortBy("date", Q.desc),
-        Q.sortBy("entry_created_at", Q.desc),
-        Q.take(limit),
-      )
-      .observe()
-      .subscribe((records) => {
-        setEntries(records.map(entryModelToEntry));
-      });
-
-    return () => subscription.unsubscribe();
-  }, [limit]);
-
-  return entries;
+export function observeRecentEntries(limit: number): Observable<Entry[]> {
+  return entriesCollection
+    .query(
+      Q.sortBy("date", Q.desc),
+      Q.sortBy("entry_created_at", Q.desc),
+      Q.take(limit),
+    )
+    .observe()
+    .pipe(map((records) => records.map(entryModelToEntry)));
 }
 
-export function useObserveEntries(bookId?: string): Entry[] {
-  const [entries, setEntries] = useState<Entry[]>([]);
+export function observeEntries(bookId?: string): Observable<Entry[]> {
+  const query = bookId
+    ? entriesCollection.query(Q.where("book_id", bookId))
+    : entriesCollection.query();
 
-  useEffect(() => {
-    const query = bookId
-      ? entriesCollection.query(Q.where("book_id", bookId))
-      : entriesCollection.query();
-
-    const subscription = query.observe().subscribe((records) => {
-      setEntries(records.map(entryModelToEntry));
-    });
-
-    return () => subscription.unsubscribe();
-  }, [bookId]);
-
-  return entries;
+  return query.observe().pipe(map((records) => records.map(entryModelToEntry)));
 }
 
 export async function fetchEntries(bookId: string): Promise<Entry[]> {
