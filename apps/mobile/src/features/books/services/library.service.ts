@@ -28,15 +28,13 @@ async function getPrimaryReadSetting(): Promise<SettingModel | null> {
 async function upsertPrimaryRead(value: string | null): Promise<void> {
   const setting = await getPrimaryReadSetting();
   if (setting) {
-    await setting.update(() => {
-      const raw: RawRecord = setting._raw;
-      raw.value = value;
+    await setting.update((record) => {
+      record.value = value;
     });
   } else if (value) {
     await settingsCollection.create((record: SettingModel) => {
-      const raw: RawRecord = record._raw;
-      raw.key = "primary_read_id";
-      raw.value = value;
+      record.key = "primary_read_id";
+      record.value = value;
     });
   }
 }
@@ -206,3 +204,49 @@ export async function setPrimaryRead(bookId: string): Promise<void> {
     console.error("setPrimaryRead failed:", error);
   }
 }
+
+// ── Onboarding ──────────────────────────────────────────────────
+
+const ONBOARDING_KEY = "onboarding_step";
+
+export async function getOnboardingStep(): Promise<number> {
+  const settings = await settingsCollection
+    .query(Q.where("key", ONBOARDING_KEY))
+    .fetch();
+  const value = settings[0]?.value;
+  return value ? parseInt(value, 10) : 0;
+}
+
+export async function setOnboardingStep(step: number): Promise<void> {
+  try {
+    await database.write(async () => {
+      const settings = await settingsCollection
+        .query(Q.where("key", ONBOARDING_KEY))
+        .fetch();
+      const existing = settings[0];
+      if (existing) {
+        await existing.update((record) => {
+          record.value = String(step);
+        });
+      } else {
+        await settingsCollection.create((record: SettingModel) => {
+          record.key = ONBOARDING_KEY;
+          record.value = String(step);
+        });
+      }
+    });
+  } catch (error) {
+    console.error("setOnboardingStep failed:", error);
+  }
+}
+
+export const onboardingStep$: Observable<number> = settingsCollection
+  .query(Q.where("key", ONBOARDING_KEY))
+  .observeWithColumns(["value"])
+  .pipe(
+    map((records) => {
+      const value = records[0]?.value;
+      return value ? parseInt(value, 10) : 0;
+    }),
+    shareReplay(1),
+  );

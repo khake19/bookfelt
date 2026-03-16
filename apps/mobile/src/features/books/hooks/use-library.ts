@@ -26,3 +26,7 @@ export function useLibrary() {
     isInLibrary: (bookId: string) => books.some((b) => b.originalId === bookId),
   };
 }
+
+export function useOnboardingStep(): number {
+  return useObservable(libraryService.onboardingStep$, 0);
+}

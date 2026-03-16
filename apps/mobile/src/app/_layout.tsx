@@ -11,6 +11,7 @@ import { database, seedEmotions } from '@bookfelt/database';
 import { DatabaseProvider } from '../providers/DatabaseProvider';
 import { AuthProvider, useAuth } from '../providers/AuthProvider';
 import { syncDatabase } from '../lib/sync';
+import { useOnboardingStep } from '../features/books/hooks/use-library';
 
 const queryClient = new QueryClient();
 
@@ -40,21 +41,35 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   const { session, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const onboardingStep = useOnboardingStep();
 
   useEffect(() => {
     if (isLoading) return;
 
     const onAuthScreen = segments[0] === 'sign-in' || segments[0] === 'forgot-password';
     const onResetScreen = segments[0] === 'reset-password';
+    const onOnboarding = segments[0] === 'onboarding';
 
     if (onResetScreen) return;
 
     if (!session && !onAuthScreen) {
       router.replace('/sign-in');
-    } else if (session && onAuthScreen) {
-      router.replace('/');
+      return;
     }
-  }, [session, isLoading, segments]);
+
+    if (session && onAuthScreen) {
+      if (onboardingStep >= 3) {
+        router.replace('/');
+      } else {
+        router.replace('/onboarding');
+      }
+      return;
+    }
+
+    if (session && !onOnboarding && onboardingStep < 3) {
+      router.replace('/onboarding');
+    }
+  }, [session, isLoading, segments, onboardingStep]);
 
   if (isLoading) return null;
 
