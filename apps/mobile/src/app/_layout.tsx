@@ -44,7 +44,10 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isLoading) return;
 
-    const onAuthScreen = segments[0] === 'sign-in';
+    const onAuthScreen = segments[0] === 'sign-in' || segments[0] === 'forgot-password';
+    const onResetScreen = segments[0] === 'reset-password';
+
+    if (onResetScreen) return;
 
     if (!session && !onAuthScreen) {
       router.replace('/sign-in');

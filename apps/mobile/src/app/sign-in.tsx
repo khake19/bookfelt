@@ -7,8 +7,9 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { useState } from "react";
-import { useAuthForm } from "../features/auth";
+import { useRouter } from "expo-router";
 import {
+  useAuthForm,
   signInWithEmail,
   signUpWithEmail,
   signInWithGoogleToken,
@@ -21,11 +22,11 @@ GoogleSignin.configure({
   iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
 });
 
-export default function SignInScreen() {
-  const [isSignUp, setIsSignUp] = useState(false);
+function AuthForm({ isSignUp }: { isSignUp: boolean }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { control, handleSubmit } = useAuthForm();
+  const { control, handleSubmit } = useAuthForm(isSignUp);
   const showToast = useToastStore((s) => s.show);
+  const router = useRouter();
 
   const onSubmit = async (data: { email: string; password: string }) => {
     setIsSubmitting(true);
@@ -41,6 +42,113 @@ export default function SignInScreen() {
       setIsSubmitting(false);
     }
   };
+
+  return (
+    <View className="gap-3">
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, onBlur, value }, fieldState }) => (
+          <View>
+            <Input
+              placeholder="Email"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              autoComplete="email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+            {fieldState.error && (
+              <Text className="text-destructive text-xs mt-1">
+                {fieldState.error.message}
+              </Text>
+            )}
+          </View>
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value }, fieldState }) => (
+          <View>
+            <Input
+              placeholder="Password"
+              secureTextEntry
+              textContentType={isSignUp ? "newPassword" : "password"}
+              autoComplete={isSignUp ? "new-password" : "current-password"}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+            {fieldState.error && (
+              <Text className="text-destructive text-xs mt-1">
+                {fieldState.error.message}
+              </Text>
+            )}
+          </View>
+        )}
+      />
+
+      {isSignUp && (
+        <Controller
+          control={control}
+          name="confirmPassword"
+          render={({ field: { onChange, onBlur, value }, fieldState }) => (
+            <View>
+              <Input
+                placeholder="Confirm Password"
+                secureTextEntry
+                textContentType="newPassword"
+                autoComplete="new-password"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+              {fieldState.error && (
+                <Text className="text-destructive text-xs mt-1">
+                  {fieldState.error.message}
+                </Text>
+              )}
+            </View>
+          )}
+        />
+      )}
+
+      {!isSignUp && (
+        <Pressable
+          onPress={() => router.push("/forgot-password")}
+          className="self-end"
+        >
+          <Text className="text-muted-foreground text-xs">
+            Forgot Password?
+          </Text>
+        </Pressable>
+      )}
+
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        disabled={isSubmitting}
+        shape="pill"
+        className="mt-2 w-full"
+      >
+        <Text className="text-primary-foreground text-center font-medium text-base">
+          {isSubmitting
+            ? "Loading..."
+            : isSignUp
+              ? "Sign Up"
+              : "Sign In"}
+        </Text>
+      </Button>
+    </View>
+  );
+}
+
+export default function SignInScreen() {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const showToast = useToastStore((s) => s.show);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -80,69 +188,7 @@ export default function SignInScreen() {
         </View>
 
         {/* Email / Password form */}
-        <View className="gap-3">
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, onBlur, value }, fieldState }) => (
-              <View>
-                <Input
-                  placeholder="Email"
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  textContentType="emailAddress"
-                  autoComplete="email"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-                {fieldState.error && (
-                  <Text className="text-destructive text-xs mt-1">
-                    {fieldState.error.message}
-                  </Text>
-                )}
-              </View>
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange, onBlur, value }, fieldState }) => (
-              <View>
-                <Input
-                  placeholder="Password"
-                  secureTextEntry
-                  textContentType={isSignUp ? "newPassword" : "password"}
-                  autoComplete={isSignUp ? "new-password" : "current-password"}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-                {fieldState.error && (
-                  <Text className="text-destructive text-xs mt-1">
-                    {fieldState.error.message}
-                  </Text>
-                )}
-              </View>
-            )}
-          />
-
-          <Button
-            onPress={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
-            shape="pill"
-            className="mt-2 w-full"
-          >
-            <Text className="text-primary-foreground text-center font-medium text-base">
-              {isSubmitting
-                ? "Loading..."
-                : isSignUp
-                  ? "Sign Up"
-                  : "Sign In"}
-            </Text>
-          </Button>
-        </View>
+        <AuthForm key={isSignUp ? "sign-up" : "sign-in"} isSignUp={isSignUp} />
 
         {/* Divider */}
         <View className="flex-row items-center my-8">
