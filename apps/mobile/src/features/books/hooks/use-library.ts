@@ -1,5 +1,5 @@
 import { combineLatest, map } from "rxjs";
-import { useObservable } from "../../../shared";
+import { useObservable } from "../../../shared/hooks/use-observable";
 import * as libraryService from "../services/library.service";
 import type { LibraryBook } from "../types/book";
 

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { map } from "rxjs";
-import { useObservable } from "../../../shared";
+import { useObservable } from "../../../shared/hooks/use-observable";
 import * as entryService from "../services/entry.service";
 
 export function useEntries(bookId?: string) {
