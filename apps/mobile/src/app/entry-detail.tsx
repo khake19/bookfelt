@@ -418,7 +418,7 @@ const EntryDetailScreen = () => {
       )}
       {focusTarget === "reflection" && (
         <FocusModeOverlay
-          subtitle={snippet ? `\u201C${stripHtml(snippet)}\u201D` : ""}
+          subtitle={snippet && stripHtml(snippet) ? `\u201C${stripHtml(snippet)}\u201D` : ""}
           content={reflection}
           onChangeContent={(html) => setValue("reflection", html)}
           onDone={() => setFocusTarget(null)}

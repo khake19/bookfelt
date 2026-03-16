@@ -89,7 +89,7 @@ const EntryCard = (props: EntryCardProps) => {
           </View>
         </CardHeader>
         <CardContent className="gap-3">
-          {snippet ? (
+          {snippet && stripHtml(snippet) ? (
             <View
               className="rounded-l pl-3"
               style={
