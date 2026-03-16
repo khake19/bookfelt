@@ -70,7 +70,12 @@
           ]
         }
       ],
-      "@react-native-google-signin/google-signin"
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.100587360826-m0m96e9udd9mk15vgql4otrdav20grha"
+        }
+      ]
     ],
     "extra": {
       "router": {},
