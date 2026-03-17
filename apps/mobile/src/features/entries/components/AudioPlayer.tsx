@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { Audio, AVPlaybackStatus } from "expo-av";
 import { PlayIcon, PauseIcon } from "react-native-heroicons/solid";
 import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
@@ -8,7 +9,7 @@ interface AudioPlayerProps {
   uri: string;
 }
 
-const NUM_BARS = 28;
+const NUM_BARS = 45;
 
 // Generate deterministic "waveform" from URI string
 function generateBars(uri: string): number[] {
@@ -28,6 +29,7 @@ const AudioPlayer = ({ uri }: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [durationMs, setDurationMs] = useState(0);
   const [positionMs, setPositionMs] = useState(0);
+  const [waveformWidth, setWaveformWidth] = useState(0);
   const bars = useMemo(() => generateBars(uri), [uri]);
 
   const progress = durationMs > 0 ? positionMs / durationMs : 0;
@@ -89,47 +91,94 @@ const AudioPlayer = ({ uri }: AudioPlayerProps) => {
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
+  const handleSeek = async (event: any) => {
+    if (!waveformWidth || durationMs === 0) return;
+
+    const locationX = event.nativeEvent.locationX;
+    const percentage = Math.max(0, Math.min(1, locationX / waveformWidth));
+    const newPosition = percentage * durationMs;
+
+    if (!soundRef.current) {
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+      });
+      const { sound } = await Audio.Sound.createAsync(
+        { uri },
+        { shouldPlay: false, progressUpdateIntervalMillis: 100 },
+        onStatus
+      );
+      soundRef.current = sound;
+    }
+
+    await soundRef.current.setPositionAsync(newPosition);
+  };
+
+  const remainingMs = durationMs - positionMs;
+
   return (
-    <View className="flex-row items-center gap-2 rounded-lg bg-card px-2.5 py-1.5">
+    <View className="flex-row items-center gap-3 rounded-xl bg-primary/10 px-2.5 py-1">
       <Pressable
         onPress={togglePlay}
         hitSlop={8}
-        className="w-6 h-6 rounded-full bg-primary/15 items-center justify-center"
+        className="w-8 h-8 rounded-full bg-primary/15 items-center justify-center"
       >
         {isPlaying ? (
-          <PauseIcon size={10} color={primary} />
+          <PauseIcon size={14} color={primary} />
         ) : (
-          <PlayIcon size={10} color={primary} style={{ marginLeft: 1 }} />
+          <PlayIcon size={14} color={primary} style={{ marginLeft: 1 }} />
         )}
       </Pressable>
 
-      <View className="flex-1 flex-row items-center gap-[1.5px] h-4">
+      <Pressable
+        onPress={handleSeek}
+        onLayout={(e) => setWaveformWidth(e.nativeEvent.layout.width)}
+        className="flex-1 flex-row items-center gap-[2px] h-10"
+      >
         {bars.map((level, i) => {
-          const filled = i / NUM_BARS <= progress;
+          const filled = i / NUM_BARS < progress;
           return (
-            <View
+            <AnimatedBar
               key={i}
-              className="rounded-full"
-              style={{
-                width: 2,
-                height: 3 + level * 10,
-                backgroundColor: filled
-                  ? primary
-                  : (muted ?? "gray") + "30",
-              }}
+              level={level}
+              filled={filled}
+              primary={primary}
+              muted={muted ?? "gray"}
             />
           );
         })}
-      </View>
+      </Pressable>
 
-      <Text className="text-[10px] text-muted tabular-nums">
-        {durationMs > 0
-          ? isPlaying
-            ? formatTime(positionMs)
-            : formatTime(durationMs)
-          : ""}
+      <Text className="text-xs text-muted tabular-nums">
+        {durationMs > 0 ? `-${formatTime(remainingMs)}` : ""}
       </Text>
     </View>
+  );
+};
+
+interface AnimatedBarProps {
+  level: number;
+  filled: boolean;
+  primary: string;
+  muted: string;
+}
+
+const AnimatedBar = ({ level, filled, primary, muted }: AnimatedBarProps) => {
+  const animatedStyle = useAnimatedStyle(() => {
+    const minHeight = 6 + level * 10;
+    const maxHeight = 6 + level * 22;
+    const targetHeight = filled ? maxHeight : minHeight;
+
+    return {
+      height: withTiming(targetHeight, { duration: 200 }),
+      backgroundColor: withTiming(filled ? primary : muted + "30", {
+        duration: 200,
+      }),
+    };
+  });
+
+  return (
+    <Animated.View className="rounded-full" style={[{ width: 2.5 }, animatedStyle]} />
   );
 };
 
