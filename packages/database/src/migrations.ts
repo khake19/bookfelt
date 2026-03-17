@@ -8,6 +8,17 @@ import {
 export const migrations = schemaMigrations({
   migrations: [
     {
+      toVersion: 7,
+      steps: [
+        addColumns({
+          table: "entries",
+          columns: [
+            { name: "setting", type: "string", isOptional: true },
+          ],
+        }),
+      ],
+    },
+    {
       toVersion: 6,
       steps: [
         addColumns({

@@ -17,6 +17,7 @@ export class EntryModel extends Model {
   @text("feeling") feeling!: string | null;
   @text("reflection") reflection!: string | null;
   @text("reflection_uri") reflectionUri!: string | null;
+  @text("setting") setting!: string | null;
   @field("date") date!: number;
   @field("entry_created_at") entryCreatedAt!: number;
 

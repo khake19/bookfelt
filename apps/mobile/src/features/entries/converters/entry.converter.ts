@@ -15,6 +15,7 @@ export interface EntryRawFields {
   feeling: string | null;
   reflection: string | null;
   reflection_uri: string | null;
+  setting: string | null;
   date: number;
   entry_created_at: number;
 }
@@ -31,6 +32,7 @@ export function entryModelToEntry(record: EntryModel): Entry {
     feeling: record.feeling ?? undefined,
     reflection: record.reflection ?? undefined,
     reflectionUri: record.reflectionUri ?? undefined,
+    setting: record.setting ?? undefined,
     date: record.date,
     createdAt: record.entryCreatedAt,
   };
@@ -51,6 +53,7 @@ export function entryToCreateRaw(
     feeling: entry.feeling ?? null,
     reflection: entry.reflection ?? null,
     reflection_uri: entry.reflectionUri ?? null,
+    setting: entry.setting ?? null,
     date: entry.date,
     entry_created_at: Date.now(),
   };
@@ -70,6 +73,7 @@ export function entryUpdatesToRaw(
   if (updates.reflection !== undefined)
     raw.reflection = updates.reflection ?? null;
   if (updates.reflectionUri !== undefined) raw.reflection_uri = updates.reflectionUri ?? null;
+  if (updates.setting !== undefined) raw.setting = updates.setting ?? null;
   if (updates.date !== undefined) raw.date = updates.date;
   return raw;
 }

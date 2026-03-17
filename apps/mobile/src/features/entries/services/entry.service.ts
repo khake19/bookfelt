@@ -47,9 +47,20 @@ export async function addEntry(
 ): Promise<string | null> {
   try {
     const record = await database.write(async () => {
-      return entriesCollection.create((record: EntryModel) => {
-        const fields = entryToCreateRaw(entry, record.id);
-        Object.assign(record._raw, fields);
+      return entriesCollection.create((rec: EntryModel) => {
+        rec.originalId = rec.id;
+        rec.bookId = entry.bookId;
+        rec.bookTitle = entry.bookTitle;
+        rec.chapter = entry.chapter ?? null;
+        rec.page = entry.page ?? null;
+        rec.percent = entry.percent ?? null;
+        rec.snippet = entry.snippet ?? null;
+        rec.feeling = entry.feeling ?? null;
+        rec.reflection = entry.reflection ?? null;
+        rec.reflectionUri = entry.reflectionUri ?? null;
+        rec.setting = entry.setting ?? null;
+        rec.date = entry.date;
+        rec.entryCreatedAt = Date.now();
       });
     });
     return record.id;
@@ -80,9 +91,18 @@ export async function updateEntry(
   try {
     await database.write(async () => {
       const record = await entriesCollection.find(entryId);
-      const fields = entryUpdatesToRaw(updates);
-      await record.update(() => {
-        Object.assign(record._raw, fields);
+      await record.update((rec) => {
+        if (updates.bookId !== undefined) rec.bookId = updates.bookId;
+        if (updates.bookTitle !== undefined) rec.bookTitle = updates.bookTitle;
+        if (updates.chapter !== undefined) rec.chapter = updates.chapter ?? null;
+        if (updates.page !== undefined) rec.page = updates.page ?? null;
+        if (updates.percent !== undefined) rec.percent = updates.percent ?? null;
+        if (updates.snippet !== undefined) rec.snippet = updates.snippet ?? null;
+        if (updates.feeling !== undefined) rec.feeling = updates.feeling ?? null;
+        if (updates.reflection !== undefined) rec.reflection = updates.reflection ?? null;
+        if (updates.reflectionUri !== undefined) rec.reflectionUri = updates.reflectionUri ?? null;
+        if (updates.setting !== undefined) rec.setting = updates.setting ?? null;
+        if (updates.date !== undefined) rec.date = updates.date;
       });
     });
   } catch (error) {

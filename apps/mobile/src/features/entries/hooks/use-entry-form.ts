@@ -12,6 +12,7 @@ function entryToFormValues(entry?: Entry): EntryFormValues {
     snippet: entry?.snippet ?? "",
     feeling: entry?.feeling ?? "",
     reflection: entry?.reflection ?? "",
+    setting: entry?.setting ?? "",
     date: entry ? new Date(entry.date) : new Date(),
   };
 }

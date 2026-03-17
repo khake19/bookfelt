@@ -32,6 +32,7 @@ export interface EntryCardData {
   snippet?: string;
   reaction: string;
   feeling?: string;
+  setting?: string;
   reflectionUri?: string;
 }
 
@@ -48,6 +49,7 @@ const EntryCard = (props: EntryCardProps) => {
     snippet,
     reaction,
     feeling,
+    setting,
     reflectionUri,
     onPress,
     onLongPress,
@@ -87,6 +89,11 @@ const EntryCard = (props: EntryCardProps) => {
             </View>
             <Text className="text-muted text-xs">{date}</Text>
           </View>
+          {setting ? (
+            <Text className="text-muted text-xs mt-0.5">
+              {setting}
+            </Text>
+          ) : null}
         </CardHeader>
         <CardContent className="gap-3">
           {snippet && stripHtml(snippet) ? (

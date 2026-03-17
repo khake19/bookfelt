@@ -7,6 +7,7 @@ export const entryFormSchema = z.object({
   snippet: z.string(),
   feeling: z.string().min(1),
   reflection: z.string(),
+  setting: z.string(),
   date: z.date(),
 });
 

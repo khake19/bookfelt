@@ -4,12 +4,14 @@ import DeleteConfirmSheet from "./components/DeleteConfirmSheet";
 import BookOptionsSheet from "../features/books/components/BookOptionsSheet";
 import ChangeStatusSheet from "../features/books/components/ChangeStatusSheet";
 import ProfileSheet from "./components/ProfileSheet";
+import SettingSheet from "../features/entries/components/SettingSheet";
 import { SHEET_IDS } from "./constants/sheet-ids";
 
 registerSheet(SHEET_IDS.DELETE_ENTRY, DeleteConfirmSheet);
 registerSheet(SHEET_IDS.ENTRY_OPTIONS, BookOptionsSheet);
 registerSheet(SHEET_IDS.CHANGE_STATUS, ChangeStatusSheet);
 registerSheet(SHEET_IDS.PROFILE, ProfileSheet);
+registerSheet(SHEET_IDS.SETTING, SettingSheet);
 
 declare module "react-native-actions-sheet" {
   interface Sheets {
@@ -35,6 +37,12 @@ declare module "react-native-actions-sheet" {
       };
     }>;
     "profile-sheet": SheetDefinition;
+    "setting-sheet": SheetDefinition<{
+      payload: {
+        current?: string;
+        onSelect: (setting: string) => void;
+      };
+    }>;
   }
 }
 

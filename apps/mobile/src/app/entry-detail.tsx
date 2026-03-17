@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-reanimated";
-import { CameraIcon, MicrophoneIcon } from "react-native-heroicons/outline";
+import { CameraIcon, BookOpenIcon, MicrophoneIcon } from "react-native-heroicons/outline";
+import { SheetManager } from "react-native-actions-sheet";
+import { SHEET_IDS } from "../shared/constants/sheet-ids";
 import { useLibrary } from "../features/books/hooks/use-library";
 import type { EntryFormValues } from "../features/entries";
 import { useObserveEmotions, useEntries, useEntryForm } from "../features/entries";
@@ -105,6 +107,7 @@ const EntryDetailScreen = () => {
       feeling: values.feeling || undefined,
       reflection: values.reflection || undefined,
       reflectionUri,
+      setting: values.setting || undefined,
       date: values.date.getTime(),
     };
     if (isNew) {
@@ -125,6 +128,7 @@ const EntryDetailScreen = () => {
   const selectedFeeling = watch("feeling");
   const snippet = watch("snippet");
   const reflection = watch("reflection");
+  const setting = watch("setting");
 
   return (
     <ScreenWrapper>
@@ -214,9 +218,28 @@ const EntryDetailScreen = () => {
         </View>
         <View className="h-px bg-border" />
         <View>
-          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-            When
-          </Text>
+          <View className="flex-row items-center justify-between mb-1.5">
+            <Text className="text-xs font-medium uppercase tracking-widest text-muted">
+              When
+            </Text>
+            <Pressable
+              onPress={() =>
+                SheetManager.show(SHEET_IDS.SETTING, {
+                  payload: {
+                    current: setting || undefined,
+                    onSelect: (v) => setValue("setting", v),
+                  },
+                })
+              }
+              hitSlop={8}
+              className="p-1"
+            >
+              <BookOpenIcon
+                size={18}
+                color={mutedForeground}
+              />
+            </Pressable>
+          </View>
           <View className="flex-row items-center">
             <Controller
               control={control}
@@ -271,6 +294,13 @@ const EntryDetailScreen = () => {
               }
             />
           </View>
+          {setting ? (
+            <View className="flex-row items-center justify-between mt-1">
+              <Text className="text-xs text-muted">
+                {setting}
+              </Text>
+            </View>
+          ) : null}
         </View>
         <View className="h-px bg-border" />
         <View className="py-1">

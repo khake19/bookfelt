@@ -9,6 +9,7 @@ export interface Entry {
   feeling?: string;
   reflection?: string;
   reflectionUri?: string;
+  setting?: string;
   date: number;
   createdAt: number;
 }
