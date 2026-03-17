@@ -11,6 +11,8 @@ export interface EmotionRecord {
   color: string;
   group: "core" | "secondary";
   sortOrder: number;
+  valence: number;
+  intensity: number;
 }
 
 function toRecord(model: EmotionModel): EmotionRecord {
@@ -21,6 +23,8 @@ function toRecord(model: EmotionModel): EmotionRecord {
     color: model.color,
     group: model.group,
     sortOrder: model.sortOrder,
+    valence: model.valence,
+    intensity: model.intensity,
   };
 }
 
@@ -33,6 +37,6 @@ export const emotions$ = emotionsCollection
   );
 
 export const emotionMap$ = emotions$.pipe(
-  map((emotions) => new Map(emotions.map((e) => [e.label, e]))),
+  map((emotions) => new Map(emotions.map((e) => [e.id, e]))),
   shareReplay(1),
 );

@@ -1,10 +1,12 @@
-import { Model } from "@nozbe/watermelondb";
+import { Model, type Relation } from "@nozbe/watermelondb";
 import { field, text, relation, date } from "@nozbe/watermelondb/decorators";
+import type { EmotionModel } from "./emotion.model";
 
 export class EntryModel extends Model {
   static override table = "entries";
   static override associations = {
     books: { type: "belongs_to" as const, key: "book_id" },
+    emotions: { type: "belongs_to" as const, key: "emotion_id" },
   };
 
   @text("original_id") originalId!: string;
@@ -14,7 +16,7 @@ export class EntryModel extends Model {
   @text("page") page!: string | null;
   @text("percent") percent!: string | null;
   @text("snippet") snippet!: string | null;
-  @text("feeling") feeling!: string | null;
+  @text("emotion_id") emotionId!: string | null;
   @text("reflection") reflection!: string | null;
   @text("reflection_uri") reflectionUri!: string | null;
   @text("setting") setting!: string | null;
@@ -23,4 +25,5 @@ export class EntryModel extends Model {
   @date("updated_at") updatedAt!: number;
 
   @relation("books", "book_id") book: any;
+  @relation("emotions", "emotion_id") emotion!: Relation<EmotionModel>;
 }

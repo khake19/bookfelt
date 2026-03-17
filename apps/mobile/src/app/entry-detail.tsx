@@ -104,7 +104,7 @@ const EntryDetailScreen = () => {
       page: values.page || undefined,
       percent: values.percent || undefined,
       snippet: values.snippet.trim() || undefined,
-      feeling: values.feeling || undefined,
+      emotionId: values.emotionId || undefined,
       reflection: values.reflection || undefined,
       reflectionUri,
       setting: values.setting || undefined,
@@ -125,7 +125,7 @@ const EntryDetailScreen = () => {
   const coreEmotions = emotions.filter((e) => e.group === "core");
   const secondaryEmotions = emotions.filter((e) => e.group === "secondary");
 
-  const selectedFeeling = watch("feeling");
+  const selectedEmotionId = watch("emotionId");
   const snippet = watch("snippet");
   const reflection = watch("reflection");
   const setting = watch("setting");
@@ -335,12 +335,12 @@ const EntryDetailScreen = () => {
           </Text>
           <Animated.View layout={LinearTransition.duration(250)} className="flex-row flex-wrap gap-2">
             {coreEmotions.map((emotion) => {
-              const isSelected = selectedFeeling === emotion.label;
+              const isSelected = selectedEmotionId === emotion.id;
               return (
                 <Pressable
-                  key={emotion.label}
+                  key={emotion.id}
                   onPress={() =>
-                    setValue("feeling", isSelected ? "" : emotion.label, {
+                    setValue("emotionId", isSelected ? "" : emotion.id, {
                       shouldValidate: true,
                     })
                   }
@@ -363,16 +363,16 @@ const EntryDetailScreen = () => {
             })}
             {showMoreEmotions &&
               secondaryEmotions.map((emotion, index) => {
-                const isSelected = selectedFeeling === emotion.label;
+                const isSelected = selectedEmotionId === emotion.id;
                 return (
                   <Animated.View
-                    key={emotion.label}
+                    key={emotion.id}
                     entering={FadeInDown.duration(250).delay(index * 30)}
                     exiting={FadeOutUp.duration(200)}
                   >
                     <Pressable
                       onPress={() =>
-                        setValue("feeling", isSelected ? "" : emotion.label, {
+                        setValue("emotionId", isSelected ? "" : emotion.id, {
                           shouldValidate: true,
                         })
                       }

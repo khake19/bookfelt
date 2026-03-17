@@ -8,6 +8,81 @@ import {
 export const migrations = schemaMigrations({
   migrations: [
     {
+      toVersion: 9,
+      steps: [
+        // Add valence and intensity to emotions
+        addColumns({
+          table: "emotions",
+          columns: [
+            { name: "valence", type: "number" },
+            { name: "intensity", type: "number" },
+          ],
+        }),
+        // Initialize with default values (will be updated by seed)
+        unsafeExecuteSql(
+          "UPDATE emotions SET valence = 0, intensity = 0.5 WHERE valence IS NULL;",
+        ),
+        // Add emotion_id column to entries
+        addColumns({
+          table: "entries",
+          columns: [
+            { name: "emotion_id", type: "string", isOptional: true },
+          ],
+        }),
+        // Migrate feeling labels to emotion_id UUIDs
+        unsafeExecuteSql(
+          "UPDATE entries SET emotion_id = (SELECT id FROM emotions WHERE emotions.label = entries.feeling) WHERE feeling IS NOT NULL;",
+        ),
+        // Create temp table without feeling column
+        unsafeExecuteSql(`
+          CREATE TABLE entries_new (
+            id TEXT PRIMARY KEY NOT NULL,
+            original_id TEXT NOT NULL,
+            book_id TEXT NOT NULL,
+            book_title TEXT NOT NULL,
+            chapter TEXT,
+            page TEXT,
+            percent TEXT,
+            snippet TEXT,
+            emotion_id TEXT,
+            reflection TEXT,
+            reflection_uri TEXT,
+            setting TEXT,
+            date INTEGER NOT NULL,
+            entry_created_at INTEGER NOT NULL,
+            updated_at INTEGER NOT NULL,
+            _changed TEXT NOT NULL,
+            _status TEXT NOT NULL
+          );
+        `),
+        // Copy data from old table to new
+        unsafeExecuteSql(`
+          INSERT INTO entries_new
+          SELECT id, original_id, book_id, book_title, chapter, page, percent, snippet,
+                 emotion_id, reflection, reflection_uri, setting, date, entry_created_at,
+                 updated_at, _changed, _status
+          FROM entries;
+        `),
+        // Drop old table
+        unsafeExecuteSql("DROP TABLE entries;"),
+        // Rename new table
+        unsafeExecuteSql("ALTER TABLE entries_new RENAME TO entries;"),
+        // Recreate indexes
+        unsafeExecuteSql(
+          "CREATE INDEX IF NOT EXISTS entries_book_id ON entries (book_id);",
+        ),
+        unsafeExecuteSql(
+          "CREATE INDEX IF NOT EXISTS entries_date ON entries (date);",
+        ),
+        unsafeExecuteSql(
+          "CREATE INDEX IF NOT EXISTS entries_entry_created_at ON entries (entry_created_at);",
+        ),
+        unsafeExecuteSql(
+          "CREATE INDEX IF NOT EXISTS entries_emotion_id ON entries (emotion_id);",
+        ),
+      ],
+    },
+    {
       toVersion: 8,
       steps: [
         addColumns({

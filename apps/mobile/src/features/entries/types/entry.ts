@@ -6,7 +6,7 @@ export interface Entry {
   page?: string;
   percent?: string;
   snippet?: string;
-  feeling?: string;
+  emotionId?: string;
   reflection?: string;
   reflectionUri?: string;
   setting?: string;

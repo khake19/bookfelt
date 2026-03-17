@@ -1,20 +1,10 @@
 import { useMemo } from "react";
-import { map } from "rxjs";
 import { useObservable } from "../../../shared/hooks/use-observable";
 import * as entryService from "../services/entry.service";
 
 export function useEntries(bookId?: string) {
   const entries$ = useMemo(
-    () =>
-      entryService
-        .observeEntries(bookId)
-        .pipe(
-          map((entries) =>
-            [...entries].sort(
-              (a, b) => b.date - a.date || b.createdAt - a.createdAt,
-            ),
-          ),
-        ),
+    () => entryService.observeEntries(bookId),
     [bookId],
   );
 

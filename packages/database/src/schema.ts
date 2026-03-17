@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from "@nozbe/watermelondb";
 
 export const schema = appSchema({
-  version: 8,
+  version: 9,
   tables: [
     tableSchema({
       name: "books",
@@ -37,7 +37,7 @@ export const schema = appSchema({
         { name: "page", type: "string", isOptional: true },
         { name: "percent", type: "string", isOptional: true },
         { name: "snippet", type: "string", isOptional: true },
-        { name: "feeling", type: "string", isOptional: true, isIndexed: true },
+        { name: "emotion_id", type: "string", isOptional: true, isIndexed: true },
         { name: "reflection", type: "string", isOptional: true },
         { name: "reflection_uri", type: "string", isOptional: true },
         { name: "date", type: "number", isIndexed: true },
@@ -54,6 +54,8 @@ export const schema = appSchema({
         { name: "color", type: "string" },
         { name: "group", type: "string" },
         { name: "sort_order", type: "number" },
+        { name: "valence", type: "number" },
+        { name: "intensity", type: "number" },
       ],
     }),
     tableSchema({

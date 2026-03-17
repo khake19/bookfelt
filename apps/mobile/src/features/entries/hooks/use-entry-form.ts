@@ -10,7 +10,7 @@ function entryToFormValues(entry?: Entry): EntryFormValues {
     page: entry?.page ?? "",
     percent: entry?.percent ?? "",
     snippet: entry?.snippet ?? "",
-    feeling: entry?.feeling ?? "",
+    emotionId: entry?.emotionId ?? "",
     reflection: entry?.reflection ?? "",
     setting: entry?.setting ?? "",
     date: entry ? new Date(entry.date) : new Date(),

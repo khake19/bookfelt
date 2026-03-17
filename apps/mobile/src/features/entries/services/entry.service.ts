@@ -27,8 +27,15 @@ export function observeRecentEntries(limit: number): Observable<Entry[]> {
 
 export function observeEntries(bookId?: string): Observable<Entry[]> {
   const query = bookId
-    ? entriesCollection.query(Q.where("book_id", bookId))
-    : entriesCollection.query();
+    ? entriesCollection.query(
+        Q.where("book_id", bookId),
+        Q.sortBy("date", Q.desc),
+        Q.sortBy("entry_created_at", Q.desc),
+      )
+    : entriesCollection.query(
+        Q.sortBy("date", Q.desc),
+        Q.sortBy("entry_created_at", Q.desc),
+      );
 
   return query
     .observeWithColumns(['updated_at'])
@@ -57,7 +64,7 @@ export async function addEntry(
         rec.page = entry.page ?? null;
         rec.percent = entry.percent ?? null;
         rec.snippet = entry.snippet ?? null;
-        rec.feeling = entry.feeling ?? null;
+        rec.emotionId = entry.emotionId ?? null;
         rec.reflection = entry.reflection ?? null;
         rec.reflectionUri = entry.reflectionUri ?? null;
         rec.setting = entry.setting ?? null;
@@ -100,7 +107,7 @@ export async function updateEntry(
         if (updates.page !== undefined) rec.page = updates.page ?? null;
         if (updates.percent !== undefined) rec.percent = updates.percent ?? null;
         if (updates.snippet !== undefined) rec.snippet = updates.snippet ?? null;
-        if (updates.feeling !== undefined) rec.feeling = updates.feeling ?? null;
+        if (updates.emotionId !== undefined) rec.emotionId = updates.emotionId ?? null;
         if (updates.reflection !== undefined) rec.reflection = updates.reflection ?? null;
         if (updates.reflectionUri !== undefined) rec.reflectionUri = updates.reflectionUri ?? null;
         if (updates.setting !== undefined) rec.setting = updates.setting ?? null;

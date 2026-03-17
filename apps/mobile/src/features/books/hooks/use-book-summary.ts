@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { generateBookSummary } from "@bookfelt/core";
 import * as libraryService from "../services/library.service";
 import * as entryService from "../../entries/services/entry.service";
+import { database, EmotionModel } from "@bookfelt/database";
 
 type SummaryState =
   | { kind: "loading" }
@@ -23,9 +24,10 @@ export function useBookSummary(
     abortRef.current = controller;
 
     try {
-      const [book, entries] = await Promise.all([
+      const [book, entries, emotions] = await Promise.all([
         libraryService.fetchBook(bookId),
         entryService.fetchEntries(bookId),
+        database.get<EmotionModel>("emotions").query().fetch(),
       ]);
 
       if (!book) {
@@ -34,6 +36,9 @@ export function useBookSummary(
       }
 
       setBookTitle(book.title);
+
+      // Build emotion map for label lookup
+      const emotionMap = new Map(emotions.map((e) => [e.id, e.label]));
 
       const text = await generateBookSummary(
         {
@@ -46,7 +51,7 @@ export function useBookSummary(
           entries: entries.map((e) => ({
             snippet: e.snippet,
             reflection: e.reflection,
-            feeling: e.feeling,
+            feeling: e.emotionId ? emotionMap.get(e.emotionId) : undefined,
           })),
         },
         controller.signal,

@@ -108,11 +108,11 @@ const BookDetailScreen = () => {
   const [showDraftsOnly, setShowDraftsOnly] = useState(false);
 
   const voiceDraftCount = entries.filter(
-    (e) => e.reflectionUri && !e.feeling,
+    (e) => e.reflectionUri && !e.emotionId,
   ).length;
 
   const displayEntries = showDraftsOnly
-    ? entries.filter((e) => e.reflectionUri && !e.snippet && !e.feeling)
+    ? entries.filter((e) => e.reflectionUri && !e.snippet && !e.emotionId)
     : entries;
 
   const handleEntryPress = (entryId: string) => {
@@ -457,17 +457,17 @@ const BookDetailScreen = () => {
                 </Animated.View>
               )}
               {displayEntries.map((entry, index) => {
-                const emotion = entry.feeling
-                  ? emotionMap.get(entry.feeling)
+                const emotion = entry.emotionId
+                  ? emotionMap.get(entry.emotionId)
                   : undefined;
                 const nextEntry = displayEntries[index + 1];
-                const nextEmotion = nextEntry?.feeling
-                  ? emotionMap.get(nextEntry.feeling)
+                const nextEmotion = nextEntry?.emotionId
+                  ? emotionMap.get(nextEntry.emotionId)
                   : undefined;
                 const isLast =
                   index === displayEntries.length - 1 && !book.firstImpression;
                 const isUnfinishedAudio =
-                  !!entry.reflectionUri && !entry.snippet && !entry.feeling;
+                  !!entry.reflectionUri && !entry.snippet && !entry.emotionId;
                 const dotColor = emotion?.color ?? "#71717a";
 
                 return (
@@ -520,7 +520,7 @@ const BookDetailScreen = () => {
                           )}
                           {entry.reflectionUri &&
                             !entry.snippet &&
-                            !entry.feeling && (
+                            !entry.emotionId && (
                               <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
                                 <MicrophoneIcon size={10} color={primary} />
                                 <Text className="text-primary text-[10px] font-medium">

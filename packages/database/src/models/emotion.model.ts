@@ -9,4 +9,6 @@ export class EmotionModel extends Model {
   @text("color") color!: string;
   @text("group") group!: "core" | "secondary";
   @field("sort_order") sortOrder!: number;
+  @field("valence") valence!: number;
+  @field("intensity") intensity!: number;
 }

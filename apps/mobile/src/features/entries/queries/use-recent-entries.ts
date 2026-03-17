@@ -18,7 +18,7 @@ export function useRecentEntries() {
   hasMoreRef.current = hasMore;
 
   const entries = useMemo(
-    () => rawEntries.filter((e) => e.snippet || e.feeling),
+    () => rawEntries.filter((e) => e.snippet || e.emotionId),
     [rawEntries],
   );
 

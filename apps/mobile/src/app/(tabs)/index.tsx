@@ -41,9 +41,9 @@ export default function HomeScreen() {
   const { entries, loadMore, hasMore, removeEntry } = useRecentEntries();
   const bookEntries = useEntries(currentlyReading?.id).entries;
   const emotionMap = useEmotionMap();
-  const latestFeeling = bookEntries[0]?.feeling;
-  const latestEmotion = latestFeeling
-    ? emotionMap.get(latestFeeling)
+  const latestEmotionId = bookEntries[0]?.emotionId;
+  const latestEmotion = latestEmotionId
+    ? emotionMap.get(latestEmotionId)
     : undefined;
 
   const handlePress = (id: string) => {
@@ -75,7 +75,7 @@ export default function HomeScreen() {
         date={timeAgo(item.date)}
         snippet={item.snippet}
         reaction={item.reflection ?? ""}
-        feeling={item.feeling}
+        emotionId={item.emotionId}
         setting={item.setting}
         reflectionUri={item.reflectionUri}
         onPress={() => handlePress(item.id)}

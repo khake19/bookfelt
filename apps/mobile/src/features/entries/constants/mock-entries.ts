@@ -9,7 +9,7 @@ export const MOCK_ENTRIES: EntryCardData[] = [
     snippet:
       "No, emptiness is not nothingness. Emptiness is a type of existence. You must use this existential emptiness to fill yourself.",
     reaction: "This hit hard. The idea that emptiness is still something...",
-    feeling: "mind-blown",
+    // emotionId: "mock-emotion-id", // Note: Would need real UUID in production
   },
   {
     id: "bf-2",
@@ -19,7 +19,7 @@ export const MOCK_ENTRIES: EntryCardData[] = [
     snippet:
       "Death exists, not as the opposite but as a part of life.",
     reaction: "Murakami makes grief feel so quiet and ordinary.",
-    feeling: "quiet",
+    // emotionId: "mock-emotion-id",
   },
   {
     id: "bf-3",
@@ -30,7 +30,7 @@ export const MOCK_ENTRIES: EntryCardData[] = [
       "How do you cause people to believe in an imagined order? First, you never admit that the order is imagined.",
     reaction:
       "Makes me question every institution I take for granted. What else is just a shared story?",
-    feeling: "curious",
+    // emotionId: "mock-emotion-id",
   },
   {
     id: "bf-4",
@@ -40,7 +40,7 @@ export const MOCK_ENTRIES: EntryCardData[] = [
     snippet:
       "The universe is a dark forest. Every civilization is an armed hunter stalking through the trees...",
     reaction: "The dark forest theory is terrifying but weirdly beautiful.",
-    feeling: "fear",
+    // emotionId: "mock-emotion-id",
   },
   {
     id: "bf-5",
@@ -50,6 +50,6 @@ export const MOCK_ENTRIES: EntryCardData[] = [
     snippet:
       "You can't ever reach perfection, but you can believe in an asymptote toward which you are ceaselessly striving.",
     reaction: "Reading this while healthy feels like a privilege I don't deserve.",
-    feeling: "hopeful",
+    // emotionId: "mock-emotion-id",
   },
 ];

@@ -12,7 +12,7 @@ export interface EntryRawFields {
   page: string | null;
   percent: string | null;
   snippet: string | null;
-  feeling: string | null;
+  emotion_id: string | null;
   reflection: string | null;
   reflection_uri: string | null;
   setting: string | null;
@@ -29,7 +29,7 @@ export function entryModelToEntry(record: EntryModel): Entry {
     page: record.page ?? undefined,
     percent: record.percent ?? undefined,
     snippet: record.snippet ?? undefined,
-    feeling: record.feeling ?? undefined,
+    emotionId: record.emotionId ?? undefined,
     reflection: record.reflection ?? undefined,
     reflectionUri: record.reflectionUri ?? undefined,
     setting: record.setting ?? undefined,
@@ -50,7 +50,7 @@ export function entryToCreateRaw(
     page: entry.page ?? null,
     percent: entry.percent ?? null,
     snippet: entry.snippet ?? null,
-    feeling: entry.feeling ?? null,
+    emotion_id: entry.emotionId ?? null,
     reflection: entry.reflection ?? null,
     reflection_uri: entry.reflectionUri ?? null,
     setting: entry.setting ?? null,
@@ -69,7 +69,7 @@ export function entryUpdatesToRaw(
   if (updates.page !== undefined) raw.page = updates.page ?? null;
   if (updates.percent !== undefined) raw.percent = updates.percent ?? null;
   if (updates.snippet !== undefined) raw.snippet = updates.snippet ?? null;
-  if (updates.feeling !== undefined) raw.feeling = updates.feeling ?? null;
+  if (updates.emotionId !== undefined) raw.emotion_id = updates.emotionId ?? null;
   if (updates.reflection !== undefined)
     raw.reflection = updates.reflection ?? null;
   if (updates.reflectionUri !== undefined) raw.reflection_uri = updates.reflectionUri ?? null;

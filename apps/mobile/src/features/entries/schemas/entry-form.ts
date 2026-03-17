@@ -5,7 +5,7 @@ export const entryFormSchema = z.object({
   page: z.string(),
   percent: z.string(),
   snippet: z.string(),
-  feeling: z.string().min(1),
+  emotionId: z.string().min(1),
   reflection: z.string(),
   setting: z.string(),
   date: z.date(),

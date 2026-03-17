@@ -31,7 +31,7 @@ export interface EntryCardData {
   date: string;
   snippet?: string;
   reaction: string;
-  feeling?: string;
+  emotionId?: string;
   setting?: string;
   reflectionUri?: string;
 }
@@ -48,7 +48,7 @@ const EntryCard = (props: EntryCardProps) => {
     date,
     snippet,
     reaction,
-    feeling,
+    emotionId,
     setting,
     reflectionUri,
     onPress,
@@ -56,7 +56,7 @@ const EntryCard = (props: EntryCardProps) => {
   } = props;
 
   const emotionMap = useEmotionMap();
-  const emotion = feeling ? emotionMap.get(feeling) : undefined;
+  const emotion = emotionId ? emotionMap.get(emotionId) : undefined;
   const color = emotion?.color;
 
   const badgeScale = useSharedValue(1);
