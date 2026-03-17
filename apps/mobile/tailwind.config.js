@@ -9,6 +9,9 @@ module.exports = {
     extend: {
       fontFamily: {
         serif: ['Lora-Regular'],
+        'serif-medium': ['Lora-Medium'],
+        'serif-semibold': ['Lora-SemiBold'],
+        'serif-bold': ['Lora-Bold'],
         'serif-italic': ['Lora-Italic'],
         mono: ['CourierPrime-Regular'],
         'mono-bold': ['CourierPrime-Bold'],

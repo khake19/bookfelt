@@ -51,7 +51,7 @@ export default function LibraryScreen() {
         entering={FadeInDown.duration(400)}
         className="flex-row items-center justify-between mt-2 mb-3"
       >
-        <Text className="text-foreground font-mono-bold text-xl">Library</Text>
+        <Text className="text-foreground font-serif-bold text-xl tracking-tight">Library</Text>
         <PillButton
           icon="plus"
           label="Add Book "

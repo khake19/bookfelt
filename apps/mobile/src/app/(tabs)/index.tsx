@@ -89,8 +89,8 @@ export default function HomeScreen() {
         entering={FadeInDown.duration(400)}
         className="flex-row items-center justify-between mt-2 mb-4 pr-1"
       >
-        <Text className="text-foreground font-mono-bold text-xl">
-          bookfelt
+        <Text className="text-foreground font-serif-bold text-xl tracking-tight">
+          <Text className="text-accent">B</Text>ookfelt
         </Text>
         <Pressable onPress={() => SheetManager.show(SHEET_IDS.PROFILE)}>
           <View className="w-9 h-9 rounded-full overflow-hidden items-center justify-center bg-primary">
