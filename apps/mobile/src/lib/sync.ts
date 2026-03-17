@@ -124,6 +124,9 @@ function stripServerFields(row: Record<string, any>): Record<string, any> {
 }
 
 function stripLocalFields(record: Record<string, any>): Record<string, any> {
-  const { _status, _changed, ...rest } = record;
-  return rest;
+  const { _status, _changed, updated_at, ...rest } = record;
+  return {
+    ...rest,
+    ...(updated_at ? { updated_at: new Date(updated_at).toISOString() } : {}),
+  };
 }

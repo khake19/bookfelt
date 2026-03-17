@@ -257,7 +257,6 @@ export default function HomeScreen() {
         }
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
-        estimatedItemSize={120}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
         ItemSeparatorComponent={() => <View className="h-3" />}

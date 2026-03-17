@@ -8,6 +8,18 @@ import {
 export const migrations = schemaMigrations({
   migrations: [
     {
+      toVersion: 8,
+      steps: [
+        addColumns({
+          table: "entries",
+          columns: [{ name: "updated_at", type: "number" }],
+        }),
+        unsafeExecuteSql(
+          "UPDATE entries SET updated_at = (strftime('%s', 'now') * 1000) WHERE updated_at IS NULL;",
+        ),
+      ],
+    },
+    {
       toVersion: 7,
       steps: [
         addColumns({

@@ -21,7 +21,7 @@ export function observeRecentEntries(limit: number): Observable<Entry[]> {
       Q.sortBy("entry_created_at", Q.desc),
       Q.take(limit),
     )
-    .observe()
+    .observeWithColumns(['updated_at'])
     .pipe(map((records) => records.map(entryModelToEntry)));
 }
 
@@ -30,7 +30,9 @@ export function observeEntries(bookId?: string): Observable<Entry[]> {
     ? entriesCollection.query(Q.where("book_id", bookId))
     : entriesCollection.query();
 
-  return query.observe().pipe(map((records) => records.map(entryModelToEntry)));
+  return query
+    .observeWithColumns(['updated_at'])
+    .pipe(map((records) => records.map(entryModelToEntry)));
 }
 
 export async function fetchEntries(bookId: string): Promise<Entry[]> {

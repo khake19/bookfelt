@@ -1,5 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
-import { field, text, relation } from "@nozbe/watermelondb/decorators";
+import { field, text, relation, date } from "@nozbe/watermelondb/decorators";
 
 export class EntryModel extends Model {
   static override table = "entries";
@@ -20,6 +20,7 @@ export class EntryModel extends Model {
   @text("setting") setting!: string | null;
   @field("date") date!: number;
   @field("entry_created_at") entryCreatedAt!: number;
+  @date("updated_at") updatedAt!: number;
 
   @relation("books", "book_id") book: any;
 }
