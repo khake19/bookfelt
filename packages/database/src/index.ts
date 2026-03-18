@@ -28,3 +28,10 @@ export const database = new Database({
   adapter,
   modelClasses: [BookModel, EntryModel, SettingModel, EmotionModel],
 });
+
+export async function resetDatabase(): Promise<void> {
+  await database.write(async () => {
+    await database.unsafeResetDatabase();
+  });
+  console.log("Database reset complete");
+}

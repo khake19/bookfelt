@@ -54,17 +54,19 @@ export async function seedEmotions(db: Database): Promise<void> {
   await db.write(async () => {
     if (existing.length === 0) {
       // Create new emotions if none exist
-      const batch = SEED_EMOTIONS.map((emotion, index) =>
-        collection.prepareCreate((record: EmotionModel) => {
-          record._raw.label = emotion.label;
-          record._raw.emoji = emotion.emoji;
-          record._raw.color = emotion.color;
-          record._raw.group = emotion.group;
-          record._raw.sort_order = index;
-          record._raw.valence = emotion.valence;
-          record._raw.intensity = emotion.intensity;
-        }),
-      );
+      const batch = SEED_EMOTIONS.map((emotion, index) => {
+        const id = emotion.label.toLowerCase();
+        return collection.prepareCreate((record: EmotionModel) => {
+          record._raw.id = id;
+          record.label = emotion.label;
+          record.emoji = emotion.emoji;
+          record.color = emotion.color;
+          record.group = emotion.group;
+          record.sortOrder = index;
+          record.valence = emotion.valence;
+          record.intensity = emotion.intensity;
+        });
+      });
       await db.batch(...batch);
     } else {
       // Update existing emotions with valence/intensity if they're missing/zero

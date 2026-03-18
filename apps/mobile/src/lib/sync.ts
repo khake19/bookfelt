@@ -69,7 +69,7 @@ export async function syncDatabase(userId: string): Promise<void> {
           changes[table] = { created: [], updated, deleted };
         }
 
-        // WatermelonDB expects all tables present
+        // Emotions are static reference data, managed via migrations
         changes.emotions = { created: [], updated: [], deleted: [] };
 
         console.log("[sync] pull complete, server timestamp:", timestamp);
