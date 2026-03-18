@@ -573,6 +573,12 @@ const BookDetailScreen = () => {
                             <AudioPlayer uri={entry.reflectionUri} />
                           </View>
                         ) : null}
+
+                        {entry.setting && (
+                          <Text className="text-muted/40 text-xs mt-2 italic">
+                            {entry.setting}
+                          </Text>
+                        )}
                       </Pressable>
                     </View>
                   </Animated.View>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text } from 'react-native';
-import Svg, { Path, Line, Defs, LinearGradient, Stop } from 'react-native-svg';
+import Svg, { Path, Line, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
 import { useGraphDimensions, dataYToSvgY, dataXToSvgX } from '../hooks/use-graph-dimensions';
 import { getCubicBezierPath } from '../utils/curve-interpolation';
 import { EmotionalArcPoint } from './EmotionalArcPoint';
@@ -37,6 +37,22 @@ export function EmotionalArcGraph({ data }: EmotionalArcGraphProps) {
   const firstPoint = svgPoints[0];
   const lastPoint = svgPoints[svgPoints.length - 1];
   const areaPath = `${pathData} L ${lastPoint.svgX} ${neutralY} L ${firstPoint.svgX} ${neutralY} Z`;
+
+  // Format dates and determine which ones to show (skip duplicates)
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  const dateLabels = svgPoints.map((point, index) => {
+    const currentDate = formatDate(point.date);
+    const prevDate = index > 0 ? formatDate(svgPoints[index - 1].date) : null;
+    return {
+      ...point,
+      dateLabel: currentDate,
+      shouldShow: currentDate !== prevDate,
+    };
+  });
 
   return (
     <View className="items-center">
@@ -94,6 +110,23 @@ export function EmotionalArcGraph({ data }: EmotionalArcGraphProps) {
             onPress={() => setSelectedPoint(point)}
           />
         ))}
+
+        {/* Date labels */}
+        {dateLabels.map((point, index) =>
+          point.shouldShow ? (
+            <SvgText
+              key={`date-${index}`}
+              x={point.svgX}
+              y={dimensions.height - dimensions.paddingY + 20}
+              fontSize="11"
+              fill="#666"
+              opacity={0.6}
+              textAnchor="middle"
+            >
+              {point.dateLabel}
+            </SvgText>
+          ) : null
+        )}
       </Svg>
 
       {/* Selected point info */}
