@@ -522,25 +522,32 @@ const BookDetailScreen = () => {
                         onLongPress={() => handleLongPress(entry.id)}
                         className="flex-1 ml-4"
                       >
-                        <View className="flex-row items-center gap-2">
+                        <View className="flex-row items-center justify-between gap-2">
+                          <View className="flex-row items-center gap-2">
+                            {emotion && (
+                              <Text className="text-xs">
+                                {emotion.emoji} {emotion.label}
+                              </Text>
+                            )}
+                            {entry.chapter && (
+                              <Text className="text-muted/40 text-xs">
+                                · Ch. {entry.chapter}
+                              </Text>
+                            )}
+                            {entry.reflectionUri &&
+                              !entry.snippet &&
+                              !entry.emotionId && (
+                                <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
+                                  <MicrophoneIcon size={10} color={primary} />
+                                  <Text className="text-primary text-[10px] font-medium">
+                                    Voice Draft
+                                  </Text>
+                                </View>
+                              )}
+                          </View>
                           <Text className="text-muted/60 text-xs">
                             {timeAgo(entry.date)}
                           </Text>
-                          {entry.chapter && (
-                            <Text className="text-muted/40 text-xs">
-                              · Ch. {entry.chapter}
-                            </Text>
-                          )}
-                          {entry.reflectionUri &&
-                            !entry.snippet &&
-                            !entry.emotionId && (
-                              <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
-                                <MicrophoneIcon size={10} color={primary} />
-                                <Text className="text-primary text-[10px] font-medium">
-                                  Voice Draft
-                                </Text>
-                              </View>
-                            )}
                         </View>
 
                         {entry.snippet && stripHtml(entry.snippet) ? (
@@ -566,12 +573,6 @@ const BookDetailScreen = () => {
                             <AudioPlayer uri={entry.reflectionUri} />
                           </View>
                         ) : null}
-
-                        {emotion && (
-                          <Text className="text-muted/50 text-xs mt-1.5">
-                            {emotion.emoji} {emotion.label}
-                          </Text>
-                        )}
                       </Pressable>
                     </View>
                   </Animated.View>
