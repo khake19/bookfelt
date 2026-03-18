@@ -10,6 +10,8 @@ export interface ArcDataPoint {
   label: string;
   category: 'positive' | 'heavy' | 'reflective' | 'neutral';
   entryCount?: number; // For grouped points
+  startDate?: number; // For grouped points - start of week
+  endDate?: number; // For grouped points - end of week
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -115,6 +117,10 @@ export function groupEntriesByWeek(
     // Use middle entry's date as representative date
     const middleEntry = bucket.entries[Math.floor(bucket.entries.length / 2)].entry;
 
+    // Calculate week start and end dates
+    const weekStartDate = firstDate + (weekNum * DAYS_PER_WEEK * MS_PER_DAY);
+    const weekEndDate = weekStartDate + ((DAYS_PER_WEEK - 1) * MS_PER_DAY);
+
     return {
       x: index,
       y: avgY,
@@ -124,6 +130,8 @@ export function groupEntriesByWeek(
       label: mostFrequentEmotion.label,
       category: mostFrequentEmotion.category,
       entryCount: bucket.entries.length,
+      startDate: weekStartDate,
+      endDate: weekEndDate,
     };
   });
 }

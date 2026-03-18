@@ -39,18 +39,43 @@ export function EmotionalArcGraph({ data }: EmotionalArcGraphProps) {
   const areaPath = `${pathData} L ${lastPoint.svgX} ${neutralY} L ${firstPoint.svgX} ${neutralY} Z`;
 
   // Format dates and determine which ones to show (skip duplicates)
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
+  const formatDateRange = (startTimestamp: number, endTimestamp: number) => {
+    const startDate = new Date(startTimestamp);
+    const endDate = new Date(endTimestamp);
+    const startMonth = startDate.toLocaleDateString('en-US', { month: 'short' });
+    const endMonth = endDate.toLocaleDateString('en-US', { month: 'short' });
+    const startDay = startDate.getDate();
+    const endDay = endDate.getDate();
+
+    // If same month, show "Jul 1 - 7"
+    if (startMonth === endMonth) {
+      return `${startMonth} ${startDay} - ${endDay}`;
+    }
+    // If different months, show "Jul 29 - Aug 4"
+    return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
+  };
+
   const dateLabels = svgPoints.map((point, index) => {
-    const currentDate = formatDate(point.date);
-    const prevDate = index > 0 ? formatDate(svgPoints[index - 1].date) : null;
+    // For grouped points (with startDate/endDate), show date range
+    const dateLabel = point.startDate && point.endDate
+      ? formatDateRange(point.startDate, point.endDate)
+      : formatDate(point.date);
+
+    const prevDateLabel = index > 0
+      ? (svgPoints[index - 1].startDate && svgPoints[index - 1].endDate
+          ? formatDateRange(svgPoints[index - 1].startDate, svgPoints[index - 1].endDate)
+          : formatDate(svgPoints[index - 1].date))
+      : null;
+
     return {
       ...point,
-      dateLabel: currentDate,
-      shouldShow: currentDate !== prevDate,
+      dateLabel,
+      shouldShow: dateLabel !== prevDateLabel,
     };
   });
 
