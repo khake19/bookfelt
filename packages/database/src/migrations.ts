@@ -8,6 +8,21 @@ import {
 export const migrations = schemaMigrations({
   migrations: [
     {
+      toVersion: 10,
+      steps: [
+        addColumns({
+          table: "emotions",
+          columns: [
+            { name: "category", type: "string" },
+          ],
+        }),
+        // Set default category to neutral (will be updated by seed)
+        unsafeExecuteSql(
+          "UPDATE emotions SET category = 'neutral' WHERE category IS NULL;",
+        ),
+      ],
+    },
+    {
       toVersion: 9,
       steps: [
         // Add valence and intensity to emotions

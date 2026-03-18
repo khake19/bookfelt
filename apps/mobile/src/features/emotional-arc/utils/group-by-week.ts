@@ -8,6 +8,7 @@ export interface ArcDataPoint {
   emoji: string;
   date: number;
   label: string;
+  category: 'positive' | 'heavy' | 'reflective' | 'neutral';
   entryCount?: number; // For grouped points
 }
 
@@ -65,6 +66,7 @@ export function groupEntriesByWeek(
       emoji: emotion.emoji,
       date: entry.date,
       label: emotion.label,
+      category: emotion.category,
     }));
   }
 
@@ -120,6 +122,7 @@ export function groupEntriesByWeek(
       emoji: mostFrequentEmotion.emoji,
       date: middleEntry.date,
       label: mostFrequentEmotion.label,
+      category: mostFrequentEmotion.category,
       entryCount: bucket.entries.length,
     };
   });

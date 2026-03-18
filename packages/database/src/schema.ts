@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from "@nozbe/watermelondb";
 
 export const schema = appSchema({
-  version: 9,
+  version: 10,
   tables: [
     tableSchema({
       name: "books",
@@ -53,6 +53,7 @@ export const schema = appSchema({
         { name: "emoji", type: "string" },
         { name: "color", type: "string" },
         { name: "group", type: "string" },
+        { name: "category", type: "string" },
         { name: "sort_order", type: "number" },
         { name: "valence", type: "number" },
         { name: "intensity", type: "number" },

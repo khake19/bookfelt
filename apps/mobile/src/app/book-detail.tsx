@@ -313,7 +313,7 @@ const BookDetailScreen = () => {
                 <Pressable
                   onPress={() => router.push({
                     pathname: "/emotional-arc",
-                    params: { bookId: book.id }
+                    params: { bookId: book.id, bookTitle: book.title }
                   })}
                   className="px-3 py-1.5 rounded-full border border-border bg-secondary"
                 >

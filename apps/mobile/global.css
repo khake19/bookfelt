@@ -19,5 +19,9 @@
     --destructive: 18 59% 41%;
     --border: 30 22% 82%;
     --input: 30 22% 82%;
+    --emotion-positive: 44 58% 55%;
+    --emotion-heavy: 352 51% 36%;
+    --emotion-reflective: 120 14% 48%;
+    --emotion-neutral: 32 14% 42%;
   }
 }

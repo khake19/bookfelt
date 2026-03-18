@@ -47,6 +47,12 @@ module.exports = {
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
+        emotion: {
+          positive: 'hsl(var(--emotion-positive))',
+          heavy: 'hsl(var(--emotion-heavy))',
+          reflective: 'hsl(var(--emotion-reflective))',
+          neutral: 'hsl(var(--emotion-neutral))',
+        },
       },
     },
   },

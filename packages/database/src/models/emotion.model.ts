@@ -8,6 +8,7 @@ export class EmotionModel extends Model {
   @text("emoji") emoji!: string;
   @text("color") color!: string;
   @text("group") group!: "core" | "secondary";
+  @text("category") category!: "positive" | "heavy" | "reflective" | "neutral";
   @field("sort_order") sortOrder!: number;
   @field("valence") valence!: number;
   @field("intensity") intensity!: number;

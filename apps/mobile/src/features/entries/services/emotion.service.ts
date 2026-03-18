@@ -10,6 +10,7 @@ export interface EmotionRecord {
   emoji: string;
   color: string;
   group: "core" | "secondary";
+  category: "positive" | "heavy" | "reflective" | "neutral";
   sortOrder: number;
   valence: number;
   intensity: number;
@@ -22,6 +23,7 @@ function toRecord(model: EmotionModel): EmotionRecord {
     emoji: model.emoji,
     color: model.color,
     group: model.group,
+    category: model.category,
     sortOrder: model.sortOrder,
     valence: model.valence,
     intensity: model.intensity,
