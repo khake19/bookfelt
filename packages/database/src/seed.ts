@@ -49,21 +49,41 @@ const SEED_EMOTIONS: {
 
 export async function seedEmotions(db: Database): Promise<void> {
   const collection = db.get<EmotionModel>("emotions");
-  const count = await collection.query().fetchCount();
-  if (count > 0) return;
+  const existing = await collection.query().fetch();
 
   await db.write(async () => {
-    const batch = SEED_EMOTIONS.map((emotion, index) =>
-      collection.prepareCreate((record: EmotionModel) => {
-        record._raw.label = emotion.label;
-        record._raw.emoji = emotion.emoji;
-        record._raw.color = emotion.color;
-        record._raw.group = emotion.group;
-        record._raw.sort_order = index;
-        record._raw.valence = emotion.valence;
-        record._raw.intensity = emotion.intensity;
-      }),
-    );
-    await db.batch(...batch);
+    if (existing.length === 0) {
+      // Create new emotions if none exist
+      const batch = SEED_EMOTIONS.map((emotion, index) =>
+        collection.prepareCreate((record: EmotionModel) => {
+          record._raw.label = emotion.label;
+          record._raw.emoji = emotion.emoji;
+          record._raw.color = emotion.color;
+          record._raw.group = emotion.group;
+          record._raw.sort_order = index;
+          record._raw.valence = emotion.valence;
+          record._raw.intensity = emotion.intensity;
+        }),
+      );
+      await db.batch(...batch);
+    } else {
+      // Update existing emotions with valence/intensity if they're missing/zero
+      const updates = existing
+        .filter((record) => record.valence === 0 || record.intensity === 0)
+        .map((record) => {
+          const seedData = SEED_EMOTIONS.find((e) => e.label === record.label);
+          if (!seedData) return null;
+
+          return record.prepareUpdate((rec) => {
+            rec.valence = seedData.valence;
+            rec.intensity = seedData.intensity;
+          });
+        })
+        .filter((r) => r !== null);
+
+      if (updates.length > 0) {
+        await db.batch(...updates);
+      }
+    }
   });
 }

@@ -308,7 +308,20 @@ const BookDetailScreen = () => {
                 </Pressable>
               )}
             </View>
-            <PillButton icon="plus" label="New" onPress={handleNewEntry} />
+            <View className="flex-row items-center gap-2">
+              {entries.some(e => e.emotionId) && (
+                <Pressable
+                  onPress={() => router.push({
+                    pathname: "/emotional-arc",
+                    params: { bookId: book.id }
+                  })}
+                  className="px-3 py-1.5 rounded-full border border-border bg-secondary"
+                >
+                  <Text className="text-xs font-medium text-foreground">Arc</Text>
+                </Pressable>
+              )}
+              <PillButton icon="plus" label="New" onPress={handleNewEntry} />
+            </View>
           </Animated.View>
         </View>
 
