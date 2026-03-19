@@ -6,13 +6,16 @@ import CloseButton from '../shared/components/CloseButton';
 import {
   EmotionalArcGraph,
   EmotionalArcLegend,
+  EmotionalRadarChart,
   useEmotionalArcData,
 } from '../features/emotional-arc';
+import { useEmotionMap } from '../features/entries';
 
 export default function EmotionalArcScreen() {
   const { bookId, bookTitle } = useLocalSearchParams<{ bookId: string; bookTitle?: string }>();
   const router = useRouter();
   const arcData = useEmotionalArcData(bookId || '');
+  const emotionMap = useEmotionMap();
 
   return (
     <ScreenWrapper>
@@ -40,6 +43,7 @@ export default function EmotionalArcScreen() {
           <Animated.View entering={FadeInDown}>
             <EmotionalArcLegend data={arcData} bookTitle={bookTitle} />
             <EmotionalArcGraph data={arcData} />
+            <EmotionalRadarChart data={arcData} emotionMap={emotionMap} />
           </Animated.View>
         )}
       </ScrollView>
