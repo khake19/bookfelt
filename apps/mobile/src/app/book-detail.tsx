@@ -334,7 +334,7 @@ const BookDetailScreen = () => {
               className="flex-row items-center mb-5 gap-3"
             >
               <View className="flex-1 h-px bg-primary/20" />
-              <Text className="text-primary font-serif-italic text-sm italic">
+              <Text className="text-primary font-serif-italic text-sm">
                 Fin.
               </Text>
               <View className="flex-1 h-px bg-primary/20" />
@@ -348,7 +348,7 @@ const BookDetailScreen = () => {
               className="flex-row items-center mb-5 gap-3"
             >
               <View className="flex-1 h-px bg-muted/20" />
-              <Text className="text-muted font-serif-italic text-sm italic">
+              <Text className="text-muted font-serif-italic text-sm">
                 Paused
               </Text>
               <View className="flex-1 h-px bg-muted/20" />
@@ -362,7 +362,7 @@ const BookDetailScreen = () => {
               className="flex-row items-center mb-5 gap-3 opacity-70"
             >
               <View className="flex-1 h-px bg-muted/20" />
-              <Text className="text-muted font-serif-italic text-sm italic">
+              <Text className="text-muted font-serif-italic text-sm">
                 Set down.
               </Text>
               <View className="flex-1 h-px bg-muted/20" />
@@ -552,7 +552,7 @@ const BookDetailScreen = () => {
 
                         {entry.snippet && stripHtml(entry.snippet) ? (
                           <Text
-                            className="text-muted/70 font-serif-italic text-sm italic mt-1.5 leading-relaxed"
+                            className="text-muted/70 font-serif-italic text-sm mt-1.5 leading-relaxed"
                             numberOfLines={2}
                           >
                             "{stripHtml(entry.snippet)}"
@@ -575,7 +575,7 @@ const BookDetailScreen = () => {
                         ) : null}
 
                         {entry.setting && (
-                          <Text className="text-muted/40 text-xs mt-2 italic">
+                          <Text className="text-muted/40 text-xs mt-2 font-serif-italic">
                             {entry.setting}
                           </Text>
                         )}

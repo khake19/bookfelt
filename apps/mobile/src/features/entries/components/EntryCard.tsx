@@ -51,29 +51,31 @@ const EntryCard = (props: EntryCardProps) => {
         <View className="flex-row gap-3 mb-3">
           {/* Book cover avatar */}
           <View className="w-10 h-10 rounded-full overflow-hidden bg-secondary">
-            {bookCoverUrl ? (
+            {bookCoverUrl && (
               <Image
                 source={{ uri: bookCoverUrl }}
                 className="w-full h-full"
                 resizeMode="cover"
               />
-            ) : (
-              <View className="w-full h-full items-center justify-center">
-                <Text className="text-muted text-xs">📖</Text>
-              </View>
             )}
           </View>
 
           {/* Book title + metadata */}
           <View className="flex-1">
             <View className="flex-row items-center gap-2 flex-wrap">
-              <Text className="font-semibold text-foreground text-sm" numberOfLines={1}>
+              <Text
+                className="font-semibold text-foreground text-sm"
+                numberOfLines={1}
+              >
                 {title}
               </Text>
               {emotion && (
                 <View className="flex-row items-center gap-1">
                   <Text className="text-xs">{emotion.emoji}</Text>
-                  <Text className="text-xs text-muted" style={{ color: emotion.color }}>
+                  <Text
+                    className="text-xs text-muted"
+                    style={{ color: emotion.color }}
+                  >
                     {emotion.label}
                   </Text>
                 </View>
@@ -90,7 +92,9 @@ const EntryCard = (props: EntryCardProps) => {
               {setting && (
                 <>
                   <Text className="text-muted/40 text-xs">·</Text>
-                  <Text className="text-muted/60 text-xs italic">{setting}</Text>
+                  <Text className="text-muted/60 text-xs italic">
+                    {setting}
+                  </Text>
                 </>
               )}
             </View>
