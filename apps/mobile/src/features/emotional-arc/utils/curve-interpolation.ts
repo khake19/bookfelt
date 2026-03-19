@@ -66,7 +66,7 @@ export function getCubicBezierPath(points: Point[]): string {
     const afterNext = i < points.length - 2 ? points[i + 2] : next;
 
     // Calculate control points using Catmull-Rom algorithm
-    const tension = 0.3; // Lower = smoother, higher = more angular
+    const tension = 0.2; // Lower = smoother, higher = more angular
 
     const cp1x = current.x + (next.x - prev.x) * tension;
     const cp1y = current.y + (next.y - prev.y) * tension;
