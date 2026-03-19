@@ -3,6 +3,7 @@ import Svg, { Circle, Line, Polygon, G, Text as SvgText } from 'react-native-svg
 import { useMemo } from 'react';
 import type { ArcDataPoint } from '../utils/group-by-week';
 import type { EmotionRecord } from '../../entries/services/emotion.service';
+import { useThemeColors } from '../../../shared';
 
 interface EmotionalRadarChartProps {
   data: ArcDataPoint[];
@@ -16,13 +17,6 @@ interface CategoryData {
   color: string;
   count: number;
 }
-
-const CATEGORY_COLORS = {
-  positive: '#D4A843',
-  heavy: '#8B2D3A',
-  reflective: '#8B5CF6',
-  neutral: '#71717a',
-};
 
 const CATEGORY_LABELS = {
   positive: 'Positive',
@@ -38,8 +32,16 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
   const maxRadius = 140;
   const levels = 4;
 
+  const theme = useThemeColors();
+
   // Calculate average intensity per category
   const categoryData = useMemo(() => {
+    const colors = {
+      positive: theme.emotionPositive || '#b8a253',
+      heavy: theme.emotionHeavy || '#8a2d34',
+      reflective: theme.emotionReflective || '#69896b',
+      neutral: theme.emotionNeutral || '#766f63',
+    };
     const categories: Record<string, { totalIntensity: number; count: number }> = {
       positive: { totalIntensity: 0, count: 0 },
       heavy: { totalIntensity: 0, count: 0 },
@@ -70,7 +72,7 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
         category: category as CategoryData['category'],
         label: CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS],
         intensity: stats.count > 0 ? stats.totalIntensity / stats.count : 0,
-        color: CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS],
+        color: colors[category as keyof typeof colors],
         count: stats.count,
       })
     );
@@ -78,7 +80,7 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
     // Order: Positive (top), Heavy (right), Neutral (bottom), Reflective (left)
     const order = ['positive', 'heavy', 'neutral', 'reflective'];
     return order.map((cat) => radarData.find((d) => d.category === cat)!);
-  }, [data, emotionMap]);
+  }, [data, emotionMap, theme]);
 
   // Calculate radar points
   const radarPoints = useMemo(() => {

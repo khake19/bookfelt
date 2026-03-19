@@ -15,5 +15,9 @@ export function useThemeColors() {
     border: useHslColor("--border"),
     card: useHslColor("--card"),
     destructive: useHslColor("--destructive"),
+    emotionPositive: useHslColor("--emotion-positive"),
+    emotionHeavy: useHslColor("--emotion-heavy"),
+    emotionReflective: useHslColor("--emotion-reflective"),
+    emotionNeutral: useHslColor("--emotion-neutral"),
   };
 }

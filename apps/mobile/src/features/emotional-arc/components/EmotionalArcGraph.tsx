@@ -66,21 +66,16 @@ export function EmotionalArcGraph({ data }: EmotionalArcGraphProps) {
       ? formatDateRange(point.startDate, point.endDate)
       : formatDate(point.date);
 
-    const prevDateLabel = index > 0
-      ? (svgPoints[index - 1].startDate && svgPoints[index - 1].endDate
-          ? formatDateRange(svgPoints[index - 1].startDate, svgPoints[index - 1].endDate)
-          : formatDate(svgPoints[index - 1].date))
-      : null;
-
     return {
       ...point,
       dateLabel,
-      shouldShow: dateLabel !== prevDateLabel,
+      shouldShow: true, // Show all date labels
+      isAlternate: index % 2 === 1, // Alternate positioning
     };
   });
 
   return (
-    <View className="items-center">
+    <View className="items-center pb-8">
       <Svg
         width={dimensions.width}
         height={dimensions.height}
@@ -136,13 +131,30 @@ export function EmotionalArcGraph({ data }: EmotionalArcGraphProps) {
           />
         ))}
 
-        {/* Date labels */}
+        {/* Date label connector lines */}
+        {dateLabels.map((point, index) =>
+          point.shouldShow ? (
+            <Line
+              key={`line-${index}`}
+              x1={point.svgX}
+              y1={point.isAlternate ? dimensions.paddingY - 5 : dimensions.height - dimensions.paddingY + 5}
+              x2={point.svgX}
+              y2={point.isAlternate ? point.svgY - 15 : point.svgY + 15}
+              stroke="#666"
+              strokeWidth={1}
+              strokeDasharray="2 2"
+              opacity={0.25}
+            />
+          ) : null
+        )}
+
+        {/* Date labels - alternating top/bottom */}
         {dateLabels.map((point, index) =>
           point.shouldShow ? (
             <SvgText
               key={`date-${index}`}
               x={point.svgX}
-              y={dimensions.height - dimensions.paddingY + 20}
+              y={point.isAlternate ? dimensions.paddingY - 10 : dimensions.height - dimensions.paddingY + 20}
               fontSize="11"
               fill="#666"
               opacity={0.6}
