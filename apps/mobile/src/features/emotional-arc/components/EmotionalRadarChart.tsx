@@ -26,10 +26,10 @@ const CATEGORY_LABELS = {
 };
 
 export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartProps) {
-  const size = 340;
+  const size = 450;
   const centerX = size / 2;
   const centerY = size / 2;
-  const maxRadius = 140;
+  const maxRadius = 125;
   const levels = 4;
 
   const theme = useThemeColors();
@@ -94,8 +94,8 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
         ...category,
         x: centerX + radius * Math.cos(angle),
         y: centerY + radius * Math.sin(angle),
-        labelX: centerX + (maxRadius + 30) * Math.cos(angle),
-        labelY: centerY + (maxRadius + 30) * Math.sin(angle),
+        labelX: centerX + (maxRadius + 18) * Math.cos(angle),
+        labelY: centerY + (maxRadius + 18) * Math.sin(angle),
         angle,
       };
     });
@@ -108,7 +108,7 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
   }
 
   return (
-    <View className="items-center py-4 bg-card/30 rounded-2xl mx-4 my-6">
+    <View className="items-center py-4 bg-card/30 rounded-2xl mx-2 mb-6 px-6">
       <Text className="text-xs font-medium uppercase tracking-widest text-muted/70 mb-2">
         Emotional Balance
       </Text>
@@ -207,10 +207,11 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
                 x={point.labelX}
                 y={point.labelY}
                 fontSize="11"
-                fontWeight="500"
+                fontWeight="600"
                 fill={point.color}
                 textAnchor={isRight ? 'start' : isTop || isBottom ? 'middle' : 'end'}
                 alignmentBaseline={isTop ? 'baseline' : isBottom ? 'hanging' : 'middle'}
+                opacity={0.9}
               >
                 {point.label}
               </SvgText>
@@ -229,7 +230,9 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
                 className="w-2 h-2 rounded-full"
                 style={{ backgroundColor: category.color }}
               />
-              <Text className="text-xs text-foreground">{category.label}</Text>
+              <Text className="text-xs text-foreground">
+                {category.label}
+              </Text>
               <Text className="text-xs text-muted/60">
                 {Math.round(category.intensity * 100)}%
               </Text>

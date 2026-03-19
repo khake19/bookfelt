@@ -75,7 +75,11 @@ export function EmotionalArcGraph({ data }: EmotionalArcGraphProps) {
   });
 
   return (
-    <View className="items-center pb-8">
+    <View className="items-center py-4 bg-card/30 rounded-2xl mx-2 mb-3">
+      <Text className="text-xs font-medium uppercase tracking-widest text-muted/70 mb-2">
+        Emotional Journey
+      </Text>
+
       <Svg
         width={dimensions.width}
         height={dimensions.height}
