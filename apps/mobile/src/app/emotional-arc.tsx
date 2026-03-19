@@ -1,6 +1,8 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { ShareIcon } from 'react-native-heroicons/outline';
+import { useRef } from 'react';
 import { ScreenWrapper } from '../shared/components/ScreenWrapper';
 import CloseButton from '../shared/components/CloseButton';
 import {
@@ -8,6 +10,8 @@ import {
   EmotionalArcLegend,
   EmotionalRadarChart,
   useEmotionalArcData,
+  ShareableArcView,
+  useShareEmotionalArc,
 } from '../features/emotional-arc';
 import { useEmotionMap } from '../features/entries';
 
@@ -16,11 +20,34 @@ export default function EmotionalArcScreen() {
   const router = useRouter();
   const arcData = useEmotionalArcData(bookId || '');
   const emotionMap = useEmotionMap();
+  const shareableRef = useRef<View>(null);
+  const { share, isCapturing } = useShareEmotionalArc();
+
+  const handleShare = () => {
+    if (arcData.length === 0) {
+      return;
+    }
+    share(shareableRef, bookTitle);
+  };
 
   return (
     <ScreenWrapper>
       <View className="flex-row items-center justify-between mb-4">
         <CloseButton onPress={() => router.back()} />
+
+        {arcData.length > 0 && (
+          <Pressable
+            className="w-[30px] h-[30px] rounded-full bg-card items-center justify-center"
+            onPress={handleShare}
+            disabled={isCapturing}
+          >
+            {isCapturing ? (
+              <ActivityIndicator size="small" />
+            ) : (
+              <ShareIcon size={20} color="#8B5CF6" />
+            )}
+          </Pressable>
+        )}
       </View>
 
       <ScrollView
@@ -47,6 +74,18 @@ export default function EmotionalArcScreen() {
           </Animated.View>
         )}
       </ScrollView>
+
+      {/* Off-screen ShareableArcView for capture */}
+      {arcData.length > 0 && (
+        <View style={{ position: 'absolute', left: -9999 }}>
+          <ShareableArcView
+            ref={shareableRef}
+            data={arcData}
+            emotionMap={emotionMap}
+            bookTitle={bookTitle}
+          />
+        </View>
+      )}
     </ScreenWrapper>
   );
 }
