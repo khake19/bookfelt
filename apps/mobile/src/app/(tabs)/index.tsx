@@ -46,6 +46,9 @@ export default function HomeScreen() {
     ? emotionMap.get(latestEmotionId)
     : undefined;
 
+  // Create book lookup map for cover URLs
+  const bookMap = new Map(books.map((book) => [book.id, book]));
+
   const handlePress = (id: string) => {
     router.push({
       pathname: "/entry-detail",
@@ -66,23 +69,27 @@ export default function HomeScreen() {
     });
   };
 
-  const renderItem = ({ item }: { item: Entry }) => (
-    <Animated.View entering={FadeIn.duration(300)}>
-      <EntryCard
-        id={item.id}
-        title={item.bookTitle}
-        chapter={item.chapter ? `Chapter ${item.chapter}` : ""}
-        date={timeAgo(item.date)}
-        snippet={item.snippet}
-        reaction={item.reflection ?? ""}
-        emotionId={item.emotionId}
-        setting={item.setting}
-        reflectionUri={item.reflectionUri}
-        onPress={() => handlePress(item.id)}
-        onLongPress={() => handleLongPress(item.id)}
-      />
-    </Animated.View>
-  );
+  const renderItem = ({ item }: { item: Entry }) => {
+    const book = bookMap.get(item.bookId);
+    return (
+      <Animated.View entering={FadeIn.duration(300)}>
+        <EntryCard
+          id={item.id}
+          title={item.bookTitle}
+          chapter={item.chapter ? `Chapter ${item.chapter}` : ""}
+          date={timeAgo(item.date)}
+          snippet={item.snippet}
+          reaction={item.reflection ?? ""}
+          emotionId={item.emotionId}
+          setting={item.setting}
+          reflectionUri={item.reflectionUri}
+          bookCoverUrl={book?.coverUrl}
+          onPress={() => handlePress(item.id)}
+          onLongPress={() => handleLongPress(item.id)}
+        />
+      </Animated.View>
+    );
+  };
 
   const ListHeader = (
     <>
@@ -259,7 +266,6 @@ export default function HomeScreen() {
         onEndReachedThreshold={0.5}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
-        ItemSeparatorComponent={() => <View className="h-3" />}
       />
     </ScreenWrapper>
   );
