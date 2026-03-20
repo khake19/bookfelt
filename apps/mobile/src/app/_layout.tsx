@@ -5,7 +5,7 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { PortalHost } from '@rn-primitives/portal';
 import { SheetProvider } from 'react-native-actions-sheet';
 import Toast from '../shared/components/Toast';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import { database, seedEmotions } from '@bookfelt/database';
 import { DatabaseProvider } from '../providers/DatabaseProvider';
@@ -18,9 +18,19 @@ const queryClient = new QueryClient();
 function SyncManager() {
   const { user } = useAuth();
   const appState = useRef(AppState.currentState);
+  const [emotionsSeeded, setEmotionsSeeded] = useState(false);
+
+  // Seed emotions first before syncing
+  useEffect(() => {
+    seedEmotions(database).then(async () => {
+      const count = await database.get('emotions').query().fetchCount();
+      console.log('[SyncManager] Emotions seeded, count:', count);
+      setEmotionsSeeded(true);
+    });
+  }, []);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !emotionsSeeded) return;
 
     syncDatabase(user.id);
 
@@ -32,7 +42,7 @@ function SyncManager() {
     });
 
     return () => sub.remove();
-  }, [user]);
+  }, [user, emotionsSeeded]);
 
   return null;
 }
@@ -77,10 +87,6 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 }
 
 export default function RootLayout() {
-  useEffect(() => {
-    seedEmotions(database);
-  }, []);
-
   return (
     <AuthProvider>
       <SyncManager />
