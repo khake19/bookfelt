@@ -1,14 +1,12 @@
-import { map } from "rxjs";
-import type { Observable } from "rxjs";
 import { database, EntryModel } from "@bookfelt/database";
 import { Q } from "@nozbe/watermelondb";
-import type { Entry } from "../types/entry";
-import {
-  entryModelToEntry,
-  entryToCreateRaw,
-  entryUpdatesToRaw,
-} from "../converters/entry.converter";
+import type { Observable } from "rxjs";
+import { map } from "rxjs";
 import { deleteAudioFiles } from "../../../lib/audio-sync";
+import {
+  entryModelToEntry
+} from "../converters/entry.converter";
+import type { Entry } from "../types/entry";
 
 const entriesCollection = database.get<EntryModel>("entries");
 
@@ -21,7 +19,7 @@ export function observeRecentEntries(limit: number): Observable<Entry[]> {
       Q.sortBy("entry_created_at", Q.desc),
       Q.take(limit),
     )
-    .observeWithColumns(['updated_at'])
+    .observeWithColumns(["updated_at"])
     .pipe(map((records) => records.map(entryModelToEntry)));
 }
 
@@ -38,7 +36,7 @@ export function observeEntries(bookId?: string): Observable<Entry[]> {
       );
 
   return query
-    .observeWithColumns(['updated_at'])
+    .observeWithColumns(["updated_at"])
     .pipe(map((records) => records.map(entryModelToEntry)));
 }
 
@@ -101,17 +99,21 @@ export async function updateEntry(
     await database.write(async () => {
       const record = await entriesCollection.find(entryId);
       await record.update((rec) => {
-        if (updates.bookId !== undefined) rec.bookId = updates.bookId;
-        if (updates.bookTitle !== undefined) rec.bookTitle = updates.bookTitle;
-        if (updates.chapter !== undefined) rec.chapter = updates.chapter ?? null;
-        if (updates.page !== undefined) rec.page = updates.page ?? null;
-        if (updates.percent !== undefined) rec.percent = updates.percent ?? null;
-        if (updates.snippet !== undefined) rec.snippet = updates.snippet ?? null;
-        if (updates.emotionId !== undefined) rec.emotionId = updates.emotionId ?? null;
-        if (updates.reflection !== undefined) rec.reflection = updates.reflection ?? null;
-        if (updates.reflectionUri !== undefined) rec.reflectionUri = updates.reflectionUri ?? null;
-        if (updates.setting !== undefined) rec.setting = updates.setting ?? null;
-        if (updates.date !== undefined) rec.date = updates.date;
+        // Use decorated property setters to trigger change tracking
+        if ("bookId" in updates && updates.bookId) rec.bookId = updates.bookId;
+        if ("bookTitle" in updates && updates.bookTitle)
+          rec.bookTitle = updates.bookTitle;
+        if ("chapter" in updates) rec.chapter = updates.chapter ?? null;
+        if ("page" in updates) rec.page = updates.page ?? null;
+        if ("percent" in updates) rec.percent = updates.percent ?? null;
+        if ("snippet" in updates) rec.snippet = updates.snippet ?? null;
+        if ("emotionId" in updates) rec.emotionId = updates.emotionId ?? null;
+        if ("reflection" in updates)
+          rec.reflection = updates.reflection ?? null;
+        if ("reflectionUri" in updates)
+          rec.reflectionUri = updates.reflectionUri ?? null;
+        if ("setting" in updates) rec.setting = updates.setting ?? null;
+        if ("date" in updates && updates.date) rec.date = updates.date;
       });
     });
   } catch (error) {

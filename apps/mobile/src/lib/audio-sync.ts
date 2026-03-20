@@ -51,13 +51,17 @@ export async function deleteAudioFiles(
     if (isLocalUri(uri)) {
       try {
         const file = new File(uri);
-        if (await file.exists()) await file.delete();
+        if (file.exists) await file.delete();
       } catch (err) {
         console.error(`[audio-sync] local delete failed for ${uri}:`, err);
       }
     } else {
       const path = extractStoragePath(uri);
-      if (path) storagePaths.push(path);
+      if (path) {
+        storagePaths.push(path);
+      } else {
+        console.warn(`[audio-sync] failed to extract storage path from: ${uri}`);
+      }
     }
   }
 
@@ -67,10 +71,7 @@ export async function deleteAudioFiles(
       .remove(storagePaths);
 
     if (error) {
-      console.error(
-        `[audio-sync] storage delete failed:`,
-        error.message
-      );
+      console.error(`[audio-sync] storage delete failed:`, error.message);
     }
   }
 }

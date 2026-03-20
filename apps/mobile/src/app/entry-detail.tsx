@@ -1,7 +1,7 @@
 import { Button, Input } from "@bookfelt/ui";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Controller } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-reanimated";
@@ -25,6 +25,7 @@ import {
 } from "../shared";
 import { consumePendingSnippet } from "../shared/utils/pending-state";
 import { useTranscriptionStore } from "../shared/stores/transcription.store";
+import { deleteAudioFiles } from "../lib/audio-sync";
 
 const EntryDetailScreen = () => {
   const { mutedForeground } = useThemeColors();
@@ -50,13 +51,22 @@ const EntryDetailScreen = () => {
   const [reflectionUri, setReflectionUri] = useState<string | undefined>(
     existing?.reflectionUri,
   );
+  const hasUserDeletedAudio = useRef(false);
+  const audioToDeleteOnSave = useRef<string | null>(null);
 
   // Sync reflectionUri when existing entry loads (observer emits after mount)
+  // But don't override if user has manually deleted the audio
   useEffect(() => {
-    if (existing?.reflectionUri && !reflectionUri) {
+    if (existing?.reflectionUri && !reflectionUri && !hasUserDeletedAudio.current) {
       setReflectionUri(existing.reflectionUri);
     }
   }, [existing?.reflectionUri]);
+
+  // Reset the deletion flag when switching to a different entry
+  useEffect(() => {
+    hasUserDeletedAudio.current = false;
+    audioToDeleteOnSave.current = null;
+  }, [id]);
 
   useEffect(() => {
     const pending = consumePendingSnippet();
@@ -110,6 +120,15 @@ const EntryDetailScreen = () => {
       setting: values.setting || undefined,
       date: values.date.getTime(),
     };
+
+    // Delete audio file if user marked it for deletion
+    if (audioToDeleteOnSave.current) {
+      deleteAudioFiles([audioToDeleteOnSave.current]).catch(err =>
+        console.error('[entry-detail] Failed to delete audio:', err)
+      );
+      audioToDeleteOnSave.current = null;
+    }
+
     if (isNew) {
       const entryId = await addEntry(data);
       if (entryId && transcriptionStatus !== "idle") {
@@ -433,7 +452,14 @@ const EntryDetailScreen = () => {
           </Pressable>
           {reflectionUri && (
             <View className="pt-2">
-              <AudioPlayer uri={reflectionUri} />
+              <AudioPlayer
+                uri={reflectionUri}
+                onDelete={() => {
+                  audioToDeleteOnSave.current = reflectionUri;
+                  hasUserDeletedAudio.current = true;
+                  setReflectionUri(undefined);
+                }}
+              />
             </View>
           )}
         </View>

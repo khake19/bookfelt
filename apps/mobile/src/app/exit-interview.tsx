@@ -9,6 +9,7 @@ import AudioPlayer from "../features/entries/components/AudioPlayer";
 import VoiceIsland from "../features/entries/components/VoiceIsland";
 import { FocusModeOverlay, RichTextPreview, ScreenWrapper, TranscribingIndicator, useThemeColors } from "../shared";
 import { useTranscriptionStore } from "../shared/stores/transcription.store";
+import { deleteAudioFiles } from "../lib/audio-sync";
 
 export default function ExitInterviewScreen() {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
@@ -137,7 +138,16 @@ export default function ExitInterviewScreen() {
             </Pressable>
             {audioUri && (
               <View className="pt-2">
-                <AudioPlayer uri={audioUri} />
+                <AudioPlayer
+                  uri={audioUri}
+                  onDelete={() => {
+                    const uriToDelete = audioUri;
+                    setAudioUri(undefined);
+                    deleteAudioFiles([uriToDelete])
+                      .then(() => console.log('[exit-interview] Audio deleted'))
+                      .catch(err => console.error('[exit-interview] Delete failed:', err));
+                  }}
+                />
               </View>
             )}
           </Animated.View>

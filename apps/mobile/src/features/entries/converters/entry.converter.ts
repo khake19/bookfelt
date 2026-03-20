@@ -63,17 +63,18 @@ export function entryUpdatesToRaw(
   updates: Partial<Entry>,
 ): Partial<Record<string, unknown>> {
   const raw: Record<string, unknown> = {};
-  if (updates.bookId !== undefined) raw.book_id = updates.bookId;
-  if (updates.bookTitle !== undefined) raw.book_title = updates.bookTitle;
-  if (updates.chapter !== undefined) raw.chapter = updates.chapter ?? null;
-  if (updates.page !== undefined) raw.page = updates.page ?? null;
-  if (updates.percent !== undefined) raw.percent = updates.percent ?? null;
-  if (updates.snippet !== undefined) raw.snippet = updates.snippet ?? null;
-  if (updates.emotionId !== undefined) raw.emotion_id = updates.emotionId ?? null;
-  if (updates.reflection !== undefined)
-    raw.reflection = updates.reflection ?? null;
-  if (updates.reflectionUri !== undefined) raw.reflection_uri = updates.reflectionUri ?? null;
-  if (updates.setting !== undefined) raw.setting = updates.setting ?? null;
-  if (updates.date !== undefined) raw.date = updates.date;
+  if ("bookId" in updates && updates.bookId) raw.book_id = updates.bookId;
+  if ("bookTitle" in updates && updates.bookTitle)
+    raw.book_title = updates.bookTitle;
+  if ("chapter" in updates) raw.chapter = updates.chapter ?? null;
+  if ("page" in updates) raw.page = updates.page ?? null;
+  if ("percent" in updates) raw.percent = updates.percent ?? null;
+  if ("snippet" in updates) raw.snippet = updates.snippet ?? null;
+  if ("emotionId" in updates) raw.emotion_id = updates.emotionId ?? null;
+  if ("reflection" in updates) raw.reflection = updates.reflection ?? null;
+  if ("reflectionUri" in updates)
+    raw.reflection_uri = updates.reflectionUri ?? null;
+  if ("setting" in updates) raw.setting = updates.setting ?? null;
+  if ("date" in updates && updates.date) raw.date = updates.date;
   return raw;
 }
