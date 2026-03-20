@@ -11,19 +11,6 @@ interface AudioPlayerProps {
   onDelete?: () => void;
 }
 
-const NUM_BARS = 45;
-
-// Generate deterministic "waveform" from URI string
-function generateBars(uri: string): number[] {
-  let hash = 0;
-  for (let i = 0; i < uri.length; i++) {
-    hash = (hash * 31 + uri.charCodeAt(i)) | 0;
-  }
-  return Array.from({ length: NUM_BARS }, (_, i) => {
-    const v = Math.abs(Math.sin(hash * (i + 1) * 0.3)) * 0.7 + 0.3;
-    return v;
-  });
-}
 
 const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
   const { primary, muted, destructive } = useThemeColors();
@@ -36,8 +23,6 @@ const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
 
   // Validate URI
   const isValidUri = uri && uri.trim().length > 0 && (uri.startsWith('http://') || uri.startsWith('https://') || uri.startsWith('file://'));
-
-  const bars = useMemo(() => generateBars(uri), [uri]);
 
   const progress = durationMs > 0 ? positionMs / durationMs : 0;
 
@@ -70,14 +55,37 @@ const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
     if (!isValidUri) {
       console.warn('[AudioPlayer] Invalid URI detected:', uri);
       setHasError(true);
-    } else {
-      setHasError(false);
+      return;
     }
+
+    setHasError(false);
+
+    // Load audio to get duration without playing
+    const loadAudio = async () => {
+      try {
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true,
+        });
+
+        const { sound } = await Audio.Sound.createAsync(
+          { uri },
+          { shouldPlay: false, progressUpdateIntervalMillis: 100 },
+          onStatus
+        );
+        soundRef.current = sound;
+      } catch (error) {
+        console.error('[AudioPlayer] Failed to load audio:', error);
+        setHasError(true);
+      }
+    };
+
+    loadAudio();
 
     return () => {
       soundRef.current?.unloadAsync().catch(() => {});
     };
-  }, [uri, isValidUri]);
+  }, [uri, isValidUri, onStatus]);
 
   const togglePlay = async () => {
     if (hasError || !isValidUri) {
@@ -190,24 +198,21 @@ const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
       <Pressable
         onPress={handleSeek}
         onLayout={(e) => setWaveformWidth(e.nativeEvent.layout.width)}
-        className="flex-1 flex-row items-center gap-[2px] h-10"
+        className="flex-1 h-10 justify-center"
       >
-        {bars.map((level, i) => {
-          const filled = i / NUM_BARS < progress;
-          return (
-            <AnimatedBar
-              key={i}
-              level={level}
-              filled={filled}
-              primary={primary}
-              muted={muted ?? "gray"}
-            />
-          );
-        })}
+        <View className="h-1 bg-muted/20 rounded-full overflow-hidden">
+          <Animated.View
+            style={{
+              width: `${progress * 100}%`,
+              height: '100%',
+              backgroundColor: primary,
+            }}
+          />
+        </View>
       </Pressable>
 
       <Text className="text-xs text-muted tabular-nums">
-        {durationMs > 0 ? `-${formatTime(remainingMs)}` : ""}
+        {formatTime(positionMs)}/{durationMs > 0 ? formatTime(durationMs) : "--:--"}
       </Text>
 
       {onDelete && (
@@ -220,32 +225,6 @@ const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
         </Pressable>
       )}
     </View>
-  );
-};
-
-interface AnimatedBarProps {
-  level: number;
-  filled: boolean;
-  primary: string;
-  muted: string;
-}
-
-const AnimatedBar = ({ level, filled, primary, muted }: AnimatedBarProps) => {
-  const animatedStyle = useAnimatedStyle(() => {
-    const minHeight = 6 + level * 10;
-    const maxHeight = 6 + level * 22;
-    const targetHeight = filled ? maxHeight : minHeight;
-
-    return {
-      height: withTiming(targetHeight, { duration: 200 }),
-      backgroundColor: withTiming(filled ? primary : muted + "30", {
-        duration: 200,
-      }),
-    };
-  });
-
-  return (
-    <Animated.View className="rounded-full" style={[{ width: 2.5 }, animatedStyle]} />
   );
 };
 
