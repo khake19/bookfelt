@@ -12,8 +12,41 @@ import { DatabaseProvider } from '../providers/DatabaseProvider';
 import { AuthProvider, useAuth } from '../providers/AuthProvider';
 import { syncDatabase } from '../lib/sync';
 import { useOnboardingStep } from '../features/books/hooks/use-library';
+import { initializeRevenueCat, setUserId } from '@/services/revenuecat';
 
 const queryClient = new QueryClient();
+
+function RevenueCatManager() {
+  const { user } = useAuth();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize RevenueCat once on app start
+  useEffect(() => {
+    initializeRevenueCat()
+      .then(() => {
+        console.log('[RevenueCat] SDK initialized');
+        setIsInitialized(true);
+      })
+      .catch((error) => {
+        console.error('[RevenueCat] Initialization failed:', error);
+      });
+  }, []);
+
+  // Set user ID when logged in
+  useEffect(() => {
+    if (!isInitialized || !user) return;
+
+    setUserId(user.id)
+      .then(() => {
+        console.log('[RevenueCat] User ID set:', user.id);
+      })
+      .catch((error) => {
+        console.error('[RevenueCat] Failed to set user ID:', error);
+      });
+  }, [user, isInitialized]);
+
+  return null;
+}
 
 function SyncManager() {
   const { user } = useAuth();
@@ -89,6 +122,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 export default function RootLayout() {
   return (
     <AuthProvider>
+      <RevenueCatManager />
       <SyncManager />
       <DatabaseProvider>
         <QueryClientProvider client={queryClient}>

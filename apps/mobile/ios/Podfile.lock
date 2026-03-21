@@ -139,6 +139,11 @@ PODS:
     - ReactNativeDependencies
     - Yoga
   - PromisesObjC (2.4.0)
+  - PurchasesHybridCommon (17.52.0):
+    - RevenueCat (= 5.65.0)
+  - PurchasesHybridCommonUI (17.52.0):
+    - PurchasesHybridCommon (= 17.52.0)
+    - RevenueCatUI (= 5.65.0)
   - RCTDeprecation (0.81.5)
   - RCTRequired (0.81.5)
   - RCTTypeSafety (0.81.5):
@@ -1903,6 +1908,9 @@ PODS:
     - React-utils (= 0.81.5)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.81.5)
+  - RevenueCat (5.65.0)
+  - RevenueCatUI (5.65.0):
+    - RevenueCat (= 5.65.0)
   - RNCAsyncStorage (2.2.0):
     - hermes-engine
     - RCTRequired
@@ -1992,6 +2000,12 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - RNPaywalls (9.14.0):
+    - PurchasesHybridCommonUI (= 17.52.0)
+    - React-Core
+  - RNPurchases (9.14.0):
+    - PurchasesHybridCommon (= 17.52.0)
+    - React-Core
   - RNReanimated (4.1.6):
     - hermes-engine
     - RCTRequired
@@ -2363,6 +2377,8 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../../../node_modules/.pnpm/@react-native-community+datetimepicker@8.4.4_expo@54.0.33_react-native@0.81.5_@babel+co_2c041e9fff17daecb6f29e9df5ecc77e/node_modules/@react-native-community/datetimepicker`)"
   - "RNGestureHandler (from `../../../node_modules/.pnpm/react-native-gesture-handler@2.28.0_react-native@0.81.5_@babel+core@7.29.0_@types+react_18db092138149f473db19e5f912d822a/node_modules/react-native-gesture-handler`)"
   - "RNGoogleSignin (from `../../../node_modules/.pnpm/@react-native-google-signin+google-signin@16.1.2_expo@54.0.33_react-native@0.81.5_@babe_b721b586db6abf21ba06379200ea46b6/node_modules/@react-native-google-signin/google-signin`)"
+  - "RNPaywalls (from `../../../node_modules/.pnpm/react-native-purchases-ui@9.14.0_react-native-purchases@9.14.0_react-native-web@0.21.2__65667f1354ddcdde9fa73e30ec9cd63c/node_modules/react-native-purchases-ui`)"
+  - "RNPurchases (from `../../../node_modules/.pnpm/react-native-purchases@9.14.0_react-native-web@0.21.2_encoding@0.1.13_react-dom@19.1.0__64195f9ad6d88b6a3760fcc2dfaca88a/node_modules/react-native-purchases`)"
   - "RNReanimated (from `../../../node_modules/.pnpm/react-native-reanimated@4.1.6_@babel+core@7.29.0_react-native-worklets@0.7.4_@babel+cor_57ca3a675060f2c65bb32cda43e307b2/node_modules/react-native-reanimated`)"
   - "RNScreens (from `../../../node_modules/.pnpm/react-native-screens@4.16.0_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.1.17_react@19.1.0__react@19.1.0/node_modules/react-native-screens`)"
   - "RNSVG (from `../../../node_modules/.pnpm/react-native-svg@15.12.1_react-native@0.81.5_@babel+core@7.29.0_@types+react@19.1.17_react@19.1.0__react@19.1.0/node_modules/react-native-svg`)"
@@ -2383,6 +2399,10 @@ SPEC REPOS:
     - GTMSessionFetcher
     - lottie-ios
     - PromisesObjC
+    - PurchasesHybridCommon
+    - PurchasesHybridCommonUI
+    - RevenueCat
+    - RevenueCatUI
 
 EXTERNAL SOURCES:
   BVLinearGradient:
@@ -2570,6 +2590,10 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.pnpm/react-native-gesture-handler@2.28.0_react-native@0.81.5_@babel+core@7.29.0_@types+react_18db092138149f473db19e5f912d822a/node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../../../node_modules/.pnpm/@react-native-google-signin+google-signin@16.1.2_expo@54.0.33_react-native@0.81.5_@babe_b721b586db6abf21ba06379200ea46b6/node_modules/@react-native-google-signin/google-signin"
+  RNPaywalls:
+    :path: "../../../node_modules/.pnpm/react-native-purchases-ui@9.14.0_react-native-purchases@9.14.0_react-native-web@0.21.2__65667f1354ddcdde9fa73e30ec9cd63c/node_modules/react-native-purchases-ui"
+  RNPurchases:
+    :path: "../../../node_modules/.pnpm/react-native-purchases@9.14.0_react-native-web@0.21.2_encoding@0.1.13_react-dom@19.1.0__64195f9ad6d88b6a3760fcc2dfaca88a/node_modules/react-native-purchases"
   RNReanimated:
     :path: "../../../node_modules/.pnpm/react-native-reanimated@4.1.6_@babel+core@7.29.0_react-native-worklets@0.7.4_@babel+cor_57ca3a675060f2c65bb32cda43e307b2/node_modules/react-native-reanimated"
   RNScreens:
@@ -2618,6 +2642,8 @@ SPEC CHECKSUMS:
   lottie-ios: 8f959969761e9c45d70353667d00af0e5b9cadb3
   lottie-react-native: 6a080b2f109ef611c75c503a33ebb8ea75db0c91
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  PurchasesHybridCommon: 27cca251e01998c53a6b31bf53baf09f84926609
+  PurchasesHybridCommonUI: fb64dd31451c45a11aa9ac0cd40aac8c0a88b2d0
   RCTDeprecation: 943572d4be82d480a48f4884f670135ae30bf990
   RCTRequired: 8f3cfc90cc25cf6e420ddb3e7caaaabc57df6043
   RCTTypeSafety: 16a4144ca3f959583ab019b57d5633df10b5e97c
@@ -2686,11 +2712,15 @@ SPEC CHECKSUMS:
   ReactCodegen: c9eb09d19d92ef0ac865c03ed4f467b331842f58
   ReactCommon: 08810150b1206cc44aecf5f6ae19af32f29151a8
   ReactNativeDependencies: 71ce9c28beb282aa720ea7b46980fff9669f428a
+  RevenueCat: 9a37739bdf42af84dd87e023db340de7e0f9d874
+  RevenueCatUI: 1a503c1713ab8f598a0eb55e9954de7e3616aa5b
   RNCAsyncStorage: 3a4f5e2777dae1688b781a487923a08569e27fe4
   RNDateTimePicker: be0e44bcb9ed0607c7c5f47dbedd88cf091f6791
   RNGestureHandler: 2914750df066d89bf9d8f48a10ad5f0051108ac3
   RNGoogleSignin: 104dd7238c56fe354e4b0a8fd267f866039ffdf3
-  RNReanimated: 09ac9f012dc947150cfa530bf833b1477d325971
+  RNPaywalls: 352503f27fb76930ec7a1a3150570427c4141f7c
+  RNPurchases: 5090bc056e41a6d9b73cbee22cd4cf22e9efcb22
+  RNReanimated: afa98664ad1e29d95d1723a7032dd8f792961982
   RNScreens: d8d6f1792f6e7ac12b0190d33d8d390efc0c1845
   RNSVG: 31d6639663c249b7d5abc9728dde2041eb2a3c34
   RNWorklets: 9aafbe2a50f6bc960825de976d9de61a02112906

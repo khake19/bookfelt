@@ -33,7 +33,7 @@ export async function callEdgeFunction<T>(
 
   const url = `${SUPABASE_URL}/functions/v1/${functionName}`;
 
-  const headers: HeadersInit = {
+  const headers: HeadersInit_ = {
     Authorization: `Bearer ${session.access_token}`,
   };
 
