@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchGoogleBooks } from "@bookfelt/core";
+import { searchGoogleBooks } from "@/services/google-books";
 
 export function useSearchBooks(query: string) {
   return useQuery({

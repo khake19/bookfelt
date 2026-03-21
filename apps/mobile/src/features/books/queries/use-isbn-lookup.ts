@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { searchGoogleBooksByIsbn } from "@bookfelt/core";
+import { searchGoogleBooksByIsbn } from "@/services/google-books";
 
 export function useIsbnLookup() {
   return useMutation({

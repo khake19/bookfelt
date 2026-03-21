@@ -1,7 +1,7 @@
 import { Image, Pressable, Text, View } from "react-native";
 import { BookOpenIcon, PlusCircleIcon } from "react-native-heroicons/outline";
 import { useThemeColors } from "../../../shared";
-import type { GoogleBook } from "@bookfelt/core";
+import type { GoogleBook } from "@/services/google-books";
 
 interface BookSearchResultProps {
   book: GoogleBook;

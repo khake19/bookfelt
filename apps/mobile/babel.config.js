@@ -7,6 +7,15 @@ module.exports = function (api) {
     ],
     plugins: [
       ["@babel/plugin-proposal-decorators", { legacy: true }],
+      [
+        "module-resolver",
+        {
+          root: ["./src"],
+          alias: {
+            "@": "./src",
+          },
+        },
+      ],
     ],
   };
 };

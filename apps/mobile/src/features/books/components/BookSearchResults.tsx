@@ -4,7 +4,7 @@ import { useThemeColors } from "../../../shared";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import BookSearchResult from "./BookSearchResult";
-import type { GoogleBook } from "@bookfelt/core";
+import type { GoogleBook } from "@/services/google-books";
 import LottieView from "lottie-react-native";
 
 interface BookSearchResultsProps {

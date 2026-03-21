@@ -1,4 +1,4 @@
-import type { GoogleBook } from "@bookfelt/core";
+import type { GoogleBook } from "@/services/google-books";
 import { Button, Input } from "@bookfelt/ui";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
