@@ -10,6 +10,7 @@ import VoiceIsland from "../features/entries/components/VoiceIsland";
 import { FocusModeOverlay, RichTextPreview, ScreenWrapper, TranscribingIndicator, useThemeColors } from "../shared";
 import { useTranscriptionStore } from "../shared/stores/transcription.store";
 import { deleteAudioFiles } from "../lib/audio-sync";
+import { useBookLimits, CustomPaywall, UpgradePrompts } from "../features/premium";
 
 export default function ExitInterviewScreen() {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
@@ -17,11 +18,13 @@ export default function ExitInterviewScreen() {
   const { books, updateBook, updateStatus } = useLibrary();
   const book = books.find((b) => b.id === bookId);
   const { mutedForeground } = useThemeColors();
+  const { limits } = useBookLimits(bookId);
 
   const [exitNote, setExitNote] = useState("");
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [audioUri, setAudioUri] = useState<string | undefined>();
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const transcriptionStatus = useTranscriptionStore((s) => s.status);
   const transcriptionText = useTranscriptionStore((s) => s.text);
@@ -63,6 +66,14 @@ export default function ExitInterviewScreen() {
   const handleSkip = () => {
     updateStatus(bookId, "paused");
     router.dismissAll();
+  };
+
+  const handleVoicePress = () => {
+    if (!limits.bookends.canUse) {
+      UpgradePrompts.bookendLimit(() => setShowPaywall(true));
+      return;
+    }
+    setIsVoiceOpen(true);
   };
 
   if (!book) {
@@ -120,7 +131,7 @@ export default function ExitInterviewScreen() {
               className="border border-muted/30 rounded-2xl bg-card p-5 min-h-[120px]"
             >
               <Pressable
-                onPress={() => setIsVoiceOpen(true)}
+                onPress={handleVoicePress}
                 hitSlop={8}
                 className="absolute top-3 right-3 z-10 p-1"
               >
@@ -195,6 +206,12 @@ export default function ExitInterviewScreen() {
           onClose={() => setIsVoiceOpen(false)}
         />
       )}
+
+      <CustomPaywall
+        visible={showPaywall}
+        onDismiss={() => setShowPaywall(false)}
+        onPurchaseSuccess={() => setShowPaywall(false)}
+      />
     </ScreenWrapper>
   );
 }

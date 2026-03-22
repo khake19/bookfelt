@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Alert } from 'react-native';
 import { Portal } from '@rn-primitives/portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
@@ -24,6 +24,7 @@ import TextScannerOverlay from '../../features/entries/components/TextScannerOve
 import VoiceIsland from '../../features/entries/components/VoiceIsland';
 import { setPendingSnippet } from '../utils/pending-state';
 import { useTranscriptionStore } from '../stores/transcription.store';
+import { useBookLimits, CustomPaywall, UpgradePrompts } from '@/features/premium';
 
 const SPRING_CONFIG = { damping: 15, stiffness: 180 };
 const FAB_SIZE = 56;
@@ -88,6 +89,8 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
   const [isOpen, setIsOpen] = useState(false);
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
   const [isVoiceIslandOpen, setIsVoiceIslandOpen] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const { limits } = useBookLimits(primaryRead?.id);
 
   const toggle = () => {
     const opening = progress.value <= 0.5;
@@ -112,6 +115,14 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
 
   const handleAudio = () => {
     if (!primaryRead) return;
+
+    // Check if user can transcribe audio
+    if (!limits.audioTranscriptions.canUse) {
+      collapse();
+      UpgradePrompts.audioTranscriptionLimit(() => setShowPaywall(true));
+      return;
+    }
+
     collapse();
     setIsVoiceIslandOpen(true);
   };
@@ -127,13 +138,15 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
   const handleVoiceSave = async (audioUri: string) => {
     if (!primaryRead) return;
     useTranscriptionStore.getState().reset();
+
     const entryId = await addEntry({
       bookId: primaryRead.id,
       bookTitle: primaryRead.title,
-      reflectionUri: audioUri,
+      reflectionUri: audioUri, // Always save audio when transcribing
       date: Date.now(),
     });
     setIsVoiceIslandOpen(false);
+
     if (entryId) {
       const { startTranscription, registerEntryId } = useTranscriptionStore.getState();
       startTranscription(audioUri);
@@ -253,6 +266,11 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
             onClose={() => setIsVoiceIslandOpen(false)}
           />
         )}
+        <CustomPaywall
+          visible={showPaywall}
+          onDismiss={() => setShowPaywall(false)}
+          onPurchaseSuccess={() => setShowPaywall(false)}
+        />
       </Portal>
     </View>
   );

@@ -108,12 +108,20 @@ export function CustomPaywall({
 
           {/* Features */}
           <View className="px-6 py-4 gap-3">
-            <FeatureItem text="Unlimited book summaries" />
-            <FeatureItem text="Unlimited audio transcription" />
-            <FeatureItem text="Cloud audio backup" />
-            <FeatureItem text="Premium emotions & themes" />
-            <FeatureItem text="Export to PDF & Markdown" />
-            <FeatureItem text="Priority support" />
+            <FeatureItem text="Unlimited audio transcriptions" />
+            <FeatureItem text="Unlimited AI summaries" />
+            <FeatureItem text="Cloud sync for audio files" />
+            <FeatureItem text="Regenerate summaries anytime" />
+          </View>
+
+          {/* What's included in Free */}
+          <View className="px-6 py-2">
+            <Text className="text-xs text-muted/70 uppercase tracking-wider mb-2">
+              Free plan includes
+            </Text>
+            <Text className="text-xs text-muted leading-relaxed">
+              15 audio transcriptions • 3 bookends (first impression, final thought, exit note) • 1 summary per book
+            </Text>
           </View>
 
           {/* Pricing */}

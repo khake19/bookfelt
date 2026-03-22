@@ -3,11 +3,13 @@ import { generateBookSummary } from "@/services/summarize";
 import * as libraryService from "../services/library.service";
 import * as entryService from "../../entries/services/entry.service";
 import { database, EmotionModel } from "@bookfelt/database";
+import { useBookLimits } from "@/features/premium";
 
 type SummaryState =
   | { kind: "loading" }
   | { kind: "done"; text: string }
-  | { kind: "error" };
+  | { kind: "error" }
+  | { kind: "blocked"; reason: string };
 
 export function useBookSummary(
   bookId: string,
@@ -16,8 +18,18 @@ export function useBookSummary(
   const [state, setState] = useState<SummaryState>({ kind: "loading" });
   const [bookTitle, setBookTitle] = useState("");
   const abortRef = useRef<AbortController | null>(null);
+  const { limits } = useBookLimits(bookId);
 
   const generate = async () => {
+    // Check if user can generate summary
+    if (!limits.summary.canGenerate) {
+      setState({
+        kind: "blocked",
+        reason: limits.summary.reason || "Upgrade to Premium for summaries",
+      });
+      return;
+    }
+
     setState({ kind: "loading" });
 
     const controller = new AbortController();

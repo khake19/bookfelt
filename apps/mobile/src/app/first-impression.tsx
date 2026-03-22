@@ -10,6 +10,7 @@ import VoiceIsland from "../features/entries/components/VoiceIsland";
 import { FocusModeOverlay, RichTextPreview, ScreenWrapper, TranscribingIndicator, useThemeColors } from "../shared";
 import { useTranscriptionStore } from "../shared/stores/transcription.store";
 import { deleteAudioFiles } from "../lib/audio-sync";
+import { useBookLimits, CustomPaywall, UpgradePrompts } from "../features/premium";
 
 export default function FirstImpressionScreen() {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();
@@ -17,11 +18,13 @@ export default function FirstImpressionScreen() {
   const { books, updateBook } = useLibrary();
   const book = books.find((b) => b.id === bookId);
   const { mutedForeground } = useThemeColors();
+  const { limits } = useBookLimits(bookId);
 
   const [firstImpression, setFirstImpression] = useState("");
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [audioUri, setAudioUri] = useState<string | undefined>();
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const transcriptionStatus = useTranscriptionStore((s) => s.status);
   const transcriptionText = useTranscriptionStore((s) => s.text);
@@ -50,6 +53,14 @@ export default function FirstImpressionScreen() {
 
   const handleSkip = () => {
     router.dismissAll();
+  };
+
+  const handleVoicePress = () => {
+    if (!limits.bookends.canUse) {
+      UpgradePrompts.bookendLimit(() => setShowPaywall(true));
+      return;
+    }
+    setIsVoiceOpen(true);
   };
 
   if (!book) {
@@ -119,7 +130,7 @@ export default function FirstImpressionScreen() {
               className="border border-primary/30 rounded-2xl bg-card p-5 min-h-[120px]"
             >
               <Pressable
-                onPress={() => setIsVoiceOpen(true)}
+                onPress={handleVoicePress}
                 hitSlop={8}
                 className="absolute top-3 right-3 z-10 p-1"
               >
@@ -190,6 +201,12 @@ export default function FirstImpressionScreen() {
           onClose={() => setIsVoiceOpen(false)}
         />
       )}
+
+      <CustomPaywall
+        visible={showPaywall}
+        onDismiss={() => setShowPaywall(false)}
+        onPurchaseSuccess={() => setShowPaywall(false)}
+      />
     </ScreenWrapper>
   );
 }
