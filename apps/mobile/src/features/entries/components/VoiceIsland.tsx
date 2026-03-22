@@ -25,9 +25,7 @@ import { StopIcon } from "react-native-heroicons/solid";
 const DEFAULT_MAX_DURATION_S = 60;
 const NUM_BARS = 32;
 const PILL_H_MARGIN = 16;
-
 const ISLAND_BG = "hsl(20, 25%, 12%)";
-
 const COVER_SIZE = 36;
 
 type Phase = "permission" | "recording" | "stopped";
@@ -215,6 +213,8 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, maxDurationS = DEFAU
           backgroundColor: ISLAND_BG,
           borderRadius: 28,
           overflow: "hidden",
+          borderWidth: 1.5,
+          borderColor: "rgba(255, 255, 255, 0.3)",
         }}
       >
         {/* Recording state */}
