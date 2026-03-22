@@ -185,9 +185,23 @@ export async function updateBook(
   try {
     await database.write(async () => {
       const record = await booksCollection.find(bookId);
-      const fields = bookUpdatesToRaw(updates);
-      await record.update(() => {
-        Object.assign(record._raw, fields);
+      await record.update((rec) => {
+        // Use decorated property setters to trigger change tracking
+        if ("title" in updates) rec.title = updates.title!;
+        if ("authors" in updates) rec.authors = updates.authors!;
+        if ("description" in updates) rec.description = updates.description ?? null;
+        if ("pageCount" in updates) rec.pageCount = updates.pageCount ?? null;
+        if ("coverUrl" in updates) rec.coverUrl = updates.coverUrl ?? null;
+        if ("isbn" in updates) rec.isbn = updates.isbn ?? null;
+        if ("publisher" in updates) rec.publisher = updates.publisher ?? null;
+        if ("publishedDate" in updates) rec.publishedDate = updates.publishedDate ?? null;
+        if ("firstImpression" in updates) rec.firstImpression = updates.firstImpression ?? null;
+        if ("finalThought" in updates) rec.finalThought = updates.finalThought ?? null;
+        if ("exitNote" in updates) rec.exitNote = updates.exitNote ?? null;
+        if ("summary" in updates) rec.summary = updates.summary ?? null;
+        if ("firstImpressionAudioUri" in updates) rec.firstImpressionAudioUri = updates.firstImpressionAudioUri ?? null;
+        if ("finalThoughtAudioUri" in updates) rec.finalThoughtAudioUri = updates.finalThoughtAudioUri ?? null;
+        if ("exitNoteAudioUri" in updates) rec.exitNoteAudioUri = updates.exitNoteAudioUri ?? null;
       });
     });
   } catch (error) {

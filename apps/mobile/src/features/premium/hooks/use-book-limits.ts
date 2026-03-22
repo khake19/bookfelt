@@ -48,9 +48,10 @@ export function useBookLimits(bookId?: string) {
   const canSaveAudioFiles = canTranscribeAudio;
 
   // Summary: 1 per book (check if current book already has summary)
-  const currentBook = books.find((b) => b.id === bookId);
+  const currentBook = bookId ? books.find((b) => b.id === bookId) : undefined;
   const hasSummary = !!currentBook?.summary;
-  const canGenerateSummary = isPremium || !hasSummary;
+  // Only allow generation if we have a book AND (user is premium OR book doesn't have summary yet)
+  const canGenerateSummary = !!currentBook && (isPremium || !hasSummary);
 
   // Count total bookends used across all books
   const totalBookendsUsed = books.reduce((sum, book) => {
