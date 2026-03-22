@@ -1,9 +1,9 @@
 import { View, Text, Pressable, ScrollView, ActivityIndicator } from "react-native";
 import { SparklesIcon, CreditCardIcon } from "react-native-heroicons/solid";
 import { useState } from "react";
-import { usePremiumStatus } from "../hooks/use-premium-status";
-import { PremiumBadge } from "../components/PremiumBadge";
-import { PaywallScreen } from "../components/PaywallScreen";
+import { usePremiumStatus } from "@/features/premium/hooks/use-premium-status";
+import { PremiumBadge } from "@/features/premium/components/PremiumBadge";
+import { PaywallScreen } from "@/features/premium/components/PaywallScreen";
 import { CustomerCenterScreen } from "./CustomerCenterScreen";
 
 /**

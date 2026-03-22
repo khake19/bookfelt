@@ -15,14 +15,14 @@ import {
 } from "react-native";
 import { PencilIcon } from "react-native-heroicons/outline";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import BookSearchInput from "../features/books/components/BookSearchInput";
-import BookSearchResults from "../features/books/components/BookSearchResults";
-import IsbnScannerOverlay from "../features/books/components/IsbnScannerOverlay";
-import { useLibrary } from "../features/books/hooks/use-library";
-import { useIsbnLookup } from "../features/books/queries/use-isbn-lookup";
-import { useSearchBooks } from "../features/books/queries/use-search-books";
-import type { Book, ReadingStatus } from "../features/books/types/book";
-import { CloseButton, ScreenWrapper, useThemeColors } from "../shared";
+import BookSearchInput from "@/features/books/components/BookSearchInput";
+import BookSearchResults from "@/features/books/components/BookSearchResults";
+import IsbnScannerOverlay from "@/features/books/components/IsbnScannerOverlay";
+import { useLibrary } from "@/features/books/hooks/use-library";
+import { useIsbnLookup } from "@/features/books/queries/use-isbn-lookup";
+import { useSearchBooks } from "@/features/books/queries/use-search-books";
+import type { Book, ReadingStatus } from "@/features/books/types/book";
+import { CloseButton, ScreenWrapper, useThemeColors } from "@/shared";
 
 type ScreenMode =
   | { kind: "search" }

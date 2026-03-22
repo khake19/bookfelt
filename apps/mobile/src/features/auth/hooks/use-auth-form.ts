@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
-import { authFormSchema, signUpFormSchema, type SignUpFormValues } from "../schemas/auth-form";
+import { authFormSchema, signUpFormSchema, type SignUpFormValues } from "@/features/auth/schemas/auth-form";
 
 export const useAuthForm = (isSignUp: boolean) => {
   return useForm<SignUpFormValues>({

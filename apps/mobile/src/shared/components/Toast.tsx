@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Text } from 'react-native';
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useToastStore } from '../stores/toast.store';
+import { useToastStore } from '@/shared/stores/toast.store';
 
 const AUTO_DISMISS_MS = 3000;
 const ISLAND_BG = 'hsl(20, 25%, 12%)';

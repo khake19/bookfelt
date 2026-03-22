@@ -5,24 +5,24 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Image, Keyboard, Pressable, ScrollView, Text, View } from "react-native";
 import { MicrophoneIcon, PencilIcon } from "react-native-heroicons/outline";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import BookSearchInput from "../features/books/components/BookSearchInput";
-import BookSearchResults from "../features/books/components/BookSearchResults";
-import IsbnScannerOverlay from "../features/books/components/IsbnScannerOverlay";
-import { useIsbnLookup } from "../features/books/queries/use-isbn-lookup";
-import { useLibrary, useOnboardingStep } from "../features/books/hooks/use-library";
-import { useSearchBooks } from "../features/books/queries/use-search-books";
-import { setOnboardingStep } from "../features/books/services/library.service";
-import type { Book } from "../features/books/types/book";
-import AudioPlayer from "../features/entries/components/AudioPlayer";
-import VoiceIsland from "../features/entries/components/VoiceIsland";
+import BookSearchInput from "@/features/books/components/BookSearchInput";
+import BookSearchResults from "@/features/books/components/BookSearchResults";
+import IsbnScannerOverlay from "@/features/books/components/IsbnScannerOverlay";
+import { useIsbnLookup } from "@/features/books/queries/use-isbn-lookup";
+import { useLibrary, useOnboardingStep } from "@/features/books/hooks/use-library";
+import { useSearchBooks } from "@/features/books/queries/use-search-books";
+import { setOnboardingStep } from "@/features/books/services/library.service";
+import type { Book } from "@/features/books/types/book";
+import AudioPlayer from "@/features/entries/components/AudioPlayer";
+import VoiceIsland from "@/features/entries/components/VoiceIsland";
 import {
   FocusModeOverlay,
   RichTextPreview,
   ScreenWrapper,
   TranscribingIndicator,
   useThemeColors,
-} from "../shared";
-import { useTranscriptionStore } from "../shared/stores/transcription.store";
+} from "@/shared";
+import { useTranscriptionStore } from "@/shared/stores/transcription.store";
 
 export default function OnboardingScreen() {
   const step = useOnboardingStep();

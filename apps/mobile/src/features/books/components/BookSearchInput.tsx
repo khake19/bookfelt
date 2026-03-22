@@ -5,7 +5,7 @@ import {
   ViewfinderCircleIcon,
   XMarkIcon,
 } from "react-native-heroicons/outline";
-import { useThemeColors } from "../../../shared";
+import { useThemeColors } from "@/shared";
 
 interface BookSearchInputProps {
   value: string;

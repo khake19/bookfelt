@@ -1,7 +1,7 @@
 import { combineLatest, map } from "rxjs";
-import { useObservable } from "../../../shared/hooks/use-observable";
-import * as libraryService from "../services/library.service";
-import type { LibraryBook } from "../types/book";
+import { useObservable } from "@/shared/hooks/use-observable";
+import * as libraryService from "@/features/books/services/library.service";
+import type { LibraryBook } from "@/features/books/types/book";
 
 const primaryRead$ = combineLatest([
   libraryService.books$,

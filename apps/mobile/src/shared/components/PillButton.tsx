@@ -1,6 +1,6 @@
 import { Pressable, Text, type PressableProps } from "react-native";
 import { PlusIcon } from "react-native-heroicons/outline";
-import { useThemeColors } from "../hooks/use-theme-colors";
+import { useThemeColors } from "@/shared/hooks/use-theme-colors";
 
 interface PillButtonProps extends PressableProps {
   label: string;

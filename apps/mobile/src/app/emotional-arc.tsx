@@ -3,8 +3,8 @@ import { View, Text, ScrollView, Pressable, ActivityIndicator } from 'react-nati
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { ShareIcon } from 'react-native-heroicons/outline';
 import { useRef } from 'react';
-import { ScreenWrapper } from '../shared/components/ScreenWrapper';
-import CloseButton from '../shared/components/CloseButton';
+import { ScreenWrapper } from '@/shared/components/ScreenWrapper';
+import CloseButton from '@/shared/components/CloseButton';
 import {
   EmotionalArcGraph,
   EmotionalArcLegend,
@@ -12,8 +12,8 @@ import {
   useEmotionalArcData,
   ShareableArcView,
   useShareEmotionalArc,
-} from '../features/emotional-arc';
-import { useEmotionMap } from '../features/entries';
+} from '@/features/emotional-arc';
+import { useEmotionMap } from '@/features/entries';
 
 export default function EmotionalArcScreen() {
   const { bookId, bookTitle } = useLocalSearchParams<{ bookId: string; bookTitle?: string }>();

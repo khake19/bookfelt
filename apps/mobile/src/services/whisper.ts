@@ -1,4 +1,4 @@
-import { callEdgeFunction } from "../lib/edge-functions";
+import { callEdgeFunction } from "@/lib/edge-functions";
 
 export async function transcribeAudio(
   fileUri: string,

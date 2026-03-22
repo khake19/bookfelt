@@ -2,13 +2,13 @@ import { map, shareReplay } from "rxjs";
 import type { Observable } from "rxjs";
 import { database, BookModel, SettingModel } from "@bookfelt/database";
 import { Q } from "@nozbe/watermelondb";
-import type { Book, LibraryBook, ReadingStatus } from "../types/book";
+import type { Book, LibraryBook, ReadingStatus } from "@/features/books/types/book";
 import {
   bookModelToLibraryBook,
   bookToCreateRaw,
   bookUpdatesToRaw,
-} from "../converters/book.converter";
-import { deleteAudioFiles } from "../../../lib/audio-sync";
+} from "@/features/books/converters/book.converter";
+import { deleteAudioFiles } from "@/lib/audio-sync";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RawRecord = any;

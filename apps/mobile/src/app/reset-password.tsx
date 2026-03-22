@@ -3,10 +3,10 @@ import { Controller } from "react-hook-form";
 import { Image, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { supabase } from "../lib/supabase";
-import { useResetPasswordForm, updatePassword } from "../features/auth";
-import { useToastStore } from "../shared/stores/toast.store";
-import { ScreenWrapper } from "../shared";
+import { supabase } from "@/lib/supabase";
+import { useResetPasswordForm, updatePassword } from "@/features/auth";
+import { useToastStore } from "@/shared/stores/toast.store";
+import { ScreenWrapper } from "@/shared";
 
 export default function ResetPasswordScreen() {
   const [isReady, setIsReady] = useState(false);

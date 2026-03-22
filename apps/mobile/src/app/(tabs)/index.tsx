@@ -13,22 +13,22 @@ import { BookOpenIcon } from "react-native-heroicons/outline";
 import { SparklesIcon } from "react-native-heroicons/solid";
 import LinearGradient from "react-native-linear-gradient";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
-import { useLibrary } from "../../features/books/hooks/use-library";
+import { useLibrary } from "@/features/books/hooks/use-library";
 import {
   EntryCard,
   useEmotionMap,
   useEntries,
   useRecentEntries,
-} from "../../features/entries";
-import type { Entry } from "../../features/entries";
+} from "@/features/entries";
+import type { Entry } from "@/features/entries";
 import {
   PillButton,
   ScreenWrapper,
   timeAgo,
   useThemeColors,
-} from "../../shared";
-import { SHEET_IDS } from "../../shared/constants/sheet-ids";
-import { useAuth } from "../../providers/AuthProvider";
+} from "@/shared";
+import { SHEET_IDS } from "@/shared/constants/sheet-ids";
+import { useAuth } from "@/providers/AuthProvider";
 import { useState } from "react";
 import { PaywallScreen, CustomPaywall, usePremiumStatus } from "@/features/premium";
 

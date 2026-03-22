@@ -1,6 +1,6 @@
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeOut, LinearTransition } from "react-native-reanimated";
-import { LibraryBook } from "../types/book";
+import { LibraryBook } from "@/features/books/types/book";
 
 interface LibraryBookRowProps {
   book: LibraryBook;

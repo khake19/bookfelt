@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import {
   forgotPasswordFormSchema,
   type ForgotPasswordFormValues,
-} from "../schemas/forgot-password-form";
+} from "@/features/auth/schemas/forgot-password-form";
 
 export const useForgotPasswordForm = () => {
   return useForm<ForgotPasswordFormValues>({

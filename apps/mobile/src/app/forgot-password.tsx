@@ -6,9 +6,9 @@ import { useRouter } from "expo-router";
 import {
   useForgotPasswordForm,
   resetPasswordForEmail,
-} from "../features/auth";
-import { useToastStore } from "../shared/stores/toast.store";
-import { ScreenWrapper } from "../shared";
+} from "@/features/auth";
+import { useToastStore } from "@/shared/stores/toast.store";
+import { ScreenWrapper } from "@/shared";
 
 export default function ForgotPasswordScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);

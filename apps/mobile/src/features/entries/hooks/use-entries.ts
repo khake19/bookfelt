@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { useObservable } from "../../../shared/hooks/use-observable";
-import * as entryService from "../services/entry.service";
+import { useObservable } from "@/shared/hooks/use-observable";
+import * as entryService from "@/features/entries/services/entry.service";
 
 export function useEntries(bookId?: string) {
   const entries$ = useMemo(

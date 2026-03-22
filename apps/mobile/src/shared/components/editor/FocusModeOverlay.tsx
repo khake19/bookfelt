@@ -17,7 +17,7 @@ import {
   HardBreakBridge,
   PlaceholderBridge,
 } from "@10play/tentap-editor";
-import CloseButton from "../CloseButton";
+import CloseButton from "@/shared/components/CloseButton";
 import FloatingToolbar from "./FloatingToolbar";
 
 const SELECTION_LISTENER_JS = `

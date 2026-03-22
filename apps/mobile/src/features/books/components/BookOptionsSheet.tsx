@@ -3,8 +3,8 @@ import ActionSheet, {
   SheetManager,
   SheetProps,
 } from "react-native-actions-sheet";
-import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
-import { SHEET_IDS } from "../../../shared/constants/sheet-ids";
+import { useThemeColors } from "@/shared/hooks/use-theme-colors";
+import { SHEET_IDS } from "@/shared/constants/sheet-ids";
 
 export default function BookOptionsSheet({
   sheetId,

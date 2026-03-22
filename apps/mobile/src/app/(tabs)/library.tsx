@@ -4,10 +4,10 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 
 import { useRouter } from "expo-router";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
-import LibraryBookRow from "../../features/books/components/LibraryBookRow";
-import { useLibrary } from "../../features/books/hooks/use-library";
-import type { ReadingStatus } from "../../features/books/types/book";
-import { PillButton, ScreenWrapper } from "../../shared";
+import LibraryBookRow from "@/features/books/components/LibraryBookRow";
+import { useLibrary } from "@/features/books/hooks/use-library";
+import type { ReadingStatus } from "@/features/books/types/book";
+import { PillButton, ScreenWrapper } from "@/shared";
 
 type Filter = "all" | ReadingStatus;
 

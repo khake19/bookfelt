@@ -1,8 +1,8 @@
 import { forwardRef } from 'react';
 import { View, Text } from 'react-native';
-import type { ArcDataPoint } from '../utils/group-by-week';
-import type { EmotionRecord } from '../../entries/services/emotion.service';
-import { useThemeColors } from '../../../shared';
+import type { ArcDataPoint } from '@/features/emotional-arc/utils/group-by-week';
+import type { EmotionRecord } from '@/features/entries/services/emotion.service';
+import { useThemeColors } from '@/shared';
 import { EmotionalArcLegend } from './EmotionalArcLegend';
 import { EmotionalArcGraph } from './EmotionalArcGraph';
 import { EmotionalRadarChart } from './EmotionalRadarChart';

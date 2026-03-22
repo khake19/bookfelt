@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { MicrophoneIcon } from "react-native-heroicons/outline";
-import { useLibrary } from "../features/books/hooks/use-library";
-import AudioPlayer from "../features/entries/components/AudioPlayer";
-import VoiceIsland from "../features/entries/components/VoiceIsland";
-import { FocusModeOverlay, RichTextPreview, ScreenWrapper, TranscribingIndicator, useThemeColors } from "../shared";
-import { useTranscriptionStore } from "../shared/stores/transcription.store";
-import { deleteAudioFiles } from "../lib/audio-sync";
-import { useBookLimits, CustomPaywall, UpgradePrompts } from "../features/premium";
+import { useLibrary } from "@/features/books/hooks/use-library";
+import AudioPlayer from "@/features/entries/components/AudioPlayer";
+import VoiceIsland from "@/features/entries/components/VoiceIsland";
+import { FocusModeOverlay, RichTextPreview, ScreenWrapper, TranscribingIndicator, useThemeColors } from "@/shared";
+import { useTranscriptionStore } from "@/shared/stores/transcription.store";
+import { deleteAudioFiles } from "@/lib/audio-sync";
+import { useBookLimits, CustomPaywall, UpgradePrompts } from "@/features/premium";
 
 export default function FirstImpressionScreen() {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();

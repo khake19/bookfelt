@@ -1,5 +1,5 @@
 import { Image, Pressable, Text, View } from "react-native";
-import { useEmotionMap } from "../hooks/use-emotions";
+import { useEmotionMap } from "@/features/entries/hooks/use-emotions";
 import AudioPlayer from "./AudioPlayer";
 
 const stripHtml = (html: string) =>

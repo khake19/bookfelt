@@ -1,6 +1,6 @@
-import { useObservable } from "../../../shared";
-import { emotions$, emotionMap$ } from "../services/emotion.service";
-import type { EmotionRecord } from "../services/emotion.service";
+import { useObservable } from "@/shared";
+import { emotions$, emotionMap$ } from "@/features/entries/services/emotion.service";
+import type { EmotionRecord } from "@/features/entries/services/emotion.service";
 
 export function useObserveEmotions(): EmotionRecord[] {
   return useObservable(emotions$, []);

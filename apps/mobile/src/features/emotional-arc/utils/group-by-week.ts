@@ -1,5 +1,5 @@
-import type { Entry } from '../../entries/types/entry';
-import type { EmotionRecord } from '../../entries/services/emotion.service';
+import type { Entry } from '@/features/entries/types/entry';
+import type { EmotionRecord } from '@/features/entries/services/emotion.service';
 
 export interface ArcDataPoint {
   x: number;

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { transcribeAudio } from '@/services/whisper';
-import { updateEntry } from '../../features/entries/services/entry.service';
+import { updateEntry } from '@/features/entries/services/entry.service';
 import { useToastStore } from './toast.store';
 
 type TranscriptionStatus = 'idle' | 'transcribing' | 'completed' | 'failed';

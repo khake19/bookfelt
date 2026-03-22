@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { Audio, AVPlaybackStatus } from "expo-av";
 import { PlayIcon, PauseIcon } from "react-native-heroicons/solid";
 import { TrashIcon } from "react-native-heroicons/outline";
-import { useThemeColors } from "../../../shared/hooks/use-theme-colors";
+import { useThemeColors } from "@/shared/hooks/use-theme-colors";
 
 interface AudioPlayerProps {
   uri: string;

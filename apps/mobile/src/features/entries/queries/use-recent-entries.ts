@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useRef } from "react";
-import { useObservable } from "../../../shared";
-import * as entryService from "../services/entry.service";
+import { useObservable } from "@/shared";
+import * as entryService from "@/features/entries/services/entry.service";
 
 const PAGE_SIZE = 20;
 

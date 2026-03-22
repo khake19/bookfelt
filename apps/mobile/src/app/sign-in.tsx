@@ -13,9 +13,9 @@ import {
   signInWithEmail,
   signUpWithEmail,
   signInWithGoogleToken,
-} from "../features/auth";
-import { useToastStore } from "../shared/stores/toast.store";
-import { ScreenWrapper } from "../shared";
+} from "@/features/auth";
+import { useToastStore } from "@/shared/stores/toast.store";
+import { ScreenWrapper } from "@/shared";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,

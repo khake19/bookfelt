@@ -24,10 +24,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useLibrary } from "../features/books/hooks/use-library";
-import type { ReadingStatus } from "../features/books/types/book";
-import { useEmotionMap, useEntries } from "../features/entries";
-import AudioPlayer from "../features/entries/components/AudioPlayer";
+import { useLibrary } from "@/features/books/hooks/use-library";
+import type { ReadingStatus } from "@/features/books/types/book";
+import { useEmotionMap, useEntries } from "@/features/entries";
+import AudioPlayer from "@/features/entries/components/AudioPlayer";
 import {
   CloseButton,
   PillButton,
@@ -36,8 +36,8 @@ import {
   stripHtml,
   timeAgo,
   useThemeColors,
-} from "../shared";
-import { SHEET_IDS } from "../shared/constants/sheet-ids";
+} from "@/shared";
+import { SHEET_IDS } from "@/shared/constants/sheet-ids";
 
 function RippleDot({ color, delay = 0 }: { color: string; delay?: number }) {
   const ripple1 = useSharedValue(0);

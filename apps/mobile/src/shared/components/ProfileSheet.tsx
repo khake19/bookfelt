@@ -4,10 +4,10 @@ import ActionSheet, {
   SheetProps,
 } from "react-native-actions-sheet";
 import { ArrowRightStartOnRectangleIcon } from "react-native-heroicons/outline";
-import { useAuth } from "../../providers/AuthProvider";
-import { signOut } from "../../features/auth";
-import { useToastStore } from "../stores/toast.store";
-import { useThemeColors } from "../hooks/use-theme-colors";
+import { useAuth } from "@/providers/AuthProvider";
+import { signOut } from "@/features/auth";
+import { useToastStore } from "@/shared/stores/toast.store";
+import { useThemeColors } from "@/shared/hooks/use-theme-colors";
 
 export default function ProfileSheet({
   sheetId,

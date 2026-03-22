@@ -4,13 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { useLibrary } from "../features/books/hooks/use-library";
+import { useLibrary } from "@/features/books/hooks/use-library";
 import {
   bookFormSchema,
   type BookFormValues,
-} from "../features/books/schemas/book-form";
-import AudioPlayer from "../features/entries/components/AudioPlayer";
-import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper } from "../shared";
+} from "@/features/books/schemas/book-form";
+import AudioPlayer from "@/features/entries/components/AudioPlayer";
+import { CloseButton, FocusModeOverlay, RichTextPreview, ScreenWrapper } from "@/shared";
 
 const BookEditScreen = () => {
   const { bookId } = useLocalSearchParams<{ bookId: string }>();

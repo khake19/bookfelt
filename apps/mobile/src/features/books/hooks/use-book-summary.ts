@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { generateBookSummary } from "@/services/summarize";
-import * as libraryService from "../services/library.service";
-import * as entryService from "../../entries/services/entry.service";
+import * as libraryService from "@/features/books/services/library.service";
+import * as entryService from "@/features/entries/services/entry.service";
 import { database, EmotionModel } from "@bookfelt/database";
 import { useBookLimits } from "@/features/premium";
 

@@ -7,13 +7,13 @@ import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-reanimated";
 import { CameraIcon, BookOpenIcon, MicrophoneIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
-import { SHEET_IDS } from "../shared/constants/sheet-ids";
-import { useLibrary } from "../features/books/hooks/use-library";
-import type { EntryFormValues } from "../features/entries";
-import { useObserveEmotions, useEntries, useEntryForm } from "../features/entries";
-import AudioPlayer from "../features/entries/components/AudioPlayer";
-import TextScannerOverlay from "../features/entries/components/TextScannerOverlay";
-import VoiceIsland from "../features/entries/components/VoiceIsland";
+import { SHEET_IDS } from "@/shared/constants/sheet-ids";
+import { useLibrary } from "@/features/books/hooks/use-library";
+import type { EntryFormValues } from "@/features/entries";
+import { useObserveEmotions, useEntries, useEntryForm } from "@/features/entries";
+import AudioPlayer from "@/features/entries/components/AudioPlayer";
+import TextScannerOverlay from "@/features/entries/components/TextScannerOverlay";
+import VoiceIsland from "@/features/entries/components/VoiceIsland";
 import {
   CloseButton,
   FocusModeOverlay,
@@ -22,11 +22,11 @@ import {
   TranscribingIndicator,
   stripHtml,
   useThemeColors,
-} from "../shared";
-import { consumePendingSnippet } from "../shared/utils/pending-state";
-import { useTranscriptionStore } from "../shared/stores/transcription.store";
-import { deleteAudioFiles } from "../lib/audio-sync";
-import { useBookLimits, CustomPaywall, UpgradePrompts } from "../features/premium";
+} from "@/shared";
+import { consumePendingSnippet } from "@/shared/utils/pending-state";
+import { useTranscriptionStore } from "@/shared/stores/transcription.store";
+import { deleteAudioFiles } from "@/lib/audio-sync";
+import { useBookLimits, CustomPaywall, UpgradePrompts } from "@/features/premium";
 
 const EntryDetailScreen = () => {
   const { mutedForeground } = useThemeColors();

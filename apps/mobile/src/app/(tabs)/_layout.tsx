@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { HomeIcon, BookOpenIcon } from 'react-native-heroicons/solid';
-import { useThemeColors, FloatingActionButton } from '../../shared';
+import { useThemeColors, FloatingActionButton } from '@/shared';
 
 export default function TabLayout() {
   const { primary, muted } = useThemeColors();

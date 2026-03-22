@@ -11,7 +11,7 @@ import { XMarkIcon, CheckIcon, SparklesIcon } from "react-native-heroicons/solid
 import { useState } from "react";
 import { PurchasesPackage } from "react-native-purchases";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useOfferings } from "../hooks/use-offerings";
+import { useOfferings } from "@/features/premium/hooks/use-offerings";
 import { purchasePackage, restorePurchases } from "@/features/premium/services/revenuecat";
 
 interface CustomPaywallProps {

@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import type { ArcDataPoint } from '../utils/group-by-week';
+import type { ArcDataPoint } from '@/features/emotional-arc/utils/group-by-week';
 
 const CATEGORIES = [
   { key: 'positive' as const, label: 'Positive', colorClass: 'bg-emotion-positive' },

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { View, Text } from 'react-native';
 import Svg, { Path, Line, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
-import { useGraphDimensions, dataYToSvgY, dataXToSvgX } from '../hooks/use-graph-dimensions';
-import { getCubicBezierPath } from '../utils/curve-interpolation';
+import { useGraphDimensions, dataYToSvgY, dataXToSvgX } from '@/features/emotional-arc/hooks/use-graph-dimensions';
+import { getCubicBezierPath } from '@/features/emotional-arc/utils/curve-interpolation';
 import { EmotionalArcPoint } from './EmotionalArcPoint';
-import type { ArcDataPoint } from '../utils/group-by-week';
+import type { ArcDataPoint } from '@/features/emotional-arc/utils/group-by-week';
 
 interface EmotionalArcGraphProps {
   data: ArcDataPoint[];

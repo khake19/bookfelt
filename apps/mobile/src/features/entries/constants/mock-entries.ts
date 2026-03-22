@@ -1,4 +1,4 @@
-import type { EntryCardData } from "../components/EntryCard";
+import type { EntryCardData } from "@/features/entries/components/EntryCard";
 
 export const MOCK_ENTRIES: EntryCardData[] = [
   {

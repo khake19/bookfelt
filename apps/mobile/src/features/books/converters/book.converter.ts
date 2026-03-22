@@ -1,5 +1,5 @@
 import type { BookModel } from "@bookfelt/database";
-import type { Book, LibraryBook, ReadingStatus } from "../types/book";
+import type { Book, LibraryBook, ReadingStatus } from "@/features/books/types/book";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RawRecord = any;

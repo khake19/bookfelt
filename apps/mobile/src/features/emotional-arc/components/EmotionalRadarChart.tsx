@@ -1,9 +1,9 @@
 import { View, Text } from 'react-native';
 import Svg, { Circle, Line, Polygon, G, Text as SvgText } from 'react-native-svg';
 import { useMemo } from 'react';
-import type { ArcDataPoint } from '../utils/group-by-week';
-import type { EmotionRecord } from '../../entries/services/emotion.service';
-import { useThemeColors } from '../../../shared';
+import type { ArcDataPoint } from '@/features/emotional-arc/utils/group-by-week';
+import type { EmotionRecord } from '@/features/entries/services/emotion.service';
+import { useThemeColors } from '@/shared';
 
 interface EmotionalRadarChartProps {
   data: ArcDataPoint[];

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useEntries, useEmotionMap } from '../../entries';
-import { groupEntriesByWeek } from '../utils/group-by-week';
+import { useEntries, useEmotionMap } from '@/features/entries';
+import { groupEntriesByWeek } from '@/features/emotional-arc/utils/group-by-week';
 
 export function useEmotionalArcData(bookId: string) {
   const { entries } = useEntries(bookId);

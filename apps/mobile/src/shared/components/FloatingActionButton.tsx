@@ -17,13 +17,13 @@ import {
 } from 'react-native-heroicons/solid';
 import { useRouter } from 'expo-router';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useThemeColors } from '../hooks/use-theme-colors';
-import { useLibrary } from '../../features/books/hooks/use-library';
-import { useEntries } from '../../features/entries/hooks/use-entries';
-import TextScannerOverlay from '../../features/entries/components/TextScannerOverlay';
-import VoiceIsland from '../../features/entries/components/VoiceIsland';
-import { setPendingSnippet } from '../utils/pending-state';
-import { useTranscriptionStore } from '../stores/transcription.store';
+import { useThemeColors } from '@/shared/hooks/use-theme-colors';
+import { useLibrary } from '@/features/books/hooks/use-library';
+import { useEntries } from '@/features/entries/hooks/use-entries';
+import TextScannerOverlay from '@/features/entries/components/TextScannerOverlay';
+import VoiceIsland from '@/features/entries/components/VoiceIsland';
+import { setPendingSnippet } from '@/shared/utils/pending-state';
+import { useTranscriptionStore } from '@/shared/stores/transcription.store';
 import { useBookLimits, CustomPaywall, UpgradePrompts } from '@/features/premium';
 
 const SPRING_CONFIG = { damping: 15, stiffness: 180 };

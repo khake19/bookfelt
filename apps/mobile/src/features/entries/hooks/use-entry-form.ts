@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { entryFormSchema, type EntryFormValues } from "../schemas/entry-form";
-import type { Entry } from "../types/entry";
+import { entryFormSchema, type EntryFormValues } from "@/features/entries/schemas/entry-form";
+import type { Entry } from "@/features/entries/types/entry";
 
 function entryToFormValues(entry?: Entry): EntryFormValues {
   return {

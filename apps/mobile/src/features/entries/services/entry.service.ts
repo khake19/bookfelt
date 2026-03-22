@@ -2,11 +2,11 @@ import { database, EntryModel } from "@bookfelt/database";
 import { Q } from "@nozbe/watermelondb";
 import type { Observable } from "rxjs";
 import { map } from "rxjs";
-import { deleteAudioFiles } from "../../../lib/audio-sync";
+import { deleteAudioFiles } from "@/lib/audio-sync";
 import {
   entryModelToEntry
-} from "../converters/entry.converter";
-import type { Entry } from "../types/entry";
+} from "@/features/entries/converters/entry.converter";
+import type { Entry } from "@/features/entries/types/entry";
 
 const entriesCollection = database.get<EntryModel>("entries");
 

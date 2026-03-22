@@ -1,10 +1,10 @@
 import { registerSheet, SheetDefinition } from "react-native-actions-sheet";
-import type { ReadingStatus } from "../features/books/types/book";
+import type { ReadingStatus } from "@/features/books/types/book";
 import DeleteConfirmSheet from "./components/DeleteConfirmSheet";
-import BookOptionsSheet from "../features/books/components/BookOptionsSheet";
-import ChangeStatusSheet from "../features/books/components/ChangeStatusSheet";
+import BookOptionsSheet from "@/features/books/components/BookOptionsSheet";
+import ChangeStatusSheet from "@/features/books/components/ChangeStatusSheet";
 import ProfileSheet from "./components/ProfileSheet";
-import SettingSheet from "../features/entries/components/SettingSheet";
+import SettingSheet from "@/features/entries/components/SettingSheet";
 import { SHEET_IDS } from "./constants/sheet-ids";
 
 registerSheet(SHEET_IDS.DELETE_ENTRY, DeleteConfirmSheet);
