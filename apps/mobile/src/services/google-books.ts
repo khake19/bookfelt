@@ -1,4 +1,4 @@
-import { callEdgeFunction } from "./edge-functions";
+import { callEdgeFunction } from "../lib/edge-functions";
 
 // --- Types ---
 

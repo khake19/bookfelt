@@ -12,7 +12,7 @@ import { DatabaseProvider } from '../providers/DatabaseProvider';
 import { AuthProvider, useAuth } from '../providers/AuthProvider';
 import { syncDatabase } from '../lib/sync';
 import { useOnboardingStep } from '../features/books/hooks/use-library';
-import { initializeRevenueCat, setUserId } from '@/services/revenuecat';
+import { initializeRevenueCat, setUserId } from '@/features/premium/services/revenuecat';
 
 const queryClient = new QueryClient();
 

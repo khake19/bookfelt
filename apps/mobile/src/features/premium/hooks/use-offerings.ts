@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PurchasesOffering } from "react-native-purchases";
-import { getOfferings } from "@/services/revenuecat";
+import { getOfferings } from "@/features/premium/services/revenuecat";
 
 /**
  * Hook to get available offerings (subscription products)

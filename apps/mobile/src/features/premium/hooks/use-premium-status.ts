@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Purchases, { CustomerInfo } from "react-native-purchases";
-import { isPremiumUser, ENTITLEMENT_ID } from "@/services/revenuecat";
+import { isPremiumUser, ENTITLEMENT_ID } from "@/features/premium/services/revenuecat";
 
 /**
  * Hook to check if user has premium entitlement

@@ -12,7 +12,7 @@ import { useState } from "react";
 import { PurchasesPackage } from "react-native-purchases";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useOfferings } from "../hooks/use-offerings";
-import { purchasePackage, restorePurchases } from "@/services/revenuecat";
+import { purchasePackage, restorePurchases } from "@/features/premium/services/revenuecat";
 
 interface CustomPaywallProps {
   visible: boolean;

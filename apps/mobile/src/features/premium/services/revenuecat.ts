@@ -1,10 +1,9 @@
 import Purchases, {
   CustomerInfo,
+  LOG_LEVEL,
   PurchasesOffering,
   PurchasesPackage,
-  LOG_LEVEL,
 } from "react-native-purchases";
-import { Platform } from "react-native";
 
 /**
  * RevenueCat Configuration
@@ -22,7 +21,7 @@ export async function initializeRevenueCat(userId?: string) {
     Purchases.setLogLevel(LOG_LEVEL.DEBUG); // Use DEBUG in development, INFO in production
 
     // Initialize with API key
-    await Purchases.configure({
+    Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
       appUserID: userId, // Optional: pass user ID from Supabase auth
     });
@@ -85,7 +84,7 @@ export async function getOfferings(): Promise<PurchasesOffering | null> {
  * Purchase a package
  */
 export async function purchasePackage(
-  pkg: PurchasesPackage
+  pkg: PurchasesPackage,
 ): Promise<{ customerInfo: CustomerInfo; success: boolean }> {
   try {
     const { customerInfo } = await Purchases.purchasePackage(pkg);

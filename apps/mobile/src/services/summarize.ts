@@ -1,4 +1,4 @@
-import { callEdgeFunction } from "./edge-functions";
+import { callEdgeFunction } from "../lib/edge-functions";
 
 // NOTE: This interface can be extended to support "recap" feature in the future
 // by adding a `type?: "summary" | "recap"` field
