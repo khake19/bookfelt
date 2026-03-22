@@ -97,25 +97,40 @@ export default function BookSummaryScreen() {
                 <SparklesIcon size={32} color="#8B5CF6" />
               </View>
               <Text className="text-foreground font-serif-italic text-base italic mb-2">
-                Summary Already Generated
+                {state.reason.includes("entry") || state.reason.includes("entries")
+                  ? "More Entries Needed"
+                  : "Summary Already Generated"}
               </Text>
               <Text className="text-muted text-sm mb-6 text-center leading-relaxed">
                 {state.reason}
               </Text>
-              <Pressable
-                onPress={() => setShowPaywall(true)}
-                className="bg-primary rounded-full px-10 py-3"
-              >
-                <Text className="text-white text-center font-medium text-base">
-                  Upgrade to Premium
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={handleDone}
-                className="mt-4 items-center py-2"
-              >
-                <Text className="text-muted text-sm">Skip for Now</Text>
-              </Pressable>
+              {state.reason.includes("entry") || state.reason.includes("entries") ? (
+                <Pressable
+                  onPress={handleDone}
+                  className="bg-primary rounded-full px-10 py-3"
+                >
+                  <Text className="text-white text-center font-medium text-base">
+                    Continue Writing
+                  </Text>
+                </Pressable>
+              ) : (
+                <>
+                  <Pressable
+                    onPress={() => setShowPaywall(true)}
+                    className="bg-primary rounded-full px-10 py-3"
+                  >
+                    <Text className="text-white text-center font-medium text-base">
+                      Upgrade to Premium
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={handleDone}
+                    className="mt-4 items-center py-2"
+                  >
+                    <Text className="text-muted text-sm">Skip for Now</Text>
+                  </Pressable>
+                </>
+              )}
             </Animated.View>
           )}
 

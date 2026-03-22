@@ -18,9 +18,26 @@ export function useBookSummary(
   const [state, setState] = useState<SummaryState>({ kind: "loading" });
   const [bookTitle, setBookTitle] = useState("");
   const abortRef = useRef<AbortController | null>(null);
-  const { limits } = useBookLimits(bookId);
+  const { limits, isPremium, isLoading } = useBookLimits(bookId);
+
+  console.log("[Summary] Hook called with:", { bookId, source, limitsLoading: isLoading });
 
   const generate = async () => {
+    // Wait for premium status to load before checking limits
+    if (isLoading) {
+      setState({ kind: "loading" });
+      return;
+    }
+
+    // Debug logging
+    console.log("[Summary] Debug info:", {
+      bookId,
+      isPremium,
+      isLoading,
+      canGenerate: limits.summary.canGenerate,
+      reason: limits.summary.reason,
+    });
+
     // Check if user can generate summary
     if (!limits.summary.canGenerate) {
       setState({
@@ -48,6 +65,17 @@ export function useBookSummary(
       }
 
       setBookTitle(book.title);
+
+      // Require at least 5 entries for meaningful summary
+      if (entries.length < 5) {
+        setState({
+          kind: "blocked",
+          reason: `Write at least ${5 - entries.length} more ${
+            5 - entries.length === 1 ? "entry" : "entries"
+          } to unlock AI summary`,
+        });
+        return;
+      }
 
       // Build emotion map for label lookup
       const emotionMap = new Map(emotions.map((e) => [e.id, e.label]));
@@ -90,12 +118,15 @@ export function useBookSummary(
   };
 
   useEffect(() => {
-    generate();
+    // Only generate once premium status has loaded
+    if (!isLoading) {
+      generate();
+    }
     return () => {
       abortRef.current?.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bookId]);
+  }, [bookId, isLoading]);
 
   return { state, bookTitle, retry: generate };
 }

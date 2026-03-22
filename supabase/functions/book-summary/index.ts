@@ -105,6 +105,14 @@ Deno.serve(async (req) => {
     return errorResponse("Invalid JSON body", 400);
   }
 
+  // Require at least 5 entries for meaningful summary
+  if (input.entries.length < 5) {
+    return errorResponse(
+      "At least 5 entries required to generate a summary",
+      400
+    );
+  }
+
   const journalContent = buildJournalContent(input);
 
   const systemPrompt =
