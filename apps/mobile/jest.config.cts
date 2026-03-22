@@ -7,16 +7,42 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   moduleNameMapper: {
     '\\.svg$': '@nx/expo/plugins/jest/svg-mock',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(?:.pnpm/)?(' +
+      'react-native|' +
+      '@react-native|' +
+      '@testing-library/react-native|' +
+      'expo|' +
+      '@expo|' +
+      'react-navigation|' +
+      '@react-navigation|' +
+      '@unimodules|' +
+      'unimodules|' +
+      'react-native-svg|' +
+      '@rn-primitives|' +
+      '@shopify/flash-list|' +
+      'react-native-reanimated|' +
+      'react-native-gesture-handler|' +
+      'react-native-heroicons|' +
+      'react-native-purchases|' +
+      '@supabase|' +
+      '@10play|' +
+      'react-native-linear-gradient|' +
+      'react-native-actions-sheet|' +
+      'react-native-view-shot|' +
+      'react-native-vision-camera|' +
+      'react-native-worklets-core' +
+      ')(?:/|$))',
+  ],
   transform: {
-    '\\.[jt]sx?$': [
+    '^.+\\.[jt]sx?$': [
       'babel-jest',
       {
         configFile: __dirname + '/.babelrc.js',
       },
     ],
-    '^.+\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp|ttf|otf|m4v|mov|mp4|mpeg|mpg|webm|aac|aiff|caf|m4a|mp3|wav|html|pdf|obj)$':
-      require.resolve('jest-expo/src/preset/assetFileTransformer.js'),
   },
   coverageDirectory: '../../coverage/apps/mobile',
 };

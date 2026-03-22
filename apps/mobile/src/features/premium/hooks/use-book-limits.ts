@@ -53,16 +53,6 @@ export function useBookLimits(bookId?: string) {
   // Only allow generation if we have a book AND (user is premium OR book doesn't have summary yet)
   const canGenerateSummary = !!currentBook && (isPremium || !hasSummary);
 
-  // Debug logging
-  console.log("[Limits] Summary check:", {
-    bookId,
-    isPremium,
-    isPremiumLoading,
-    currentBookFound: !!currentBook,
-    hasSummary,
-    canGenerateSummary,
-  });
-
   // Count total bookends used across all books
   const totalBookendsUsed = books.reduce((sum, book) => {
     let count = 0;

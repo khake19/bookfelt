@@ -20,23 +20,12 @@ export function useBookSummary(
   const abortRef = useRef<AbortController | null>(null);
   const { limits, isPremium, isLoading } = useBookLimits(bookId);
 
-  console.log("[Summary] Hook called with:", { bookId, source, limitsLoading: isLoading });
-
   const generate = async () => {
     // Wait for premium status to load before checking limits
     if (isLoading) {
       setState({ kind: "loading" });
       return;
     }
-
-    // Debug logging
-    console.log("[Summary] Debug info:", {
-      bookId,
-      isPremium,
-      isLoading,
-      canGenerate: limits.summary.canGenerate,
-      reason: limits.summary.reason,
-    });
 
     // Check if user can generate summary
     if (!limits.summary.canGenerate) {
