@@ -114,7 +114,21 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
   };
 
   const handleAudio = () => {
-    if (!primaryRead) return;
+    if (!primaryRead) {
+      collapse();
+      Alert.alert(
+        "No Book Selected",
+        "Please select a book to start reading before recording a reflection."
+      );
+      return;
+    }
+
+    console.log('[FAB Audio] Checking limit:', {
+      canUse: limits.audioTranscriptions.canUse,
+      used: limits.audioTranscriptions.used,
+      limit: limits.audioTranscriptions.limit,
+      remaining: limits.audioTranscriptions.remaining,
+    });
 
     // Check if user can transcribe audio
     if (!limits.audioTranscriptions.canUse) {
@@ -247,7 +261,6 @@ export default function FloatingActionButton({ state, descriptors, navigation }:
                       : undefined
               }
               isOpen={isOpen}
-              disabled={key === 'audio' && hasNoPrimaryRead}
             />
           ))}
         </View>

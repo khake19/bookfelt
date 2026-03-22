@@ -10,6 +10,7 @@ import {
 import { XMarkIcon, CheckIcon, SparklesIcon } from "react-native-heroicons/solid";
 import { useState } from "react";
 import { PurchasesPackage } from "react-native-purchases";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useOfferings } from "../hooks/use-offerings";
 import { purchasePackage, restorePurchases } from "@/services/revenuecat";
 
@@ -28,6 +29,7 @@ export function CustomPaywall({
   onDismiss,
   onPurchaseSuccess,
 }: CustomPaywallProps) {
+  const insets = useSafeAreaInsets();
   const { offering, isLoading } = useOfferings();
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PurchasesPackage | null>(
@@ -80,7 +82,10 @@ export function CustomPaywall({
     >
       <View className="flex-1 bg-background">
         {/* Header */}
-        <View className="flex-row items-center justify-between px-4 py-4 border-b border-border">
+        <View
+          className="flex-row items-center justify-between px-4 py-4 border-b border-border"
+          style={{ paddingTop: insets.top + 16 }}
+        >
           <Text className="text-lg font-semibold text-foreground">
             Upgrade to Premium
           </Text>
@@ -153,7 +158,10 @@ export function CustomPaywall({
         </ScrollView>
 
         {/* Purchase button */}
-        <View className="px-6 py-4 border-t border-border">
+        <View
+          className="px-6 py-4 border-t border-border"
+          style={{ paddingBottom: insets.bottom + 16 }}
+        >
           <Pressable
             onPress={() => selectedPackage && handlePurchase(selectedPackage)}
             disabled={!selectedPackage || isPurchasing}

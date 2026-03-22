@@ -26,6 +26,7 @@ import {
 import { consumePendingSnippet } from "../shared/utils/pending-state";
 import { useTranscriptionStore } from "../shared/stores/transcription.store";
 import { deleteAudioFiles } from "../lib/audio-sync";
+import { useBookLimits, CustomPaywall, UpgradePrompts } from "../features/premium";
 
 const EntryDetailScreen = () => {
   const { mutedForeground } = useThemeColors();
@@ -97,6 +98,17 @@ const EntryDetailScreen = () => {
   const [isTextScannerOpen, setIsTextScannerOpen] = useState(false);
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [showMoreEmotions, setShowMoreEmotions] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  const { limits } = useBookLimits(book?.id);
+
+  const handleVoicePress = () => {
+    if (!limits.audioTranscriptions.canUse) {
+      UpgradePrompts.audioTranscriptionLimit(() => setShowPaywall(true));
+      return;
+    }
+    setIsVoiceOpen(true);
+  };
   const [androidPickerMode, setAndroidPickerMode] = useState<
     "date" | "time" | null
   >(null);
@@ -432,7 +444,7 @@ const EntryDetailScreen = () => {
               Your Reflection
             </Text>
             <Pressable
-              onPress={() => setIsVoiceOpen(true)}
+              onPress={handleVoicePress}
               hitSlop={8}
               className="p-1"
             >
@@ -503,6 +515,12 @@ const EntryDetailScreen = () => {
           onClose={() => setIsVoiceOpen(false)}
         />
       )}
+
+      <CustomPaywall
+        visible={showPaywall}
+        onDismiss={() => setShowPaywall(false)}
+        onPurchaseSuccess={() => setShowPaywall(false)}
+      />
     </ScreenWrapper>
   );
 };
