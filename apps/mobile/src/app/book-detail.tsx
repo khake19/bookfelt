@@ -551,8 +551,61 @@ const BookDetailScreen = () => {
                           </Text>
                         </View>
 
-                        {/* Quote-only card (snippet without reflection) */}
-                        {entry.snippet && stripHtml(entry.snippet) && (!entry.reflection || !stripHtml(entry.reflection)) ? (
+                        {/* Two-zone: snippet + reflection */}
+                        {entry.snippet && stripHtml(entry.snippet) && entry.reflection && stripHtml(entry.reflection) ? (
+                          <View className="rounded-2xl overflow-hidden bg-card">
+                            {/* Top zone: Quote with emotion background */}
+                            <View
+                              className="px-4 py-3"
+                              style={{
+                                backgroundColor: emotion?.color
+                                  ? `${emotion.color}dd`
+                                  : "hsl(20, 50%, 45%)",
+                              }}
+                            >
+                              <Text className="text-white font-serif-italic text-sm leading-relaxed">
+                                <Text className="text-white/90 text-2xl leading-none">"</Text>
+                                {stripHtml(entry.snippet)}
+                              </Text>
+                            </View>
+
+                            {/* Speech bubble arrow connector - left-aligned */}
+                            <View className="bg-card pl-4">
+                              <View
+                                style={{
+                                  width: 0,
+                                  height: 0,
+                                  borderLeftWidth: 8,
+                                  borderRightWidth: 8,
+                                  borderTopWidth: 8,
+                                  borderLeftColor: "transparent",
+                                  borderRightColor: "transparent",
+                                  borderTopColor: emotion?.color
+                                    ? `${emotion.color}dd`
+                                    : "hsl(20, 50%, 45%)",
+                                }}
+                              />
+                            </View>
+
+                            {/* Bottom zone: Reflection on neutral background */}
+                            <View className="px-4 py-3">
+                              <Text className="text-foreground text-base leading-relaxed">
+                                {stripHtml(entry.reflection)}
+                              </Text>
+                              {entry.reflectionUri && (
+                                <View className="mt-3">
+                                  <AudioPlayer uri={entry.reflectionUri} />
+                                </View>
+                              )}
+                              {entry.setting && (
+                                <Text className="text-muted/40 text-xs mt-3 font-serif-italic">
+                                  {entry.setting}
+                                </Text>
+                              )}
+                            </View>
+                          </View>
+                        ) : entry.snippet && stripHtml(entry.snippet) && (!entry.reflection || !stripHtml(entry.reflection)) ? (
+                          // Quote-only card (snippet without reflection)
                           <View
                             className="rounded-3xl p-6 min-h-[200px] justify-center"
                             style={{
@@ -626,7 +679,7 @@ const BookDetailScreen = () => {
                       />
                     </View>
                     <View className="flex-1 ml-4">
-                      <View className="flex-row items-center gap-2">
+                      <View className="flex-row items-center gap-2 mb-1.5">
                         <Text className="text-primary text-xs font-medium">
                           First Impression
                         </Text>
@@ -634,14 +687,14 @@ const BookDetailScreen = () => {
                           · {timeAgo(book.addedAt)}
                         </Text>
                       </View>
-                      <View className="mt-1.5">
-                        <RichTextPreview html={book.firstImpression} />
+                      <View className="bg-card rounded-2xl px-4 py-3">
+                        <RichTextPreview html={book.firstImpression} fontSize={16} />
+                        {book.firstImpressionAudioUri && (
+                          <View className="mt-3">
+                            <AudioPlayer uri={book.firstImpressionAudioUri} />
+                          </View>
+                        )}
                       </View>
-                      {book.firstImpressionAudioUri && (
-                        <View className="mt-2">
-                          <AudioPlayer uri={book.firstImpressionAudioUri} />
-                        </View>
-                      )}
                     </View>
                   </View>
                 </Animated.View>
@@ -744,7 +797,7 @@ const BookDetailScreen = () => {
                       />
                     </View>
                     <View className="flex-1 ml-4">
-                      <View className="flex-row items-center gap-2">
+                      <View className="flex-row items-center gap-2 mb-1.5">
                         <Text className="text-primary text-xs font-medium">
                           First Impression
                         </Text>
@@ -752,14 +805,14 @@ const BookDetailScreen = () => {
                           · {timeAgo(book.addedAt)}
                         </Text>
                       </View>
-                      <View className="mt-1.5">
-                        <RichTextPreview html={book.firstImpression} />
+                      <View className="bg-card rounded-2xl px-4 py-3">
+                        <RichTextPreview html={book.firstImpression} fontSize={16} />
+                        {book.firstImpressionAudioUri && (
+                          <View className="mt-3">
+                            <AudioPlayer uri={book.firstImpressionAudioUri} />
+                          </View>
+                        )}
                       </View>
-                      {book.firstImpressionAudioUri && (
-                        <View className="mt-2">
-                          <AudioPlayer uri={book.firstImpressionAudioUri} />
-                        </View>
-                      )}
                     </View>
                   </View>
                 </Animated.View>
