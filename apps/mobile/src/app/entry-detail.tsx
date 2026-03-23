@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import { Controller } from "react-hook-form";
 import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-reanimated";
-import { CameraIcon, BookOpenIcon, MicrophoneIcon } from "react-native-heroicons/outline";
+import { CameraIcon, BookOpenIcon, MicrophoneIcon, TrashIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
 import { SHEET_IDS } from "@/shared/constants/sheet-ids";
 import { useLibrary } from "@/features/books/hooks/use-library";
@@ -29,14 +29,14 @@ import { deleteAudioFiles } from "@/lib/audio-sync";
 import { useBookLimits, CustomPaywall, UpgradePrompts } from "@/features/premium";
 
 const EntryDetailScreen = () => {
-  const { mutedForeground } = useThemeColors();
+  const { mutedForeground, destructive } = useThemeColors();
   const { id, bookId } = useLocalSearchParams<{
     id: string;
     bookId?: string;
   }>();
   const router = useRouter();
   const { books, primaryRead } = useLibrary();
-  const { entries, addEntry, updateEntry } = useEntries();
+  const { entries, addEntry, updateEntry, removeEntry } = useEntries();
   const existing = id ? entries.find((e) => e.id === id) : undefined;
   const book = books.find((b) => b.id === bookId) ?? primaryRead;
   const isNew = !existing;
@@ -152,6 +152,27 @@ const EntryDetailScreen = () => {
     router.back();
   };
 
+  const handleDelete = async () => {
+    if (!existing) return;
+
+    SheetManager.show(SHEET_IDS.DELETE_ENTRY, {
+      payload: {
+        title: "Delete Entry",
+        description: "Are you sure you want to delete this entry? This action cannot be undone.",
+        onConfirm: async () => {
+          // Delete audio file if exists
+          if (existing.reflectionUri) {
+            deleteAudioFiles([existing.reflectionUri]).catch(err =>
+              console.error('[entry-detail] Failed to delete audio:', err)
+            );
+          }
+          await removeEntry(existing.id);
+          router.back();
+        },
+      },
+    });
+  };
+
   const emotions = useObserveEmotions();
   const coreEmotions = emotions.filter((e) => e.group === "core");
   const secondaryEmotions = emotions.filter((e) => e.group === "secondary");
@@ -173,6 +194,15 @@ const EntryDetailScreen = () => {
             {book?.title ?? "No book selected"}
           </Text>
         </View>
+        {!isNew && (
+          <Pressable
+            onPress={handleDelete}
+            hitSlop={8}
+            className="mr-3"
+          >
+            <TrashIcon size={20} color={destructive} />
+          </Pressable>
+        )}
         <Button
           shape="pill"
           onPress={handleSubmit(onSubmit)}
