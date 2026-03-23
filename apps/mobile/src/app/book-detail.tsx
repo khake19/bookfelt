@@ -522,7 +522,8 @@ const BookDetailScreen = () => {
                         onLongPress={() => handleLongPress(entry.id)}
                         className="flex-1 ml-4"
                       >
-                        <View className="flex-row items-center justify-between gap-2">
+                        {/* Metadata row - always shown */}
+                        <View className="flex-row items-center justify-between gap-2 mb-1.5">
                           <View className="flex-row items-center gap-2">
                             {emotion && (
                               <Text className="text-xs">
@@ -550,34 +551,59 @@ const BookDetailScreen = () => {
                           </Text>
                         </View>
 
-                        {entry.snippet && stripHtml(entry.snippet) ? (
-                          <Text
-                            className="text-muted/70 font-serif-italic text-sm mt-1.5 leading-relaxed"
-                            numberOfLines={2}
+                        {/* Quote-only card (snippet without reflection) */}
+                        {entry.snippet && stripHtml(entry.snippet) && (!entry.reflection || !stripHtml(entry.reflection)) ? (
+                          <View
+                            className="rounded-3xl p-6 min-h-[200px] justify-center"
+                            style={{
+                              backgroundColor: emotion?.color
+                                ? `${emotion.color}dd`
+                                : "hsl(20, 50%, 45%)",
+                            }}
                           >
-                            "{stripHtml(entry.snippet)}"
-                          </Text>
-                        ) : null}
-
-                        {entry.reflection && stripHtml(entry.reflection) ? (
-                          <Text
-                            className="text-foreground text-sm mt-1 leading-relaxed"
-                            numberOfLines={4}
-                          >
-                            {stripHtml(entry.reflection)}
-                          </Text>
-                        ) : null}
-
-                        {entry.reflectionUri ? (
-                          <View className="mt-2">
-                            <AudioPlayer uri={entry.reflectionUri} />
+                            <Text className="text-white font-serif-italic text-2xl leading-relaxed">
+                              <Text className="text-white/90 text-5xl leading-none">"</Text>
+                              {stripHtml(entry.snippet)}
+                            </Text>
+                            {entry.setting && (
+                              <Text className="text-white/40 text-xs mt-4 font-serif-italic">
+                                {entry.setting}
+                              </Text>
+                            )}
                           </View>
-                        ) : null}
+                        ) : (
+                          <>
+                            {/* Regular entry content */}
+                            {entry.snippet && stripHtml(entry.snippet) ? (
+                              <Text
+                                className="text-muted/70 font-serif-italic text-sm leading-relaxed"
+                                numberOfLines={2}
+                              >
+                                "{stripHtml(entry.snippet)}"
+                              </Text>
+                            ) : null}
 
-                        {entry.setting && (
-                          <Text className="text-muted/40 text-xs mt-2 font-serif-italic">
-                            {entry.setting}
-                          </Text>
+                            {entry.reflection && stripHtml(entry.reflection) ? (
+                              <Text
+                                className="text-foreground text-sm mt-1 leading-relaxed"
+                                numberOfLines={4}
+                              >
+                                {stripHtml(entry.reflection)}
+                              </Text>
+                            ) : null}
+
+                            {entry.reflectionUri ? (
+                              <View className="mt-2">
+                                <AudioPlayer uri={entry.reflectionUri} />
+                              </View>
+                            ) : null}
+
+                            {entry.setting && (
+                              <Text className="text-muted/40 text-xs mt-2 font-serif-italic">
+                                {entry.setting}
+                              </Text>
+                            )}
+                          </>
                         )}
                       </Pressable>
                     </View>
