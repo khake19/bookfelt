@@ -93,6 +93,12 @@ export default function HomeScreen() {
           bookCoverUrl={book?.coverUrl}
           onPress={() => handlePress(item.id)}
           onLongPress={() => handleLongPress(item.id)}
+          onBookPress={() =>
+            router.push({
+              pathname: "/book-detail",
+              params: { bookId: item.bookId },
+            })
+          }
         />
       </Animated.View>
     );
