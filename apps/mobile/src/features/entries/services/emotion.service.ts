@@ -14,6 +14,7 @@ export interface EmotionRecord {
   sortOrder: number;
   valence: number;
   intensity: number;
+  control: number;
 }
 
 function toRecord(model: EmotionModel): EmotionRecord {
@@ -27,6 +28,7 @@ function toRecord(model: EmotionModel): EmotionRecord {
     sortOrder: model.sortOrder,
     valence: model.valence,
     intensity: model.intensity,
+    control: model.control,
   };
 }
 

@@ -12,4 +12,5 @@ export class EmotionModel extends Model {
   @field("sort_order") sortOrder!: number;
   @field("valence") valence!: number;
   @field("intensity") intensity!: number;
+  @field("control") control!: number;
 }

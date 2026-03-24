@@ -8,6 +8,21 @@ import {
 export const migrations = schemaMigrations({
   migrations: [
     {
+      toVersion: 11,
+      steps: [
+        addColumns({
+          table: "emotions",
+          columns: [
+            { name: "control", type: "number" },
+          ],
+        }),
+        // Initialize with default value (will be updated by seed)
+        unsafeExecuteSql(
+          "UPDATE emotions SET control = 0.5 WHERE control IS NULL;",
+        ),
+      ],
+    },
+    {
       toVersion: 10,
       steps: [
         addColumns({
