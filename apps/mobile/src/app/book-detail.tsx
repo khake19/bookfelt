@@ -598,7 +598,7 @@ const BookDetailScreen = () => {
                                 </View>
                               )}
                               {entry.setting && (
-                                <Text className="text-muted/40 text-xs mt-3 font-serif-italic">
+                                <Text className="text-muted/60 text-xs mt-3 font-serif-italic">
                                   {entry.setting}
                                 </Text>
                               )}
@@ -619,7 +619,7 @@ const BookDetailScreen = () => {
                               {stripHtml(entry.snippet)}
                             </Text>
                             {entry.setting && (
-                              <Text className="text-white/40 text-xs mt-4 font-serif-italic">
+                              <Text className="text-white/60 text-xs mt-4 font-serif-italic">
                                 {entry.setting}
                               </Text>
                             )}
@@ -652,7 +652,7 @@ const BookDetailScreen = () => {
                             ) : null}
 
                             {entry.setting && (
-                              <Text className="text-muted/40 text-xs mt-2 font-serif-italic">
+                              <Text className="text-muted/60 text-xs mt-2 font-serif-italic">
                                 {entry.setting}
                               </Text>
                             )}

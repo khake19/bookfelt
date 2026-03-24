@@ -182,7 +182,7 @@ const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
   }
 
   return (
-    <View className="flex-row items-center gap-3 rounded-xl bg-primary/10 px-2.5 py-1 border-2 border-primary">
+    <View className="flex-row items-center gap-3 rounded-xl bg-primary/10 px-2.5 py-1">
       <Pressable
         onPress={togglePlay}
         hitSlop={8}
