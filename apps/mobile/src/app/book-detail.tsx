@@ -551,8 +551,8 @@ const BookDetailScreen = () => {
                           </Text>
                         </View>
 
-                        {/* Two-zone: snippet + reflection */}
-                        {entry.snippet && stripHtml(entry.snippet) && entry.reflection && stripHtml(entry.reflection) ? (
+                        {/* Two-zone: snippet + reflection (text or audio) */}
+                        {entry.snippet && stripHtml(entry.snippet) && ((entry.reflection && stripHtml(entry.reflection)) || entry.reflectionUri) ? (
                           <View className="rounded-2xl overflow-hidden bg-card">
                             {/* Top zone: Quote with emotion background */}
                             <View
@@ -589,11 +589,13 @@ const BookDetailScreen = () => {
 
                             {/* Bottom zone: Reflection on neutral background */}
                             <View className="px-4 py-3">
-                              <Text className="text-foreground text-base leading-relaxed">
-                                {stripHtml(entry.reflection)}
-                              </Text>
+                              {entry.reflection && stripHtml(entry.reflection) && (
+                                <Text className="text-foreground text-base leading-relaxed">
+                                  {stripHtml(entry.reflection)}
+                                </Text>
+                              )}
                               {entry.reflectionUri && (
-                                <View className="mt-3">
+                                <View className={entry.reflection && stripHtml(entry.reflection) ? "mt-3" : ""}>
                                   <AudioPlayer uri={entry.reflectionUri} />
                                 </View>
                               )}
@@ -621,6 +623,57 @@ const BookDetailScreen = () => {
                             {entry.setting && (
                               <Text className="text-white/60 text-xs mt-4 font-serif-italic">
                                 {entry.setting}
+                              </Text>
+                            )}
+                          </View>
+                        ) : !entry.snippet && entry.reflection && stripHtml(entry.reflection) ? (
+                          // Reflection-only: minimal with subtle background tint
+                          <View
+                            className="rounded-2xl px-4 py-3"
+                            style={{
+                              backgroundColor: emotion?.color
+                                ? `${emotion.color}12`
+                                : "rgba(113, 113, 122, 0.07)",
+                            }}
+                          >
+                            <Text className="text-foreground text-base leading-relaxed">
+                              {stripHtml(entry.reflection)}
+                            </Text>
+                            {entry.reflectionUri && (
+                              <View className="mt-3">
+                                <AudioPlayer uri={entry.reflectionUri} />
+                              </View>
+                            )}
+                            {entry.setting && (
+                              <Text className="text-muted/60 text-xs mt-3 font-serif-italic">
+                                {entry.setting}
+                              </Text>
+                            )}
+                          </View>
+                        ) : emotion && !entry.snippet && !entry.reflection && !entry.reflectionUri ? (
+                          // Emotion-only: compact pill/badge
+                          <View className="flex-row items-center flex-wrap gap-2">
+                            <View
+                              className="flex-row items-center gap-1.5 rounded-full px-3 py-1.5"
+                              style={{ backgroundColor: `${emotion.color}25` }}
+                            >
+                              <Text className="text-base">{emotion.emoji}</Text>
+                              <Text
+                                className="text-sm font-medium"
+                                style={{ color: emotion.color }}
+                              >
+                                {emotion.label}
+                              </Text>
+                            </View>
+                            {(entry.chapter || entry.page || entry.setting) && (
+                              <Text className="text-muted/60 text-xs">
+                                {[
+                                  entry.chapter && `Ch. ${entry.chapter}`,
+                                  entry.page && `Pg. ${entry.page}`,
+                                  entry.setting,
+                                ]
+                                  .filter(Boolean)
+                                  .join(" · ")}
                               </Text>
                             )}
                           </View>
