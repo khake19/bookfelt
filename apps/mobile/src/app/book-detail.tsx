@@ -28,6 +28,7 @@ import { useLibrary } from "@/features/books/hooks/use-library";
 import type { ReadingStatus } from "@/features/books/types/book";
 import { useEmotionMap, useEntries } from "@/features/entries";
 import AudioPlayer from "@/features/entries/components/AudioPlayer";
+import EntryContent from "@/features/entries/components/EntryContent";
 import {
   CloseButton,
   PillButton,
@@ -551,166 +552,14 @@ const BookDetailScreen = () => {
                           </Text>
                         </View>
 
-                        {/* Two-zone: snippet + reflection (text or audio) */}
-                        {entry.snippet && stripHtml(entry.snippet) && ((entry.reflection && stripHtml(entry.reflection)) || entry.reflectionUri) ? (
-                          <View className="rounded-2xl overflow-hidden bg-card">
-                            {/* Top zone: Quote with emotion background */}
-                            <View
-                              className="px-4 py-3"
-                              style={{
-                                backgroundColor: emotion?.color
-                                  ? `${emotion.color}dd`
-                                  : "hsl(20, 50%, 45%)",
-                              }}
-                            >
-                              <Text className="text-white font-serif-italic text-sm leading-relaxed">
-                                <Text className="text-white/90 text-2xl leading-none">"</Text>
-                                {stripHtml(entry.snippet)}
-                              </Text>
-                            </View>
-
-                            {/* Speech bubble arrow connector - left-aligned */}
-                            <View className="bg-card pl-4">
-                              <View
-                                style={{
-                                  width: 0,
-                                  height: 0,
-                                  borderLeftWidth: 8,
-                                  borderRightWidth: 8,
-                                  borderTopWidth: 8,
-                                  borderLeftColor: "transparent",
-                                  borderRightColor: "transparent",
-                                  borderTopColor: emotion?.color
-                                    ? `${emotion.color}dd`
-                                    : "hsl(20, 50%, 45%)",
-                                }}
-                              />
-                            </View>
-
-                            {/* Bottom zone: Reflection on neutral background */}
-                            <View className="px-4 py-3">
-                              {entry.reflection && stripHtml(entry.reflection) && (
-                                <Text className="text-foreground text-base leading-relaxed">
-                                  {stripHtml(entry.reflection)}
-                                </Text>
-                              )}
-                              {entry.reflectionUri && (
-                                <View className={entry.reflection && stripHtml(entry.reflection) ? "mt-3" : ""}>
-                                  <AudioPlayer uri={entry.reflectionUri} />
-                                </View>
-                              )}
-                              {entry.setting && (
-                                <Text className="text-muted/60 text-xs mt-3 font-serif-italic">
-                                  {entry.setting}
-                                </Text>
-                              )}
-                            </View>
-                          </View>
-                        ) : entry.snippet && stripHtml(entry.snippet) && (!entry.reflection || !stripHtml(entry.reflection)) ? (
-                          // Quote-only card (snippet without reflection)
-                          <View
-                            className="rounded-3xl p-6 min-h-[200px] justify-center"
-                            style={{
-                              backgroundColor: emotion?.color
-                                ? `${emotion.color}dd`
-                                : "hsl(20, 50%, 45%)",
-                            }}
-                          >
-                            <Text className="text-white font-serif-italic text-2xl leading-relaxed">
-                              <Text className="text-white/90 text-5xl leading-none">"</Text>
-                              {stripHtml(entry.snippet)}
-                            </Text>
-                            {entry.setting && (
-                              <Text className="text-white/60 text-xs mt-4 font-serif-italic">
-                                {entry.setting}
-                              </Text>
-                            )}
-                          </View>
-                        ) : !entry.snippet && entry.reflection && stripHtml(entry.reflection) ? (
-                          // Reflection-only: minimal with subtle background tint
-                          <View
-                            className="rounded-2xl px-4 py-3"
-                            style={{
-                              backgroundColor: emotion?.color
-                                ? `${emotion.color}12`
-                                : "rgba(113, 113, 122, 0.07)",
-                            }}
-                          >
-                            <Text className="text-foreground text-base leading-relaxed">
-                              {stripHtml(entry.reflection)}
-                            </Text>
-                            {entry.reflectionUri && (
-                              <View className="mt-3">
-                                <AudioPlayer uri={entry.reflectionUri} />
-                              </View>
-                            )}
-                            {entry.setting && (
-                              <Text className="text-muted/60 text-xs mt-3 font-serif-italic">
-                                {entry.setting}
-                              </Text>
-                            )}
-                          </View>
-                        ) : emotion && !entry.snippet && !entry.reflection && !entry.reflectionUri ? (
-                          // Emotion-only: compact pill/badge
-                          <View className="flex-row items-center flex-wrap gap-2">
-                            <View
-                              className="flex-row items-center gap-1.5 rounded-full px-3 py-1.5"
-                              style={{ backgroundColor: `${emotion.color}25` }}
-                            >
-                              <Text className="text-base">{emotion.emoji}</Text>
-                              <Text
-                                className="text-sm font-medium"
-                                style={{ color: emotion.color }}
-                              >
-                                {emotion.label}
-                              </Text>
-                            </View>
-                            {(entry.chapter || entry.page || entry.setting) && (
-                              <Text className="text-muted/60 text-xs">
-                                {[
-                                  entry.chapter && `Ch. ${entry.chapter}`,
-                                  entry.page && `Pg. ${entry.page}`,
-                                  entry.setting,
-                                ]
-                                  .filter(Boolean)
-                                  .join(" · ")}
-                              </Text>
-                            )}
-                          </View>
-                        ) : (
-                          <>
-                            {/* Regular entry content */}
-                            {entry.snippet && stripHtml(entry.snippet) ? (
-                              <Text
-                                className="text-muted/70 font-serif-italic text-sm leading-relaxed"
-                                numberOfLines={2}
-                              >
-                                "{stripHtml(entry.snippet)}"
-                              </Text>
-                            ) : null}
-
-                            {entry.reflection && stripHtml(entry.reflection) ? (
-                              <Text
-                                className="text-foreground text-sm mt-1 leading-relaxed"
-                                numberOfLines={4}
-                              >
-                                {stripHtml(entry.reflection)}
-                              </Text>
-                            ) : null}
-
-                            {entry.reflectionUri ? (
-                              <View className="mt-2">
-                                <AudioPlayer uri={entry.reflectionUri} />
-                              </View>
-                            ) : null}
-
-                            {entry.setting && (
-                              <Text className="text-muted/60 text-xs mt-2 font-serif-italic">
-                                {entry.setting}
-                              </Text>
-                            )}
-                          </>
-                        )}
+                        {/* Entry content - shared component */}
+                        <EntryContent
+                          snippet={entry.snippet}
+                          reflection={entry.reflection}
+                          reflectionUri={entry.reflectionUri}
+                          emotion={emotion}
+                          setting={entry.setting}
+                        />
                       </Pressable>
                     </View>
                   </Animated.View>

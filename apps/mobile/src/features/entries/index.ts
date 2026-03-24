@@ -1,5 +1,6 @@
 export { default as EntryCard } from "./components/EntryCard";
 export type { EntryCardData } from "./components/EntryCard";
+export { default as EntryContent } from "./components/EntryContent";
 export type { Emotion } from "./constants/emotions";
 export { MOCK_ENTRIES } from "./constants/mock-entries";
 export { useEntries } from "./hooks/use-entries";

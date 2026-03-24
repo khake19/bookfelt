@@ -1,6 +1,6 @@
 import { Image, Pressable, Text, View } from "react-native";
 import { useEmotionMap } from "@/features/entries/hooks/use-emotions";
-import AudioPlayer from "./AudioPlayer";
+import EntryContent from "./EntryContent";
 
 const stripHtml = (html: string) =>
   html
@@ -120,30 +120,14 @@ const EntryCard = (props: EntryCardProps) => {
           </View>
         </View>
 
-        {/* Content */}
-        <View className="gap-3">
-          {snippet && stripHtml(snippet) ? (
-            <Text
-              className="text-sm text-foreground/70 font-serif-italic leading-relaxed pl-13"
-              numberOfLines={3}
-            >
-              "{stripHtml(snippet)}"
-            </Text>
-          ) : null}
-          {reaction && stripHtml(reaction) ? (
-            <Text
-              className="text-sm text-foreground leading-relaxed pl-13"
-              numberOfLines={4}
-            >
-              {stripHtml(reaction)}
-            </Text>
-          ) : null}
-          {reflectionUri ? (
-            <View className="pl-13">
-              <AudioPlayer uri={reflectionUri} />
-            </View>
-          ) : null}
-        </View>
+        {/* Content - shared component */}
+        <EntryContent
+          snippet={snippet}
+          reflection={reaction}
+          reflectionUri={reflectionUri}
+          emotion={emotion}
+          setting={setting}
+        />
 
         {/* Bottom divider */}
         <View className="h-px bg-border/50 mt-4" />
