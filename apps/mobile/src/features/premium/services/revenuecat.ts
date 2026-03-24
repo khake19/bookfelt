@@ -11,9 +11,16 @@ import Constants from "expo-constants";
  * RevenueCat Configuration
  */
 const REVENUECAT_API_KEY = Platform.select({
-  ios: Constants.expoConfig?.extra?.revenueCatIosKey || "test_sMVCDjpEDACZNFoFcqUsNGgFsGe",
-  android: Constants.expoConfig?.extra?.revenueCatAndroidKey || "test_sMVCDjpEDACZNFoFcqUsNGgFsGe",
-}) as string;
+  ios: Constants.expoConfig?.extra?.revenueCatIosKey,
+  android: Constants.expoConfig?.extra?.revenueCatAndroidKey,
+});
+
+if (!REVENUECAT_API_KEY) {
+  throw new Error(
+    `[RevenueCat] Missing API key for ${Platform.OS}. ` +
+    `Please set EXPO_PUBLIC_REVENUECAT_${Platform.OS === 'ios' ? 'IOS' : 'ANDROID'}_KEY in your .env file.`
+  );
+}
 
 const ENTITLEMENT_ID = "Bookfelt Premium";
 

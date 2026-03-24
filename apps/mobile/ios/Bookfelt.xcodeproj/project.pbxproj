@@ -7,57 +7,57 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		046BD353C35C4C8084A96257 /* CourierPrime-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1FD39909A80546DCBC922EE0 /* CourierPrime-Bold.ttf */; };
+		134184AD5A6E4718B56E96CB /* CourierPrime-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 936EADA4A167478F81E5F2C0 /* CourierPrime-Italic.ttf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		1928EA2BA3554866965A7BDF /* SourceSans3-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A540532CE0C74B9A8FD711E6 /* SourceSans3-Regular.ttf */; };
+		35DB136EA2E94DF69C0F440E /* CourierPrime-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71BE266642624C7299DFF185 /* CourierPrime-Regular.ttf */; };
+		3BC1134FE00740B2872AF3C1 /* SourceSans3-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27391B7EFD5349D392CC36DF /* SourceSans3-Light.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		46781C29AF5D41F6973C26D3 /* CourierPrime-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C57BE389404E4B9BAC5891CF /* CourierPrime-Regular.ttf */; };
-		5DC16BCC024D422B81ABD21B /* SourceSans3-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E47C061EA50483E8222457A /* SourceSans3-SemiBold.ttf */; };
-		6CF8DC6F7545B0DB03036B19 /* libPods-Bookfelt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10F754127C739C2C07B16614 /* libPods-Bookfelt.a */; };
-		77CCE4371AAE829E9376995C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192789E2C66BFB461164F7CD /* ExpoModulesProvider.swift */; };
-		879479CEFB074BA0959FFCE0 /* Lora-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B6CF70EA0F1A48C8B4E1AE94 /* Lora-Medium.ttf */; };
-		8BCC7047D59E402E806FBD0B /* Lora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F93E29ECB71C4ABE939885ED /* Lora-Regular.ttf */; };
-		8C1560C2B8604F86A17D25BD /* Lora-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C18AABE384A4F8B882A88D1 /* Lora-Italic.ttf */; };
-		95C30876BAA41DA3E4E7D805 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 94B9654058ADA8D84AE4D74D /* PrivacyInfo.xcprivacy */; };
-		9CE52A466E2A4AE885F49965 /* Lora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D076E39537A43F8B9A7A4C3 /* Lora-SemiBold.ttf */; };
-		A472C41C22B147B58392F164 /* SourceSans3-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9C16C4FA80849F7AD699F17 /* SourceSans3-Medium.ttf */; };
-		B822FC60751B4E448E604A27 /* Lora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 771E570C6AA34A8C83284C88 /* Lora-Bold.ttf */; };
+		5BE7E6B7B05F462294DD1A4A /* Lora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70144827D31241F0A10C523C /* Lora-Bold.ttf */; };
+		8FEA8B11B2FE53ECB2346BCF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A8B92AA1842B11F17FE75029 /* PrivacyInfo.xcprivacy */; };
+		90392A82B3B74CD2A4A0EF57 /* Lora-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE7541F89CC34DEFA1F90C7B /* Lora-Medium.ttf */; };
+		91FA5802D5D9403CADB310F9 /* Lora-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A198BA38B152405D87142319 /* Lora-Italic.ttf */; };
+		98B36517F9B84AF891D6E6AD /* CourierPrime-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8070D5C8AEA44BE4A57A5388 /* CourierPrime-BoldItalic.ttf */; };
+		A171254B2AB142198B6D3FEC /* SourceSans3-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C07BC1DBD58F4521BC4E76D6 /* SourceSans3-Bold.ttf */; };
+		A278AD723B8346FF962F71B5 /* CourierPrime-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DFB9251C51C4DE6B806C992 /* CourierPrime-Bold.ttf */; };
+		B747C4F3287126E207303E4F /* libPods-Bookfelt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 132F63434BBD746289A0DEB3 /* libPods-Bookfelt.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		D5924AD24C4240F19CA9CBEB /* CourierPrime-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B47E5C17D0F6409083FABE4D /* CourierPrime-Italic.ttf */; };
-		D6F39F1932994D54932F3770 /* SourceSans3-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E603F71B3E34418B7AD4E41 /* SourceSans3-Bold.ttf */; };
-		DF33E342811D43079C8B0C59 /* SourceSans3-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C55420D5C4264455A5EB1F9A /* SourceSans3-Light.ttf */; };
+		C858DDAECF822A68602D0961 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9035132294443FF077A8F44 /* ExpoModulesProvider.swift */; };
+		D580E9295A604F3DA9E4675D /* Lora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4875FEA3B1624272909E8DE5 /* Lora-Regular.ttf */; };
+		DB74D6F7F3FE4250A589379F /* SourceSans3-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A2A0584205F47F5AB9B6BF0 /* SourceSans3-SemiBold.ttf */; };
+		DD14417F49714EC0BA281BE1 /* SourceSans3-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 24ECD3B41C2F4485B4FF2F42 /* SourceSans3-Medium.ttf */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		FB1B8FCABC0444D5A0F792D6 /* CourierPrime-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1EDFEDA81956428C84451942 /* CourierPrime-BoldItalic.ttf */; };
+		F9A6032555774D0985F771D6 /* Lora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5C9BF40FC4834E1B9320D3ED /* Lora-SemiBold.ttf */; };
+		FB96C59A6BAD442C85928E9B /* SourceSans3-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB7CD0EA74B74B3398670E57 /* SourceSans3-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		10F754127C739C2C07B16614 /* libPods-Bookfelt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Bookfelt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A2A0584205F47F5AB9B6BF0 /* SourceSans3-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-SemiBold.ttf"; path = "../assets/fonts/SourceSans3-SemiBold.ttf"; sourceTree = "<group>"; };
+		132F63434BBD746289A0DEB3 /* libPods-Bookfelt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Bookfelt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* Bookfelt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookfelt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Bookfelt/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Bookfelt/Info.plist; sourceTree = "<group>"; };
-		192789E2C66BFB461164F7CD /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Bookfelt/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		1E47C061EA50483E8222457A /* SourceSans3-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-SemiBold.ttf"; path = "../assets/fonts/SourceSans3-SemiBold.ttf"; sourceTree = "<group>"; };
-		1EDFEDA81956428C84451942 /* CourierPrime-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-BoldItalic.ttf"; path = "../assets/fonts/CourierPrime-BoldItalic.ttf"; sourceTree = "<group>"; };
-		1FD39909A80546DCBC922EE0 /* CourierPrime-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-Bold.ttf"; path = "../assets/fonts/CourierPrime-Bold.ttf"; sourceTree = "<group>"; };
-		36D6D2004553BC8718D2B93B /* Pods-Bookfelt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookfelt.debug.xcconfig"; path = "Target Support Files/Pods-Bookfelt/Pods-Bookfelt.debug.xcconfig"; sourceTree = "<group>"; };
-		4E603F71B3E34418B7AD4E41 /* SourceSans3-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Bold.ttf"; path = "../assets/fonts/SourceSans3-Bold.ttf"; sourceTree = "<group>"; };
-		5D076E39537A43F8B9A7A4C3 /* Lora-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-SemiBold.ttf"; path = "../assets/fonts/Lora-SemiBold.ttf"; sourceTree = "<group>"; };
-		771E570C6AA34A8C83284C88 /* Lora-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Bold.ttf"; path = "../assets/fonts/Lora-Bold.ttf"; sourceTree = "<group>"; };
-		8C18AABE384A4F8B882A88D1 /* Lora-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Italic.ttf"; path = "../assets/fonts/Lora-Italic.ttf"; sourceTree = "<group>"; };
-		94B9654058ADA8D84AE4D74D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Bookfelt/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		A540532CE0C74B9A8FD711E6 /* SourceSans3-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Regular.ttf"; path = "../assets/fonts/SourceSans3-Regular.ttf"; sourceTree = "<group>"; };
+		24ECD3B41C2F4485B4FF2F42 /* SourceSans3-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Medium.ttf"; path = "../assets/fonts/SourceSans3-Medium.ttf"; sourceTree = "<group>"; };
+		27391B7EFD5349D392CC36DF /* SourceSans3-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Light.ttf"; path = "../assets/fonts/SourceSans3-Light.ttf"; sourceTree = "<group>"; };
+		4875FEA3B1624272909E8DE5 /* Lora-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Regular.ttf"; path = "../assets/fonts/Lora-Regular.ttf"; sourceTree = "<group>"; };
+		5C9BF40FC4834E1B9320D3ED /* Lora-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-SemiBold.ttf"; path = "../assets/fonts/Lora-SemiBold.ttf"; sourceTree = "<group>"; };
+		70144827D31241F0A10C523C /* Lora-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Bold.ttf"; path = "../assets/fonts/Lora-Bold.ttf"; sourceTree = "<group>"; };
+		71BE266642624C7299DFF185 /* CourierPrime-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-Regular.ttf"; path = "../assets/fonts/CourierPrime-Regular.ttf"; sourceTree = "<group>"; };
+		8070D5C8AEA44BE4A57A5388 /* CourierPrime-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-BoldItalic.ttf"; path = "../assets/fonts/CourierPrime-BoldItalic.ttf"; sourceTree = "<group>"; };
+		936EADA4A167478F81E5F2C0 /* CourierPrime-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-Italic.ttf"; path = "../assets/fonts/CourierPrime-Italic.ttf"; sourceTree = "<group>"; };
+		9DFB9251C51C4DE6B806C992 /* CourierPrime-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-Bold.ttf"; path = "../assets/fonts/CourierPrime-Bold.ttf"; sourceTree = "<group>"; };
+		A198BA38B152405D87142319 /* Lora-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Italic.ttf"; path = "../assets/fonts/Lora-Italic.ttf"; sourceTree = "<group>"; };
+		A8B92AA1842B11F17FE75029 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Bookfelt/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Bookfelt/SplashScreen.storyboard; sourceTree = "<group>"; };
-		B47E5C17D0F6409083FABE4D /* CourierPrime-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-Italic.ttf"; path = "../assets/fonts/CourierPrime-Italic.ttf"; sourceTree = "<group>"; };
-		B6CF70EA0F1A48C8B4E1AE94 /* Lora-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Medium.ttf"; path = "../assets/fonts/Lora-Medium.ttf"; sourceTree = "<group>"; };
-		B9C16C4FA80849F7AD699F17 /* SourceSans3-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Medium.ttf"; path = "../assets/fonts/SourceSans3-Medium.ttf"; sourceTree = "<group>"; };
+		AB7CD0EA74B74B3398670E57 /* SourceSans3-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Regular.ttf"; path = "../assets/fonts/SourceSans3-Regular.ttf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		C55420D5C4264455A5EB1F9A /* SourceSans3-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Light.ttf"; path = "../assets/fonts/SourceSans3-Light.ttf"; sourceTree = "<group>"; };
-		C57BE389404E4B9BAC5891CF /* CourierPrime-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-Regular.ttf"; path = "../assets/fonts/CourierPrime-Regular.ttf"; sourceTree = "<group>"; };
-		D6923E9F1D64D0FFA4B48DA0 /* Pods-Bookfelt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookfelt.release.xcconfig"; path = "Target Support Files/Pods-Bookfelt/Pods-Bookfelt.release.xcconfig"; sourceTree = "<group>"; };
+		C07BC1DBD58F4521BC4E76D6 /* SourceSans3-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSans3-Bold.ttf"; path = "../assets/fonts/SourceSans3-Bold.ttf"; sourceTree = "<group>"; };
+		CA2FC9B6761BE708CFEDAF32 /* Pods-Bookfelt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookfelt.release.xcconfig"; path = "Target Support Files/Pods-Bookfelt/Pods-Bookfelt.release.xcconfig"; sourceTree = "<group>"; };
+		DBC3192D81285D6F49D9C93A /* Pods-Bookfelt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookfelt.debug.xcconfig"; path = "Target Support Files/Pods-Bookfelt/Pods-Bookfelt.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EE7541F89CC34DEFA1F90C7B /* Lora-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Medium.ttf"; path = "../assets/fonts/Lora-Medium.ttf"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Bookfelt/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* Bookfelt-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Bookfelt-Bridging-Header.h"; path = "Bookfelt/Bookfelt-Bridging-Header.h"; sourceTree = "<group>"; };
-		F93E29ECB71C4ABE939885ED /* Lora-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lora-Regular.ttf"; path = "../assets/fonts/Lora-Regular.ttf"; sourceTree = "<group>"; };
+		F9035132294443FF077A8F44 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Bookfelt/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,21 +65,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CF8DC6F7545B0DB03036B19 /* libPods-Bookfelt.a in Frameworks */,
+				B747C4F3287126E207303E4F /* libPods-Bookfelt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		052EEB7137F9FB36E93E543E /* Bookfelt */ = {
-			isa = PBXGroup;
-			children = (
-				192789E2C66BFB461164F7CD /* ExpoModulesProvider.swift */,
-			);
-			name = Bookfelt;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* Bookfelt */ = {
 			isa = PBXGroup;
 			children = (
@@ -89,36 +81,58 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				94B9654058ADA8D84AE4D74D /* PrivacyInfo.xcprivacy */,
+				A8B92AA1842B11F17FE75029 /* PrivacyInfo.xcprivacy */,
 			);
 			name = Bookfelt;
-			sourceTree = "<group>";
-		};
-		19A2B72C2CB64C84234FE23B /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				052EEB7137F9FB36E93E543E /* Bookfelt */,
-			);
-			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				10F754127C739C2C07B16614 /* libPods-Bookfelt.a */,
+				132F63434BBD746289A0DEB3 /* libPods-Bookfelt.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		70CDBCFF887F3D6DE82B0BF2 /* Pods */ = {
+		334096960D47273F52EB19B7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				36D6D2004553BC8718D2B93B /* Pods-Bookfelt.debug.xcconfig */,
-				D6923E9F1D64D0FFA4B48DA0 /* Pods-Bookfelt.release.xcconfig */,
+				DBC3192D81285D6F49D9C93A /* Pods-Bookfelt.debug.xcconfig */,
+				CA2FC9B6761BE708CFEDAF32 /* Pods-Bookfelt.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		3BBD4C3C64187F12E682608D /* Bookfelt */ = {
+			isa = PBXGroup;
+			children = (
+				F9035132294443FF077A8F44 /* ExpoModulesProvider.swift */,
+			);
+			name = Bookfelt;
+			sourceTree = "<group>";
+		};
+		6A3BD9A0133247F49FA6CA48 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4875FEA3B1624272909E8DE5 /* Lora-Regular.ttf */,
+				EE7541F89CC34DEFA1F90C7B /* Lora-Medium.ttf */,
+				5C9BF40FC4834E1B9320D3ED /* Lora-SemiBold.ttf */,
+				70144827D31241F0A10C523C /* Lora-Bold.ttf */,
+				A198BA38B152405D87142319 /* Lora-Italic.ttf */,
+				71BE266642624C7299DFF185 /* CourierPrime-Regular.ttf */,
+				9DFB9251C51C4DE6B806C992 /* CourierPrime-Bold.ttf */,
+				936EADA4A167478F81E5F2C0 /* CourierPrime-Italic.ttf */,
+				8070D5C8AEA44BE4A57A5388 /* CourierPrime-BoldItalic.ttf */,
+				AB7CD0EA74B74B3398670E57 /* SourceSans3-Regular.ttf */,
+				27391B7EFD5349D392CC36DF /* SourceSans3-Light.ttf */,
+				24ECD3B41C2F4485B4FF2F42 /* SourceSans3-Medium.ttf */,
+				0A2A0584205F47F5AB9B6BF0 /* SourceSans3-SemiBold.ttf */,
+				C07BC1DBD58F4521BC4E76D6 /* SourceSans3-Bold.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -135,9 +149,9 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				EC29DBCEA93E44E09714CC8D /* Resources */,
-				70CDBCFF887F3D6DE82B0BF2 /* Pods */,
-				19A2B72C2CB64C84234FE23B /* ExpoModulesProviders */,
+				6A3BD9A0133247F49FA6CA48 /* Resources */,
+				334096960D47273F52EB19B7 /* Pods */,
+				D913BA9BCC72F7E6C2A8C6DF /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -161,26 +175,12 @@
 			path = Bookfelt/Supporting;
 			sourceTree = "<group>";
 		};
-		EC29DBCEA93E44E09714CC8D /* Resources */ = {
+		D913BA9BCC72F7E6C2A8C6DF /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				F93E29ECB71C4ABE939885ED /* Lora-Regular.ttf */,
-				B6CF70EA0F1A48C8B4E1AE94 /* Lora-Medium.ttf */,
-				5D076E39537A43F8B9A7A4C3 /* Lora-SemiBold.ttf */,
-				771E570C6AA34A8C83284C88 /* Lora-Bold.ttf */,
-				8C18AABE384A4F8B882A88D1 /* Lora-Italic.ttf */,
-				C57BE389404E4B9BAC5891CF /* CourierPrime-Regular.ttf */,
-				1FD39909A80546DCBC922EE0 /* CourierPrime-Bold.ttf */,
-				B47E5C17D0F6409083FABE4D /* CourierPrime-Italic.ttf */,
-				1EDFEDA81956428C84451942 /* CourierPrime-BoldItalic.ttf */,
-				A540532CE0C74B9A8FD711E6 /* SourceSans3-Regular.ttf */,
-				C55420D5C4264455A5EB1F9A /* SourceSans3-Light.ttf */,
-				B9C16C4FA80849F7AD699F17 /* SourceSans3-Medium.ttf */,
-				1E47C061EA50483E8222457A /* SourceSans3-SemiBold.ttf */,
-				4E603F71B3E34418B7AD4E41 /* SourceSans3-Bold.ttf */,
+				3BBD4C3C64187F12E682608D /* Bookfelt */,
 			);
-			name = Resources;
-			path = "";
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,13 +191,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Bookfelt" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				829A33AEED77B82BE88C0063 /* [Expo] Configure project */,
+				972A62D8B64ED98E989207B9 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				ABADFC070F984B5088FDEE29 /* [CP] Embed Pods Frameworks */,
+				8FA4DA166CC5F537114E4BE9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -247,21 +247,21 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				8BCC7047D59E402E806FBD0B /* Lora-Regular.ttf in Resources */,
-				879479CEFB074BA0959FFCE0 /* Lora-Medium.ttf in Resources */,
-				9CE52A466E2A4AE885F49965 /* Lora-SemiBold.ttf in Resources */,
-				B822FC60751B4E448E604A27 /* Lora-Bold.ttf in Resources */,
-				8C1560C2B8604F86A17D25BD /* Lora-Italic.ttf in Resources */,
-				46781C29AF5D41F6973C26D3 /* CourierPrime-Regular.ttf in Resources */,
-				046BD353C35C4C8084A96257 /* CourierPrime-Bold.ttf in Resources */,
-				D5924AD24C4240F19CA9CBEB /* CourierPrime-Italic.ttf in Resources */,
-				FB1B8FCABC0444D5A0F792D6 /* CourierPrime-BoldItalic.ttf in Resources */,
-				1928EA2BA3554866965A7BDF /* SourceSans3-Regular.ttf in Resources */,
-				DF33E342811D43079C8B0C59 /* SourceSans3-Light.ttf in Resources */,
-				A472C41C22B147B58392F164 /* SourceSans3-Medium.ttf in Resources */,
-				5DC16BCC024D422B81ABD21B /* SourceSans3-SemiBold.ttf in Resources */,
-				D6F39F1932994D54932F3770 /* SourceSans3-Bold.ttf in Resources */,
-				95C30876BAA41DA3E4E7D805 /* PrivacyInfo.xcprivacy in Resources */,
+				D580E9295A604F3DA9E4675D /* Lora-Regular.ttf in Resources */,
+				90392A82B3B74CD2A4A0EF57 /* Lora-Medium.ttf in Resources */,
+				F9A6032555774D0985F771D6 /* Lora-SemiBold.ttf in Resources */,
+				5BE7E6B7B05F462294DD1A4A /* Lora-Bold.ttf in Resources */,
+				91FA5802D5D9403CADB310F9 /* Lora-Italic.ttf in Resources */,
+				35DB136EA2E94DF69C0F440E /* CourierPrime-Regular.ttf in Resources */,
+				A278AD723B8346FF962F71B5 /* CourierPrime-Bold.ttf in Resources */,
+				134184AD5A6E4718B56E96CB /* CourierPrime-Italic.ttf in Resources */,
+				98B36517F9B84AF891D6E6AD /* CourierPrime-BoldItalic.ttf in Resources */,
+				FB96C59A6BAD442C85928E9B /* SourceSans3-Regular.ttf in Resources */,
+				3BC1134FE00740B2872AF3C1 /* SourceSans3-Light.ttf in Resources */,
+				DD14417F49714EC0BA281BE1 /* SourceSans3-Medium.ttf in Resources */,
+				DB74D6F7F3FE4250A589379F /* SourceSans3-SemiBold.ttf in Resources */,
+				A171254B2AB142198B6D3FEC /* SourceSans3-Bold.ttf in Resources */,
+				8FEA8B11B2FE53ECB2346BCF /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +363,29 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bookfelt/Pods-Bookfelt-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		829A33AEED77B82BE88C0063 /* [Expo] Configure project */ = {
+		8FA4DA166CC5F537114E4BE9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Bookfelt/Pods-Bookfelt-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bookfelt/Pods-Bookfelt-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		972A62D8B64ED98E989207B9 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -387,28 +409,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Bookfelt/expo-configure-project.sh\"\n";
 		};
-		ABADFC070F984B5088FDEE29 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Bookfelt/Pods-Bookfelt-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bookfelt/Pods-Bookfelt-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -417,7 +417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				77CCE4371AAE829E9376995C /* ExpoModulesProvider.swift in Sources */,
+				C858DDAECF822A68602D0961 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,7 +426,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36D6D2004553BC8718D2B93B /* Pods-Bookfelt.debug.xcconfig */;
+			baseConfigurationReference = DBC3192D81285D6F49D9C93A /* Pods-Bookfelt.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -462,7 +462,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6923E9F1D64D0FFA4B48DA0 /* Pods-Bookfelt.release.xcconfig */;
+			baseConfigurationReference = CA2FC9B6761BE708CFEDAF32 /* Pods-Bookfelt.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
