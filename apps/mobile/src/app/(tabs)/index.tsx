@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { BookOpenIcon } from "react-native-heroicons/outline";
-import { SparklesIcon } from "react-native-heroicons/solid";
 import LinearGradient from "react-native-linear-gradient";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { useLibrary } from "@/features/books/hooks/use-library";
@@ -29,8 +28,6 @@ import {
 } from "@/shared";
 import { SHEET_IDS } from "@/shared/constants/sheet-ids";
 import { useAuth } from "@/providers/AuthProvider";
-import { useState } from "react";
-import { PaywallScreen, CustomPaywall, usePremiumStatus } from "@/features/premium";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -48,10 +45,6 @@ export default function HomeScreen() {
   const latestEmotion = latestEmotionId
     ? emotionMap.get(latestEmotionId)
     : undefined;
-
-  // Premium testing
-  const { isPremium } = usePremiumStatus();
-  const [showPaywall, setShowPaywall] = useState(false);
 
   // Create book lookup map for cover URLs
   const bookMap = new Map(books.map((book) => [book.id, book]));
@@ -115,23 +108,6 @@ export default function HomeScreen() {
         </Text>
 
         <View className="flex-row items-center gap-2">
-          {/* Premium Test Button */}
-          <Pressable
-            onPress={() => setShowPaywall(true)}
-            className={`px-3 py-1.5 rounded-full flex-row items-center gap-1.5 ${
-              isPremium ? "bg-primary/20" : "bg-secondary"
-            }`}
-          >
-            <SparklesIcon size={12} color={isPremium ? "#8B5CF6" : "#666"} />
-            <Text
-              className={`text-xs font-medium ${
-                isPremium ? "text-primary" : "text-muted"
-              }`}
-            >
-              {isPremium ? "Premium" : "Test"}
-            </Text>
-          </Pressable>
-
           <Pressable onPress={() => SheetManager.show(SHEET_IDS.PROFILE)}>
             <View className="w-9 h-9 rounded-full overflow-hidden items-center justify-center bg-primary">
               {avatarUrl ? (
@@ -301,15 +277,6 @@ export default function HomeScreen() {
         contentContainerStyle={{ paddingBottom: 24 }}
       />
 
-      {/* Premium Paywall Modal - Using Custom Design */}
-      <CustomPaywall
-        visible={showPaywall}
-        onDismiss={() => setShowPaywall(false)}
-        onPurchaseSuccess={() => {
-          setShowPaywall(false);
-          console.log("Premium purchase successful!");
-        }}
-      />
     </ScreenWrapper>
   );
 }
