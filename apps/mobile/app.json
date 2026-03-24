@@ -81,7 +81,9 @@
       "router": {},
       "eas": {
         "projectId": "b5012abf-bcaa-438c-bed8-7106a95374ed"
-      }
+      },
+      "revenueCatIosKey": "${EXPO_PUBLIC_REVENUECAT_IOS_KEY}",
+      "revenueCatAndroidKey": "${EXPO_PUBLIC_REVENUECAT_ANDROID_KEY}"
     }
   }
 }

@@ -4,11 +4,17 @@ import Purchases, {
   PurchasesOffering,
   PurchasesPackage,
 } from "react-native-purchases";
+import { Platform } from "react-native";
+import Constants from "expo-constants";
 
 /**
  * RevenueCat Configuration
  */
-const REVENUECAT_API_KEY = "test_sMVCDjpEDACZNFoFcqUsNGgFsGe";
+const REVENUECAT_API_KEY = Platform.select({
+  ios: Constants.expoConfig?.extra?.revenueCatIosKey || "test_sMVCDjpEDACZNFoFcqUsNGgFsGe",
+  android: Constants.expoConfig?.extra?.revenueCatAndroidKey || "test_sMVCDjpEDACZNFoFcqUsNGgFsGe",
+}) as string;
+
 const ENTITLEMENT_ID = "Bookfelt Premium";
 
 /**
