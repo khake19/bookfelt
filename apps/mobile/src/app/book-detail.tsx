@@ -373,7 +373,7 @@ const BookDetailScreen = () => {
           {entries.length > 0 ? (
             <View className="relative">
               {/* AI Summary node */}
-              {book.status === "finished" && book.summary && (
+              {book.status === "finished" && book.summary && !showDraftsOnly && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -400,7 +400,7 @@ const BookDetailScreen = () => {
                 </Animated.View>
               )}
               {/* Final Thought cap */}
-              {book.status === "finished" && book.finalThought && (
+              {book.status === "finished" && book.finalThought && !showDraftsOnly && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -435,7 +435,7 @@ const BookDetailScreen = () => {
                 </Animated.View>
               )}
               {/* Exit Note node */}
-              {(book.status === "dnf" || book.status === "paused") && book.exitNote && (
+              {(book.status === "dnf" || book.status === "paused") && book.exitNote && !showDraftsOnly && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -503,7 +503,7 @@ const BookDetailScreen = () => {
                             style={{ backgroundColor: dotColor }}
                           />
                         )}
-                        {!isLast && (
+                        {!isLast && !showDraftsOnly && (
                           <View
                             className="absolute w-0.5"
                             style={{
@@ -718,7 +718,7 @@ const BookDetailScreen = () => {
               })}
 
               {/* First Impression anchor */}
-              {book.firstImpression && (
+              {book.firstImpression && !showDraftsOnly && (
                 <Animated.View
                   entering={FadeInDown.duration(400).delay(
                     250 + entries.length * 80,
@@ -755,7 +755,7 @@ const BookDetailScreen = () => {
             </View>
           ) : (
             <>
-              {book.status === "finished" && book.summary && (
+              {book.status === "finished" && book.summary && !showDraftsOnly && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -772,7 +772,7 @@ const BookDetailScreen = () => {
                   </View>
                 </Animated.View>
               )}
-              {book.status === "finished" && book.finalThought && (
+              {book.status === "finished" && book.finalThought && !showDraftsOnly && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
@@ -797,7 +797,7 @@ const BookDetailScreen = () => {
                   </View>
                 </Animated.View>
               )}
-              {(book.status === "dnf" || book.status === "paused") && book.exitNote && (
+              {(book.status === "dnf" || book.status === "paused") && book.exitNote && !showDraftsOnly && (
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                   <View className="flex-row mb-6">
                     <View className="w-3 items-center">
