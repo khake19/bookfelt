@@ -9,6 +9,8 @@ import {
   bookUpdatesToRaw,
 } from "@/features/books/converters/book.converter";
 import { deleteAudioFiles } from "@/lib/audio-sync";
+import { AnalyticsEvents } from "@bookfelt/core";
+import { getAnalytics } from "@/services/posthog";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RawRecord = any;
@@ -97,6 +99,11 @@ export async function addBook(
         await upsertPrimaryRead(created.id);
       }
 
+      // Track analytics
+      getAnalytics().track(
+        AnalyticsEvents.bookAdded(created.id, book.title, book.authors?.join(", "), status)
+      );
+
       return created.id;
     });
   } catch (error) {
@@ -109,6 +116,11 @@ export async function removeBook(bookId: string): Promise<void> {
   try {
     const record = await booksCollection.find(bookId);
     const entries = await record.entries.fetch();
+
+    // Track analytics before deletion
+    getAnalytics().track(
+      AnalyticsEvents.bookRemoved(record.id, record.title, record.status, entries.length)
+    );
 
     const allUris: (string | null)[] = [
       record.firstImpressionAudioUri,
@@ -148,10 +160,24 @@ export async function updateBookStatus(
   try {
     await database.write(async () => {
       const record = await booksCollection.find(bookId);
+      const previousStatus = record.status;
+
       await record.update(() => {
         const raw: RawRecord = record._raw;
         raw.status = status;
       });
+
+      // Track analytics for status changes
+      getAnalytics().track(
+        AnalyticsEvents.bookStatusChanged(record.id, record.title, previousStatus, status)
+      );
+
+      // Track specific events for finished/DNF
+      if (status === "finished") {
+        getAnalytics().track(AnalyticsEvents.bookFinished(record.id, record.title));
+      } else if (status === "dnf") {
+        getAnalytics().track(AnalyticsEvents.bookDNF(record.id, record.title));
+      }
 
       const primarySetting = await getPrimaryReadSetting();
       const currentPrimary = primarySetting?.value ?? null;
@@ -203,6 +229,41 @@ export async function updateBook(
         if ("finalThoughtAudioUri" in updates) rec.finalThoughtAudioUri = updates.finalThoughtAudioUri ?? null;
         if ("exitNoteAudioUri" in updates) rec.exitNoteAudioUri = updates.exitNoteAudioUri ?? null;
       });
+
+      // Track bookend events
+      if ("firstImpression" in updates || "firstImpressionAudioUri" in updates) {
+        getAnalytics().track(
+          AnalyticsEvents.bookendAdded(
+            record.id,
+            record.title,
+            "first_impression",
+            !!(updates.firstImpressionAudioUri || rec.firstImpressionAudioUri),
+            !!(updates.firstImpression || rec.firstImpression)
+          )
+        );
+      }
+      if ("finalThought" in updates || "finalThoughtAudioUri" in updates) {
+        getAnalytics().track(
+          AnalyticsEvents.bookendAdded(
+            record.id,
+            record.title,
+            "final_thought",
+            !!(updates.finalThoughtAudioUri || rec.finalThoughtAudioUri),
+            !!(updates.finalThought || rec.finalThought)
+          )
+        );
+      }
+      if ("exitNote" in updates || "exitNoteAudioUri" in updates) {
+        getAnalytics().track(
+          AnalyticsEvents.bookendAdded(
+            record.id,
+            record.title,
+            "exit_note",
+            !!(updates.exitNoteAudioUri || rec.exitNoteAudioUri),
+            !!(updates.exitNote || rec.exitNote)
+          )
+        );
+      }
     });
   } catch (error) {
     console.error("updateBook failed:", error);

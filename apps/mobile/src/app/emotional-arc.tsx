@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { ShareIcon } from 'react-native-heroicons/outline';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { ScreenWrapper } from '@/shared/components/ScreenWrapper';
 import CloseButton from '@/shared/components/CloseButton';
 import {
@@ -14,6 +14,7 @@ import {
   useShareEmotionalArc,
 } from '@/features/emotional-arc';
 import { useEmotionMap } from '@/features/entries';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 export default function EmotionalArcScreen() {
   const { bookId, bookTitle } = useLocalSearchParams<{ bookId: string; bookTitle?: string }>();
@@ -22,6 +23,18 @@ export default function EmotionalArcScreen() {
   const emotionMap = useEmotionMap();
   const shareableRef = useRef<View>(null);
   const { share, isCapturing } = useShareEmotionalArc();
+  const analytics = useAnalytics();
+
+  // Track emotional arc view
+  useEffect(() => {
+    if (arcData.length > 0) {
+      analytics.emotionalArcViewed(
+        bookId || '',
+        bookTitle || 'Unknown',
+        arcData.length
+      );
+    }
+  }, [bookId, bookTitle]); // Only track once per book
 
   const handleShare = () => {
     if (arcData.length === 0) {

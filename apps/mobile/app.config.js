@@ -85,6 +85,8 @@ module.exports = {
       },
       revenueCatIosKey: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY,
       revenueCatAndroidKey: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY,
+      posthogApiKey: process.env.EXPO_PUBLIC_POSTHOG_API_KEY,
+      posthogHost: process.env.EXPO_PUBLIC_POSTHOG_HOST,
     },
   },
 };

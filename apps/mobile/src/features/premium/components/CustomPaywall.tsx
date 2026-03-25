@@ -8,11 +8,12 @@ import {
   Alert,
 } from "react-native";
 import { XMarkIcon, CheckIcon, SparklesIcon } from "react-native-heroicons/solid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PurchasesPackage } from "react-native-purchases";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useOfferings } from "@/features/premium/hooks/use-offerings";
 import { purchasePackage, restorePurchases } from "@/features/premium/services/revenuecat";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 interface CustomPaywallProps {
   visible: boolean;
@@ -31,10 +32,18 @@ export function CustomPaywall({
 }: CustomPaywallProps) {
   const insets = useSafeAreaInsets();
   const { offering, isLoading } = useOfferings();
+  const analytics = useAnalytics();
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PurchasesPackage | null>(
     null
   );
+
+  // Track paywall view
+  useEffect(() => {
+    if (visible) {
+      analytics.paywallViewed(!!offering);
+    }
+  }, [visible, offering]);
 
   const handlePurchase = async (pkg: PurchasesPackage) => {
     try {
@@ -42,15 +51,26 @@ export function CustomPaywall({
       const { success } = await purchasePackage(pkg);
 
       if (success) {
+        // Track successful purchase
+        analytics.premiumUpgraded(
+          pkg.identifier,
+          pkg.product.identifier,
+          pkg.product.price,
+          pkg.product.currencyCode
+        );
+
         Alert.alert("Success!", "Welcome to Bookfelt Premium! 🎉");
         onPurchaseSuccess?.();
         onDismiss();
       }
     } catch (error: any) {
       if (error.message === "Purchase cancelled") {
+        analytics.purchaseCancelled(pkg.identifier);
         // User cancelled - do nothing
         return;
       }
+
+      analytics.purchaseFailed(pkg.identifier, error.message);
       Alert.alert("Purchase Failed", error.message || "Please try again later.");
     } finally {
       setIsPurchasing(false);
@@ -61,10 +81,15 @@ export function CustomPaywall({
     try {
       setIsPurchasing(true);
       await restorePurchases();
+
+      analytics.purchasesRestored(true);
+
       Alert.alert("Restored!", "Your purchases have been restored.");
       onPurchaseSuccess?.();
       onDismiss();
     } catch (error: any) {
+      analytics.purchasesRestored(false, error.message);
+
       Alert.alert("Restore Failed", "No previous purchases found.");
     } finally {
       setIsPurchasing(false);

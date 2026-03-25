@@ -4,6 +4,8 @@ import * as libraryService from "@/features/books/services/library.service";
 import * as entryService from "@/features/entries/services/entry.service";
 import { database, EmotionModel } from "@bookfelt/database";
 import { useBookLimits } from "@/features/premium";
+import { AnalyticsEvents } from "@bookfelt/core";
+import { getAnalytics } from "@/services/posthog";
 
 type SummaryState =
   | { kind: "loading" }
@@ -87,6 +89,12 @@ export function useBookSummary(
       );
 
       libraryService.updateBook(bookId, { summary: text });
+
+      // Track analytics
+      getAnalytics().track(
+        AnalyticsEvents.summaryGenerated(bookId, book.title, source, entries.length, isPremium)
+      );
+
       setState({ kind: "done", text });
     } catch (err: any) {
       if (

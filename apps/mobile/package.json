@@ -48,6 +48,7 @@
     "metro-config": "~0.83.0",
     "metro-resolver": "~0.83.0",
     "nativewind": "^4.2.2",
+    "posthog-react-native": "^4.37.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.71.2",

@@ -3,9 +3,11 @@ import { Alert, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 export function useShareEmotionalArc() {
   const [isCapturing, setIsCapturing] = useState(false);
+  const analytics = useAnalytics();
 
   const captureView = async (viewRef: React.RefObject<View>): Promise<string | null> => {
     try {
@@ -52,8 +54,19 @@ export function useShareEmotionalArc() {
           ? `Share ${bookTitle} Emotional Arc`
           : 'Share Emotional Arc',
       });
+
+      // Track successful share
+      analytics.emotionalArcShared('share_sheet', bookTitle);
     } catch (error) {
       console.error('Error sharing:', error);
+
+      // Track failed share
+      analytics.emotionalArcShareFailed(
+        'share_sheet',
+        error instanceof Error ? error.message : 'Unknown error',
+        bookTitle
+      );
+
       Alert.alert('Error', 'Failed to share image. Please try again.');
     } finally {
       setIsCapturing(false);
@@ -82,9 +95,20 @@ export function useShareEmotionalArc() {
 
       // Save to photo library
       await MediaLibrary.createAssetAsync(uri);
+
+      // Track successful save
+      analytics.emotionalArcShared('save_to_photos');
+
       Alert.alert('Success', 'Image saved to your photo library!');
     } catch (error) {
       console.error('Error saving to photos:', error);
+
+      // Track failed save
+      analytics.emotionalArcShareFailed(
+        'save_to_photos',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+
       Alert.alert('Error', 'Failed to save image. Please try again.');
     } finally {
       setIsCapturing(false);

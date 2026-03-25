@@ -13,6 +13,7 @@ import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 import { syncDatabase } from '@/lib/sync';
 import { useOnboardingStep } from '@/features/books/hooks/use-library';
 import { initializeRevenueCat, setUserId } from '@/features/premium/services/revenuecat';
+import { initializePostHog, identifyUser } from '@/services/posthog';
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,34 @@ function RevenueCatManager() {
       .catch((error) => {
         console.error('[RevenueCat] Failed to set user ID:', error);
       });
+  }, [user, isInitialized]);
+
+  return null;
+}
+
+function PostHogManager() {
+  const { user } = useAuth();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize PostHog once on app start
+  useEffect(() => {
+    initializePostHog()
+      .then(() => {
+        console.log('[PostHog] SDK initialized');
+        setIsInitialized(true);
+      })
+      .catch((error) => {
+        console.error('[PostHog] Initialization failed:', error);
+      });
+  }, []);
+
+  // Identify user when logged in
+  useEffect(() => {
+    if (!isInitialized || !user) return;
+
+    identifyUser(user.id, {
+      email: user.email,
+    });
   }, [user, isInitialized]);
 
   return null;
@@ -123,6 +152,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <RevenueCatManager />
+      <PostHogManager />
       <SyncManager />
       <DatabaseProvider>
         <QueryClientProvider client={queryClient}>

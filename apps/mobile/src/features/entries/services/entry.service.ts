@@ -7,6 +7,8 @@ import {
   entryModelToEntry
 } from "@/features/entries/converters/entry.converter";
 import type { Entry } from "@/features/entries/types/entry";
+import { AnalyticsEvents } from "@bookfelt/core";
+import { getAnalytics } from "@/services/posthog";
 
 const entriesCollection = database.get<EntryModel>("entries");
 
@@ -70,6 +72,21 @@ export async function addEntry(
         rec.entryCreatedAt = Date.now();
       });
     });
+
+    // Track analytics
+    getAnalytics().track(
+      AnalyticsEvents.entryCreated(
+        record.id,
+        entry.bookId,
+        entry.bookTitle,
+        !!entry.reflectionUri,
+        !!entry.emotionId,
+        !!entry.snippet,
+        !!entry.reflection,
+        !!entry.setting
+      )
+    );
+
     return record.id;
   } catch (error) {
     console.error("addEntry failed:", error);
@@ -80,6 +97,12 @@ export async function addEntry(
 export async function removeEntry(entryId: string): Promise<void> {
   try {
     const record = await entriesCollection.find(entryId);
+
+    // Track analytics before deletion
+    getAnalytics().track(
+      AnalyticsEvents.entryRemoved(record.id, record.bookId, !!record.reflectionUri)
+    );
+
     await deleteAudioFiles([record.reflectionUri]);
 
     await database.write(async () => {
@@ -98,6 +121,8 @@ export async function updateEntry(
   try {
     await database.write(async () => {
       const record = await entriesCollection.find(entryId);
+      const hadAudio = !!record.reflectionUri;
+
       await record.update((rec) => {
         // Use decorated property setters to trigger change tracking
         if ("bookId" in updates && updates.bookId) rec.bookId = updates.bookId;
@@ -115,6 +140,17 @@ export async function updateEntry(
         if ("setting" in updates) rec.setting = updates.setting ?? null;
         if ("date" in updates && updates.date) rec.date = updates.date;
       });
+
+      // Track analytics
+      getAnalytics().track(
+        AnalyticsEvents.entryUpdated(
+          record.id,
+          record.bookId,
+          Object.keys(updates),
+          !hadAudio && !!record.reflectionUri,
+          hadAudio && !record.reflectionUri
+        )
+      );
     });
   } catch (error) {
     console.error("updateEntry failed:", error);

@@ -1,9 +1,12 @@
 import { Alert } from "react-native";
+import { AnalyticsEvents } from "@bookfelt/core";
+import { getAnalytics } from "@/services/posthog";
 
 interface UpgradePromptOptions {
   title: string;
   message: string;
   onUpgrade: () => void;
+  limitType?: string;
 }
 
 /**
@@ -14,7 +17,15 @@ export function showUpgradePrompt({
   title,
   message,
   onUpgrade,
+  limitType,
 }: UpgradePromptOptions) {
+  // Track when user hits free tier limit
+  if (limitType) {
+    getAnalytics().track(
+      AnalyticsEvents.freeTierLimitReached(limitType as any, title)
+    );
+  }
+
   Alert.alert(title, message, [
     {
       text: "Maybe Later",
@@ -38,6 +49,7 @@ export const UpgradePrompts = {
       message:
         "You've used all 15 free audio transcriptions. Upgrade to Premium for unlimited transcriptions on all your books!",
       onUpgrade,
+      limitType: "audio_transcription",
     }),
 
   summaryLimit: (onUpgrade: () => void) =>
@@ -46,6 +58,7 @@ export const UpgradePrompts = {
       message:
         "You've already generated a summary for this book. Upgrade to Premium to regenerate summaries!",
       onUpgrade,
+      limitType: "summary",
     }),
 
   bookendLimit: (onUpgrade: () => void) =>
@@ -54,5 +67,6 @@ export const UpgradePrompts = {
       message:
         "You've used all 3 free bookends. Upgrade to Premium for unlimited bookends on all your books!",
       onUpgrade,
+      limitType: "bookend",
     }),
 };
