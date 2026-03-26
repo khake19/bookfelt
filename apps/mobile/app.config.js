@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: "Bookfelt",
     slug: "bookfelt",
-    version: "1.0.5",
+    version: "1.0.6",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "bookfelt",
