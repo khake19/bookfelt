@@ -1,8 +1,7 @@
 packages:
-  - apps/*
-  - packages/*
-
+  - "apps/*"
+  - "packages/*"
+  - "libs/*"
 autoInstallPeers: true
-
 patchedDependencies:
-  react-native-vision-camera-text-recognition@3.1.1: patches/react-native-vision-camera-text-recognition@3.1.1.patch
+  react-native-vision-camera-text-recognition@3.1.1: "patches/react-native-vision-camera-text-recognition@3.1.1.patch"

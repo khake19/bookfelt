@@ -393,6 +393,8 @@ importers:
 
   apps/mobile-e2e: {}
 
+  libs/supabase: {}
+
   packages/core:
     dependencies:
       axios:

@@ -1,0 +1,93 @@
+{
+  "name": "@bookfelt/supabase",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/supabase/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "db:pull": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase db pull",
+        "cwd": "packages/supabase"
+      }
+    },
+    "db:push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase db push",
+        "cwd": "packages/supabase"
+      }
+    },
+    "db:reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase db reset",
+        "cwd": "packages/supabase"
+      }
+    },
+    "migration:new": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase migration new {args.name}",
+        "cwd": "packages/supabase"
+      }
+    },
+    "link": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase link --project-ref {args.ref}",
+        "cwd": "packages/supabase"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase start",
+        "cwd": "packages/supabase"
+      }
+    },
+    "stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase stop",
+        "cwd": "packages/supabase"
+      }
+    },
+    "migration:repair": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase migration repair --status reverted {args.id}",
+        "cwd": "packages/supabase"
+      }
+    },
+    "functions:serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase functions serve",
+        "cwd": "packages/supabase"
+      }
+    },
+    "functions:deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase functions deploy {args.name}",
+        "cwd": "packages/supabase"
+      }
+    },
+    "functions:deploy-all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase functions deploy",
+        "cwd": "packages/supabase"
+      }
+    },
+    "functions:new": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "supabase functions new {args.name}",
+        "cwd": "packages/supabase"
+      }
+    }
+  }
+}

@@ -60,6 +60,11 @@ cache/
 credentials.json
 credentials/
 
+# Supabase (only ignore temp/config, NOT migrations or functions)
+packages/supabase/.temp/
+packages/supabase/.branches/
+packages/supabase/config.toml
+
 
 test-output
 
