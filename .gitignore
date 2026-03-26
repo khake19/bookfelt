@@ -64,5 +64,6 @@ Environment variables
 .env.local
 .env.*.local
 
-/android
-/ios
+# android/
+# ios/
+# Commented out - using manual native folders (not Prebuild)
