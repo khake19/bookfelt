@@ -9,7 +9,11 @@
     "ios": "expo run:ios",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "version:bump": "node scripts/bump-version.mjs",
+    "version:patch": "node scripts/bump-version.mjs patch",
+    "version:minor": "node scripts/bump-version.mjs minor",
+    "version:major": "node scripts/bump-version.mjs major"
   },
   "dependencies": {
     "@10play/tentap-editor": "^1.0.1",
