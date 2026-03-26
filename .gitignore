@@ -56,6 +56,10 @@ npm-debug.*
 web-build/
 cache/
 
+# EAS credentials (contains keystore passwords)
+credentials.json
+credentials/
+
 
 test-output
 
