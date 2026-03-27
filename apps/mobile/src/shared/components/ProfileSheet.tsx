@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Linking, Pressable, Text, View } from "react-native";
 import ActionSheet, {
   SheetManager,
   SheetProps,
 } from "react-native-actions-sheet";
-import { ArrowRightStartOnRectangleIcon, SparklesIcon } from "react-native-heroicons/outline";
+import { ArrowRightStartOnRectangleIcon, ChatBubbleLeftIcon, SparklesIcon } from "react-native-heroicons/outline";
 import { useAuth } from "@/providers/AuthProvider";
 import { signOut } from "@/features/auth";
 import { useToastStore } from "@/shared/stores/toast.store";
@@ -32,6 +32,18 @@ export default function ProfileSheet({
     } catch (error: any) {
       showToast(error.message ?? "Sign out failed", "error");
     }
+  };
+
+  const handleFeedback = () => {
+    const email = "kerk.jazul@gmail.com";
+    const subject = "Bookfelt Feedback";
+    const body = "Hi! I'd like to share feedback about Bookfelt:\n\n";
+
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(mailtoUrl).catch(() => {
+      showToast("Unable to open email client", "error");
+    });
   };
 
   return (
@@ -89,6 +101,16 @@ export default function ProfileSheet({
             </Pressable>
           )}
         </View>
+
+        <Pressable
+          onPress={handleFeedback}
+          className="flex-row items-center gap-3 py-3 border-t border-border"
+        >
+          <ChatBubbleLeftIcon size={20} color={primary} />
+          <Text className="text-foreground font-medium text-base">
+            Send Feedback
+          </Text>
+        </Pressable>
 
         <Pressable
           onPress={handleSignOut}
