@@ -393,8 +393,6 @@ importers:
 
   apps/mobile-e2e: {}
 
-  libs/supabase: {}
-
   packages/core:
     dependencies:
       axios:
@@ -409,6 +407,8 @@ importers:
       '@nozbe/watermelondb':
         specifier: ^0.28.0
         version: 0.28.0
+
+  packages/supabase: {}
 
   packages/ui:
     dependencies:

@@ -73,6 +73,6 @@ Environment variables
 .env.local
 .env.*.local
 
-# android/
-# ios/
-# Commented out - using manual native folders (not Prebuild)
+# Native folders (regenerated via Expo prebuild)
+android/
+ios/
