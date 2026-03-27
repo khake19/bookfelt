@@ -2,13 +2,14 @@ module.exports = {
   expo: {
     name: "Bookfelt",
     slug: "bookfelt",
-    version: "1.0.10",
+    version: "1.0.11",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "bookfelt",
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
     ios: {
+      buildNumber: "2",
       supportsTablet: true,
       bundleIdentifier: "com.kerk.-bookfelt-mobile",
       infoPlist: {
