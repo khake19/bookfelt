@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: "Bookfelt",
     slug: "bookfelt",
-    version: "1.0.9",
+    version: "1.0.10",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "bookfelt",
@@ -74,7 +74,7 @@ module.exports = {
         "@react-native-google-signin/google-signin",
         {
           iosUrlScheme: "com.googleusercontent.apps.100587360826-m0m96e9udd9mk15vgql4otrdav20grha",
-          webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+          webClientId: "100587360826-2ogcj7kt9ohv819q0uelags0h0ebsvu7.apps.googleusercontent.com",
         },
       ],
     ],
