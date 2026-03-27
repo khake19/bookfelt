@@ -8,6 +8,12 @@ module.exports = {
     scheme: "bookfelt",
     userInterfaceStyle: "automatic",
     newArchEnabled: true,
+    runtimeVersion: {
+      policy: "appVersion"
+    },
+    updates: {
+      url: "https://u.expo.dev/b5012abf-bcaa-438c-bed8-7106a95374ed"
+    },
     ios: {
       buildNumber: "2",
       supportsTablet: true,
