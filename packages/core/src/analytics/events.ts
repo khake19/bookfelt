@@ -66,6 +66,25 @@ export const AnalyticsEvents = {
     properties: { entryId, bookId, hadAudio },
   }),
 
+  entryShared: (
+    method: 'share_sheet' | 'save_to_photos',
+    entryId: string,
+    bookId: string,
+    bookTitle: string
+  ): AnalyticsEvent => ({
+    name: 'entry_shared',
+    properties: { method, entryId, bookId, bookTitle },
+  }),
+
+  entryShareFailed: (
+    method: 'share_sheet' | 'save_to_photos',
+    error: string,
+    entryId: string
+  ): AnalyticsEvent => ({
+    name: 'entry_share_failed',
+    properties: { method, error, entryId },
+  }),
+
   // ── Bookends ───────────────────────────────────────────────────
 
   bookendAdded: (

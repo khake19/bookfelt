@@ -43,5 +43,14 @@ export function useAnalytics() {
     emotionalArcShareFailed: (method: 'share_sheet' | 'save_to_photos', error: string, bookTitle?: string) => {
       analyticsService.track(AnalyticsEvents.emotionalArcShareFailed(method, error, bookTitle));
     },
+
+    // Entry events
+    entryShared: (method: 'share_sheet' | 'save_to_photos', entryId: string, bookId: string, bookTitle: string) => {
+      analyticsService.track(AnalyticsEvents.entryShared(method, entryId, bookId, bookTitle));
+    },
+
+    entryShareFailed: (method: 'share_sheet' | 'save_to_photos', error: string, entryId: string) => {
+      analyticsService.track(AnalyticsEvents.entryShareFailed(method, error, entryId));
+    },
   };
 }

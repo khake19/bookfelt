@@ -1,5 +1,10 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, View, ActivityIndicator } from "react-native";
+import { useRef } from "react";
+import { ShareIcon } from "react-native-heroicons/solid";
 import { useEmotionMap } from "@/features/entries/hooks/use-emotions";
+import { useShareEntry } from "@/features/entries/hooks/use-share-entry";
+import { ShareableEntryView } from "@/features/entries/components/ShareableEntryView";
+import { useThemeColors } from "@/shared";
 import EntryContent from "./EntryContent";
 
 const stripHtml = (html: string) =>
@@ -10,9 +15,14 @@ const stripHtml = (html: string) =>
 
 export interface EntryCardData {
   id: string;
+  bookId: string;
   title: string;
+  author?: string;
   chapter: string;
+  page?: string;
+  percent?: string;
   date: string;
+  dateTimestamp: number;
   snippet?: string;
   reaction: string;
   emotionId?: string;
@@ -29,9 +39,15 @@ interface EntryCardProps extends EntryCardData {
 
 const EntryCard = (props: EntryCardProps) => {
   const {
+    id,
+    bookId,
     title,
+    author,
     chapter,
+    page,
+    percent,
     date,
+    dateTimestamp,
     snippet,
     reaction,
     emotionId,
@@ -43,8 +59,24 @@ const EntryCard = (props: EntryCardProps) => {
     onBookPress,
   } = props;
 
+  const { primary, mutedForeground, background } = useThemeColors();
   const emotionMap = useEmotionMap();
   const emotion = emotionId ? emotionMap.get(emotionId) : undefined;
+  const { share, isCapturing } = useShareEntry();
+  const shareableRef = useRef<View>(null);
+
+  // Show share button only for snippet-only entries (no reflection)
+  const hasSnippet = snippet && stripHtml(snippet);
+  const hasReflection = reaction && stripHtml(reaction);
+  const showShareButton = hasSnippet && !hasReflection && !reflectionUri;
+
+  const handleShare = async (e: any) => {
+    e.stopPropagation();
+    if (!showShareButton) return;
+
+    const entryTitle = `${title} - ${new Date(dateTimestamp).toLocaleDateString()}`;
+    await share(shareableRef, entryTitle, id, bookId, title);
+  };
 
   return (
     <Pressable onPress={onPress} onLongPress={onLongPress}>
@@ -120,17 +152,62 @@ const EntryCard = (props: EntryCardProps) => {
           </View>
         </View>
 
-        {/* Content - shared component */}
-        <EntryContent
-          snippet={snippet}
-          reflection={reaction}
-          reflectionUri={reflectionUri}
-          emotion={emotion}
-          setting={setting}
-        />
+        {/* Content - shared component with share button inside */}
+        <View className="relative">
+          {/* Share button - positioned inside card top right */}
+          {showShareButton && (
+            <Pressable
+              onPress={handleShare}
+              hitSlop={8}
+              disabled={isCapturing}
+              className="absolute top-2 right-2 z-10 w-8 h-8 items-center justify-center rounded-full"
+              style={{ backgroundColor: background }}
+            >
+              {isCapturing ? (
+                <ActivityIndicator size="small" color={mutedForeground} />
+              ) : (
+                <ShareIcon size={16} color={mutedForeground} />
+              )}
+            </Pressable>
+          )}
+
+          <EntryContent
+            snippet={snippet}
+            reflection={reaction}
+            reflectionUri={reflectionUri}
+            emotion={emotion}
+            setting={setting}
+          />
+        </View>
 
         {/* Bottom divider */}
         <View className="h-px bg-border/50 mt-4" />
+
+        {/* Off-screen shareable entry view for capture */}
+        {showShareButton && (
+          <View style={{ position: 'absolute', left: -9999 }}>
+            <ShareableEntryView
+              ref={shareableRef}
+              entry={{
+                id,
+                bookId,
+                bookTitle: title,
+                chapter,
+                page,
+                percent,
+                date: dateTimestamp,
+                snippet,
+                reflection: reaction,
+                reflectionUri,
+                setting,
+                emotionId,
+                createdAt: dateTimestamp,
+              }}
+              book={{ title, author }}
+              emotion={emotion}
+            />
+          </View>
+        )}
       </View>
     </Pressable>
   );

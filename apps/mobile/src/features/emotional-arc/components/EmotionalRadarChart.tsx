@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, useWindowDimensions } from 'react-native';
 import Svg, { Circle, Line, Polygon, G, Text as SvgText } from 'react-native-svg';
 import { useMemo } from 'react';
 import type { ArcDataPoint } from '@/features/emotional-arc/utils/group-by-week';
@@ -26,13 +26,15 @@ const CATEGORY_LABELS = {
 };
 
 export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartProps) {
-  const size = 450;
+  const { width: screenWidth } = useWindowDimensions();
+  const theme = useThemeColors();
+
+  // Calculate responsive size - 64px accounts for container padding (32px each side)
+  const size = Math.min(screenWidth - 64, 450);
   const centerX = size / 2;
   const centerY = size / 2;
-  const maxRadius = 125;
+  const maxRadius = size * 0.28; // Maintains ~125/450 ratio
   const levels = 4;
-
-  const theme = useThemeColors();
 
   // Calculate average intensity per category
   const categoryData = useMemo(() => {

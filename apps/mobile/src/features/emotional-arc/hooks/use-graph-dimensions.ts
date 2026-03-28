@@ -18,9 +18,9 @@ export function useGraphDimensions(): GraphDimensions {
 
   return useMemo(() => {
     const paddingX = 20;
-    const paddingY = 60;
+    const paddingY = 40;
     const width = screenWidth - 32; // Account for screen padding
-    const height = Math.min(screenHeight * 0.5, 400);
+    const height = Math.min(screenHeight * 0.6, 550);
 
     return {
       width,

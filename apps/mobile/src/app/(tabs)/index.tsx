@@ -75,9 +75,14 @@ export default function HomeScreen() {
       <Animated.View entering={FadeIn.duration(300)}>
         <EntryCard
           id={item.id}
+          bookId={item.bookId}
           title={item.bookTitle}
+          author={book?.authors.join(", ")}
           chapter={item.chapter ? `Chapter ${item.chapter}` : ""}
+          page={item.page}
+          percent={item.percent}
           date={timeAgo(item.date)}
+          dateTimestamp={item.date}
           snippet={item.snippet}
           reaction={item.reflection ?? ""}
           emotionId={item.emotionId}

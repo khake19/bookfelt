@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   Pressable,
@@ -13,6 +14,7 @@ import {
   EllipsisHorizontalIcon,
   MicrophoneIcon,
 } from "react-native-heroicons/outline";
+import { ShareIcon } from "react-native-heroicons/solid";
 import LinearGradient from "react-native-linear-gradient";
 import Animated, {
   FadeInDown,
@@ -26,7 +28,7 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLibrary } from "@/features/books/hooks/use-library";
 import type { ReadingStatus } from "@/features/books/types/book";
-import { useEmotionMap, useEntries } from "@/features/entries";
+import { useEmotionMap, useEntries, useShareEntry, ShareableEntryView } from "@/features/entries";
 import AudioPlayer from "@/features/entries/components/AudioPlayer";
 import EntryContent from "@/features/entries/components/EntryContent";
 import {
@@ -102,11 +104,15 @@ const BookDetailScreen = () => {
   const router = useRouter();
   const { books, updateStatus, removeBook } = useLibrary();
   const { entries, removeEntry } = useEntries(bookId);
-  const { primary, background } = useThemeColors();
+  const { primary, background, mutedForeground } = useThemeColors();
   const emotionMap = useEmotionMap();
   const insets = useSafeAreaInsets();
   const book = books.find((b) => b.id === bookId);
   const [showDraftsOnly, setShowDraftsOnly] = useState(false);
+
+  const { share, isCapturing } = useShareEntry();
+  const [sharingEntryId, setSharingEntryId] = useState<string | null>(null);
+  const shareableRefs = useRef<Map<string, React.RefObject<View>>>(new Map());
 
   const voiceDraftCount = entries.filter(
     (e) => e.reflectionUri && !e.emotionId,
@@ -154,6 +160,31 @@ const BookDetailScreen = () => {
         currentStatus: book.status,
       },
     });
+  };
+
+  const getShareableRef = (entryId: string) => {
+    if (!shareableRefs.current.has(entryId)) {
+      shareableRefs.current.set(entryId, { current: null });
+    }
+    return shareableRefs.current.get(entryId)!;
+  };
+
+  const handleShareEntry = async (entryId: string, e: any) => {
+    e.stopPropagation();
+    if (!book) return;
+
+    const entry = entries.find(e => e.id === entryId);
+    if (!entry) return;
+
+    const stripHtmlLocal = (html: string) => html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+    const hasSnippet = entry.snippet && stripHtmlLocal(entry.snippet);
+    if (!hasSnippet) return;
+
+    setSharingEntryId(entryId);
+    const entryTitle = `${book.title} - ${new Date(entry.date).toLocaleDateString()}`;
+    const ref = getShareableRef(entryId);
+    await share(ref, entryTitle, entry.id, book.id, book.title);
+    setSharingEntryId(null);
   };
 
   if (!book) {
@@ -518,49 +549,81 @@ const BookDetailScreen = () => {
                       </View>
 
                       {/* Content */}
-                      <Pressable
-                        onPress={() => handleEntryPress(entry.id)}
-                        onLongPress={() => handleLongPress(entry.id)}
-                        className="flex-1 ml-4"
-                      >
-                        {/* Metadata row - always shown */}
-                        <View className="flex-row items-center justify-between gap-2 mb-1.5">
-                          <View className="flex-row items-center gap-2">
-                            {emotion && (
-                              <Text className="text-xs">
-                                {emotion.emoji} {emotion.label}
-                              </Text>
-                            )}
-                            {entry.chapter && (
-                              <Text className="text-muted/40 text-xs">
-                                · Ch. {entry.chapter}
-                              </Text>
-                            )}
-                            {entry.reflectionUri &&
-                              !entry.snippet &&
-                              !entry.emotionId && (
-                                <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
-                                  <MicrophoneIcon size={10} color={primary} />
-                                  <Text className="text-primary text-[10px] font-medium">
-                                    Voice Draft
-                                  </Text>
-                                </View>
+                      <View className="flex-1 ml-4">
+                        <Pressable
+                          onPress={() => handleEntryPress(entry.id)}
+                          onLongPress={() => handleLongPress(entry.id)}
+                        >
+                          {/* Metadata row - always shown */}
+                          <View className="flex-row items-center justify-between gap-2 mb-1.5">
+                            <View className="flex-row items-center gap-2 flex-1">
+                              {emotion && (
+                                <Text className="text-xs">
+                                  {emotion.emoji} {emotion.label}
+                                </Text>
                               )}
+                              {entry.chapter && (
+                                <Text className="text-muted/40 text-xs">
+                                  · Ch. {entry.chapter}
+                                </Text>
+                              )}
+                              {entry.reflectionUri &&
+                                !entry.snippet &&
+                                !entry.emotionId && (
+                                  <View className="flex-row items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
+                                    <MicrophoneIcon size={10} color={primary} />
+                                    <Text className="text-primary text-[10px] font-medium">
+                                      Voice Draft
+                                    </Text>
+                                  </View>
+                                )}
+                            </View>
+                            <Text className="text-muted/60 text-xs">
+                              {timeAgo(entry.date)}
+                            </Text>
                           </View>
-                          <Text className="text-muted/60 text-xs">
-                            {timeAgo(entry.date)}
-                          </Text>
-                        </View>
 
-                        {/* Entry content - shared component */}
-                        <EntryContent
-                          snippet={entry.snippet}
-                          reflection={entry.reflection}
-                          reflectionUri={entry.reflectionUri}
-                          emotion={emotion}
-                          setting={entry.setting}
-                        />
-                      </Pressable>
+                          {/* Entry content - shared component with share button inside */}
+                          <View className="relative">
+                            {/* Share button - positioned inside card top right - only for snippet-only entries */}
+                            {entry.snippet && entry.snippet.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() && !entry.reflection && !entry.reflectionUri && (
+                              <Pressable
+                                onPress={(e) => handleShareEntry(entry.id, e)}
+                                hitSlop={8}
+                                disabled={isCapturing && sharingEntryId === entry.id}
+                                className="absolute top-2 right-2 z-10 w-8 h-8 items-center justify-center rounded-full"
+                                style={{ backgroundColor: background }}
+                              >
+                                {isCapturing && sharingEntryId === entry.id ? (
+                                  <ActivityIndicator size="small" color={mutedForeground} />
+                                ) : (
+                                  <ShareIcon size={16} color={mutedForeground} />
+                                )}
+                              </Pressable>
+                            )}
+
+                            <EntryContent
+                              snippet={entry.snippet}
+                              reflection={entry.reflection}
+                              reflectionUri={entry.reflectionUri}
+                              emotion={emotion}
+                              setting={entry.setting}
+                            />
+                          </View>
+                        </Pressable>
+
+                        {/* Off-screen shareable entry view for capture - only for snippet-only entries */}
+                        {entry.snippet && entry.snippet.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() && !entry.reflection && !entry.reflectionUri && (
+                          <View style={{ position: 'absolute', left: -9999 }}>
+                            <ShareableEntryView
+                              ref={getShareableRef(entry.id)}
+                              entry={entry}
+                              book={{ title: book.title, author: book.authors.join(", ") }}
+                              emotion={emotion}
+                            />
+                          </View>
+                        )}
+                      </View>
                     </View>
                   </Animated.View>
                 );

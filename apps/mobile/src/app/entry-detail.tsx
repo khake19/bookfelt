@@ -3,7 +3,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState, useRef } from "react";
 import { Controller } from "react-hook-form";
-import { Platform, Pressable, ScrollView, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View, ActivityIndicator } from "react-native";
 import Animated, { FadeInDown, FadeOutUp, LinearTransition } from "react-native-reanimated";
 import { CameraIcon, BookOpenIcon, MicrophoneIcon, TrashIcon } from "react-native-heroicons/outline";
 import { SheetManager } from "react-native-actions-sheet";
@@ -29,7 +29,7 @@ import { deleteAudioFiles } from "@/lib/audio-sync";
 import { useBookLimits, CustomPaywall, UpgradePrompts } from "@/features/premium";
 
 const EntryDetailScreen = () => {
-  const { mutedForeground, destructive } = useThemeColors();
+  const { mutedForeground, destructive, primary } = useThemeColors();
   const { id, bookId } = useLocalSearchParams<{
     id: string;
     bookId?: string;

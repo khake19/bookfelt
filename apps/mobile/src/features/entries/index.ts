@@ -1,10 +1,12 @@
 export { default as EntryCard } from "./components/EntryCard";
 export type { EntryCardData } from "./components/EntryCard";
 export { default as EntryContent } from "./components/EntryContent";
+export { ShareableEntryView } from "./components/ShareableEntryView";
 export type { Emotion } from "./constants/emotions";
 export { MOCK_ENTRIES } from "./constants/mock-entries";
 export { useEntries } from "./hooks/use-entries";
 export { useEntryForm } from "./hooks/use-entry-form";
+export { useShareEntry } from "./hooks/use-share-entry";
 export { useRecentEntries } from "./queries/use-recent-entries";
 export { useObserveEmotions, useEmotionMap } from "./hooks/use-emotions";
 export type { EmotionRecord } from "./services/emotion.service";
