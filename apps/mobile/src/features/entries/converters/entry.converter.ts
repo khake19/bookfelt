@@ -18,6 +18,7 @@ export interface EntryRawFields {
   setting: string | null;
   date: number;
   entry_created_at: number;
+  needs_transcription: boolean;
 }
 
 export function entryModelToEntry(record: EntryModel): Entry {
@@ -35,6 +36,7 @@ export function entryModelToEntry(record: EntryModel): Entry {
     setting: record.setting ?? undefined,
     date: record.date,
     createdAt: record.entryCreatedAt,
+    needsTranscription: record.needsTranscription,
   };
 }
 
@@ -56,6 +58,7 @@ export function entryToCreateRaw(
     setting: entry.setting ?? null,
     date: entry.date,
     entry_created_at: Date.now(),
+    needs_transcription: entry.needsTranscription ?? false,
   };
 }
 
@@ -76,5 +79,7 @@ export function entryUpdatesToRaw(
     raw.reflection_uri = updates.reflectionUri ?? null;
   if ("setting" in updates) raw.setting = updates.setting ?? null;
   if ("date" in updates && updates.date) raw.date = updates.date;
+  if ("needsTranscription" in updates)
+    raw.needs_transcription = updates.needsTranscription ?? false;
   return raw;
 }

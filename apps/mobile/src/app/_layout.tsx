@@ -14,6 +14,8 @@ import { syncDatabase } from '@/lib/sync';
 import { useOnboardingStep } from '@/features/books/hooks/use-library';
 import { initializeRevenueCat, setUserId } from '@/features/premium/services/revenuecat';
 import { initializePostHog, identifyUser } from '@/services/posthog';
+import { useNetworkListener } from '@/hooks/use-network-listener';
+import { migrateExistingAudioEntries } from '@/services/transcription-queue';
 
 const queryClient = new QueryClient();
 
@@ -87,6 +89,10 @@ function SyncManager() {
     seedEmotions(database).then(async () => {
       const count = await database.get('emotions').query().fetchCount();
       console.log('[SyncManager] Emotions seeded, count:', count);
+
+      // Migrate existing audio entries to mark them for transcription
+      await migrateExistingAudioEntries();
+
       setEmotionsSeeded(true);
     });
   }, []);
@@ -106,6 +112,11 @@ function SyncManager() {
     return () => sub.remove();
   }, [user, emotionsSeeded]);
 
+  return null;
+}
+
+function NetworkManager() {
+  useNetworkListener();
   return null;
 }
 
@@ -154,6 +165,7 @@ export default function RootLayout() {
       <RevenueCatManager />
       <PostHogManager />
       <SyncManager />
+      <NetworkManager />
       <DatabaseProvider>
         <QueryClientProvider client={queryClient}>
           <SheetProvider>

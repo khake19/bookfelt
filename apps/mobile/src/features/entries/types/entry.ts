@@ -12,4 +12,5 @@ export interface Entry {
   setting?: string;
   date: number;
   createdAt: number;
+  needsTranscription?: boolean;
 }

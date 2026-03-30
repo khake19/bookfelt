@@ -23,6 +23,7 @@ export class EntryModel extends Model {
   @field("date") date!: number;
   @field("entry_created_at") entryCreatedAt!: number;
   @date("updated_at") updatedAt!: number;
+  @field("needs_transcription") needsTranscription!: boolean;
 
   @relation("books", "book_id") book: any;
   @relation("emotions", "emotion_id") emotion!: Relation<EmotionModel>;

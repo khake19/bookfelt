@@ -8,6 +8,32 @@ import {
 export const migrations = schemaMigrations({
   migrations: [
     {
+      toVersion: 13,
+      steps: [
+        addColumns({
+          table: "books",
+          columns: [
+            { name: "date_finished", type: "number", isOptional: true },
+          ],
+        }),
+      ],
+    },
+    {
+      toVersion: 12,
+      steps: [
+        addColumns({
+          table: "entries",
+          columns: [
+            { name: "needs_transcription", type: "boolean" },
+          ],
+        }),
+        // Initialize existing entries to false (they don't need transcription)
+        unsafeExecuteSql(
+          "UPDATE entries SET needs_transcription = 0 WHERE needs_transcription IS NULL;",
+        ),
+      ],
+    },
+    {
       toVersion: 11,
       steps: [
         addColumns({

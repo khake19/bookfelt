@@ -70,6 +70,8 @@ export async function addEntry(
         rec.setting = entry.setting ?? null;
         rec.date = entry.date;
         rec.entryCreatedAt = Date.now();
+        // Mark for transcription if audio exists but no transcription yet
+        rec.needsTranscription = !!entry.reflectionUri && !entry.reflection;
       });
     });
 
@@ -139,6 +141,8 @@ export async function updateEntry(
           rec.reflectionUri = updates.reflectionUri ?? null;
         if ("setting" in updates) rec.setting = updates.setting ?? null;
         if ("date" in updates && updates.date) rec.date = updates.date;
+        if ("needsTranscription" in updates)
+          rec.needsTranscription = updates.needsTranscription ?? false;
       });
 
       // Track analytics

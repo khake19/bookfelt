@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import NetInfo from '@react-native-community/netinfo';
 import { transcribeAudio } from '@/services/whisper';
 import { updateEntry } from '@/features/entries/services/entry.service';
 import { useToastStore } from './toast.store';
@@ -38,12 +39,20 @@ export const useTranscriptionStore = create<TranscriptionState>((set, get) => ({
           useToastStore.getState().show('Reflection transcribed', 'success');
         }
       })
-      .catch((err) => {
+      .catch(async (err) => {
         if (get()._gen !== gen) return;
         const { entryId } = get();
         set({ status: 'failed', text: null });
 
-        if (entryId) {
+        // Check if error is due to network connectivity
+        const netState = await NetInfo.fetch();
+        const isOnline = netState.isConnected === true && netState.isInternetReachable !== false;
+
+        if (!isOnline && entryId) {
+          // Mark entry for retry when back online
+          await updateEntry(entryId, { needsTranscription: true });
+          useToastStore.getState().show('Offline - will transcribe when online', 'info');
+        } else if (entryId) {
           useToastStore.getState().show('Transcription failed', 'error');
         }
       });
