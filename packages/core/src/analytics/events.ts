@@ -163,4 +163,36 @@ export const AnalyticsEvents = {
     name: 'free_tier_limit_reached',
     properties: { limitType, title },
   }),
+
+  // ── Onboarding ─────────────────────────────────────────────────
+
+  onboardingStarted: (): AnalyticsEvent => ({
+    name: 'onboarding_started',
+    properties: {},
+  }),
+
+  onboardingStepCompleted: (step: number, stepName: string): AnalyticsEvent => ({
+    name: 'onboarding_step_completed',
+    properties: { step, stepName },
+  }),
+
+  onboardingCompleted: (addedBook: boolean, addedFirstImpression: boolean): AnalyticsEvent => ({
+    name: 'onboarding_completed',
+    properties: { addedBook, addedFirstImpression },
+  }),
+
+  onboardingSkipped: (step: number, stepName: string): AnalyticsEvent => ({
+    name: 'onboarding_skipped',
+    properties: { step, stepName },
+  }),
+
+  bookAddedOnboarding: (bookId: string, title: string, authors?: string, source?: string): AnalyticsEvent => ({
+    name: 'book_added_onboarding',
+    properties: { bookId, title, authors, source },
+  }),
+
+  firstImpressionAddedOnboarding: (bookId: string, bookTitle: string, hasAudio: boolean, hasText: boolean): AnalyticsEvent => ({
+    name: 'first_impression_added_onboarding',
+    properties: { bookId, bookTitle, hasAudio, hasText },
+  }),
 } as const;

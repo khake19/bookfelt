@@ -23,6 +23,8 @@ import {
   useThemeColors,
 } from "@/shared";
 import { useTranscriptionStore } from "@/shared/stores/transcription.store";
+import { getAnalytics } from "@/services/posthog";
+import { AnalyticsEvents } from "@bookfelt/core";
 
 export default function OnboardingScreen() {
   const step = useOnboardingStep();
@@ -33,6 +35,17 @@ export default function OnboardingScreen() {
   const latestBook = books.length > 0
     ? books.reduce((a, b) => (a.addedAt > b.addedAt ? a : b))
     : null;
+
+  // Track onboarding started (only once when step is 0)
+  useEffect(() => {
+    if (step === 0) {
+      try {
+        getAnalytics().track(AnalyticsEvents.onboardingStarted());
+      } catch (error) {
+        console.error('[Onboarding] Failed to track onboarding_started:', error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (step >= 3) {
@@ -62,6 +75,15 @@ export default function OnboardingScreen() {
 /* ─── Step 0: Welcome ─── */
 
 function WelcomeStep({ onNext }: { onNext: () => void }) {
+  const handleNext = () => {
+    try {
+      getAnalytics().track(AnalyticsEvents.onboardingStepCompleted(0, 'welcome'));
+    } catch (error) {
+      console.error('[Onboarding] Failed to track step 0 completion:', error);
+    }
+    onNext();
+  };
+
   return (
     <View className="flex-1 justify-center items-center px-6">
       <Animated.View entering={FadeInDown.duration(500).delay(100)} className="items-center">
@@ -79,7 +101,7 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
         </Text>
       </Animated.View>
       <Animated.View entering={FadeInDown.duration(500).delay(550)} className="w-full mt-10">
-        <Button onPress={onNext} shape="pill" className="w-full">
+        <Button onPress={handleNext} shape="pill" className="w-full">
           <Text className="text-background text-center font-medium text-base">Get Started</Text>
         </Button>
       </Animated.View>
@@ -151,7 +173,22 @@ function AddBookStep({ onBookAdded }: { onBookAdded: () => void }) {
       source: "google",
     };
     const bookId = await addBook(book, "reading");
-    if (bookId) onBookAdded();
+    if (bookId) {
+      try {
+        getAnalytics().track(
+          AnalyticsEvents.bookAddedOnboarding(
+            book.id,
+            book.title,
+            book.authors?.join(", "),
+            book.source
+          )
+        );
+        getAnalytics().track(AnalyticsEvents.onboardingStepCompleted(1, 'add_book'));
+      } catch (error) {
+        console.error('[Onboarding] Failed to track book added:', error);
+      }
+      onBookAdded();
+    }
   };
 
   const handleManualAdd = async () => {
@@ -163,7 +200,22 @@ function AddBookStep({ onBookAdded }: { onBookAdded: () => void }) {
       source: "manual",
     };
     const bookId = await addBook(book, "reading");
-    if (bookId) onBookAdded();
+    if (bookId) {
+      try {
+        getAnalytics().track(
+          AnalyticsEvents.bookAddedOnboarding(
+            book.id,
+            book.title,
+            book.authors?.join(", "),
+            book.source
+          )
+        );
+        getAnalytics().track(AnalyticsEvents.onboardingStepCompleted(1, 'add_book'));
+      } catch (error) {
+        console.error('[Onboarding] Failed to track book added:', error);
+      }
+      onBookAdded();
+    }
   };
 
   return (
@@ -311,23 +363,49 @@ function FirstImpressionStep({ bookId }: { bookId: string }) {
     return () => resetTranscription();
   }, []);
 
-  const completeOnboarding = async () => {
+  const completeOnboarding = async (addedFirstImpression: boolean) => {
+    try {
+      getAnalytics().track(
+        AnalyticsEvents.onboardingCompleted(true, addedFirstImpression)
+      );
+    } catch (error) {
+      console.error('[Onboarding] Failed to track onboarding completion:', error);
+    }
     await setOnboardingStep(3);
     router.replace("/");
   };
 
   const handleSave = async () => {
-    if (firstImpression.trim()) {
+    const hasText = firstImpression.trim().length > 0;
+    if (hasText) {
       updateBook(bookId, {
         firstImpression: firstImpression.trim(),
         firstImpressionAudioUri: audioUri,
       });
+      try {
+        getAnalytics().track(
+          AnalyticsEvents.firstImpressionAddedOnboarding(
+            bookId,
+            book?.title || 'Unknown',
+            !!audioUri,
+            hasText
+          )
+        );
+        getAnalytics().track(AnalyticsEvents.onboardingStepCompleted(2, 'first_impression'));
+      } catch (error) {
+        console.error('[Onboarding] Failed to track first impression:', error);
+      }
     }
-    await completeOnboarding();
+    await completeOnboarding(hasText);
   };
 
   const handleSkip = async () => {
-    await completeOnboarding();
+    try {
+      getAnalytics().track(AnalyticsEvents.onboardingSkipped(2, 'first_impression'));
+    } catch (error) {
+      console.error('[Onboarding] Failed to track skip:', error);
+    }
+    await completeOnboarding(false);
   };
 
   if (!book) {
