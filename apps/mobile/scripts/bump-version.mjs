@@ -55,10 +55,10 @@ function updateAppConfig(newVersion, newVersionCode) {
       `versionCode: ${newVersionCode}`
     );
   } else {
-    // Add versionCode to android section
+    // Add versionCode to android section (right after opening brace)
     content = content.replace(
-      /(android:\s*\{[^}]*)(package:)/,
-      `$1versionCode: ${newVersionCode},\n      $2`
+      /(android:\s*\{)/,
+      `$1\n      versionCode: ${newVersionCode},`
     );
   }
 
@@ -70,10 +70,10 @@ function updateAppConfig(newVersion, newVersionCode) {
       `buildNumber: "${buildNumber}"`
     );
   } else {
-    // Add buildNumber to ios section
+    // Add buildNumber to ios section (right after opening brace)
     content = content.replace(
-      /(ios:\s*\{[^}]*)(supportsTablet:)/,
-      `$1buildNumber: "${buildNumber}",\n      $2`
+      /(ios:\s*\{)/,
+      `$1\n      buildNumber: "${buildNumber}",`
     );
   }
 
