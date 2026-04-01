@@ -76,3 +76,7 @@ Environment variables
 # Native folders (regenerated via Expo prebuild)
 android/
 ios/
+
+# Next.js
+.next
+out

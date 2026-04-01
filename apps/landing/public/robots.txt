@@ -1,0 +1,7 @@
+# Bookfelt Landing Page - robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://bookfelt.app/sitemap.xml

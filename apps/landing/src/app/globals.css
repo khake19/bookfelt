@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 40% 92%;
+    --foreground: 20 33% 18%;
+    --card: 34 35% 89%;
+    --card-foreground: 20 33% 18%;
+    --primary: 35 52% 50%;
+    --primary-foreground: 20 33% 18%;
+    --secondary: 34 35% 89%;
+    --secondary-foreground: 20 33% 18%;
+    --muted: 28 10% 50%;
+    --muted-foreground: 28 10% 50%;
+    --accent: 109 22% 33%;
+    --accent-foreground: 36 40% 92%;
+    --destructive: 18 59% 41%;
+    --border: 30 22% 82%;
+    --input: 30 22% 82%;
+    --emotion-positive: 44 58% 55%;
+    --emotion-heavy: 352 51% 36%;
+    --emotion-reflective: 120 14% 48%;
+    --emotion-neutral: 32 14% 42%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

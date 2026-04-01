@@ -20,6 +20,9 @@
     },
     {
       "path": "./packages/supabase"
+    },
+    {
+      "path": "./apps/landing"
     }
   ]
 }
