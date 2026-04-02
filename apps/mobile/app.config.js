@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: "Bookfelt",
     slug: "bookfelt",
-    version: "1.0.13",
+    version: "1.0.14",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "bookfelt",
@@ -15,7 +15,7 @@ module.exports = {
       url: "https://u.expo.dev/b5012abf-bcaa-438c-bed8-7106a95374ed"
     },
     ios: {
-      buildNumber: "14",
+      buildNumber: "15",
       supportsTablet: true,
       bundleIdentifier: "com.kerk.-bookfelt-mobile",
       infoPlist: {
@@ -24,7 +24,7 @@ module.exports = {
       },
     },
     android: {
-      versionCode: 14,
+      versionCode: 15,
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#E8E0D4",
