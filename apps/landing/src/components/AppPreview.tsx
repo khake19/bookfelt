@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { trackEvent } from '@/lib/posthog'
 import { useSectionTracking } from '@/hooks/useSectionTracking'
 
@@ -24,8 +25,8 @@ export function AppPreview() {
       numeral: 'iii',
       headline: 'First page. Last page. Everything between.',
       description:
-        "Bookends capture what you felt when you started versus when you finished. Your \"this sounds amazing\" becomes \"I'll never forget this.\" That's the magic.",
-      visual: 'bookends', // Placeholder for bookends comparison
+        'Bookends capture what you felt when you started versus when you finished. See how your thoughts evolved from that first impression to your final takeaway.',
+      visual: 'bookends',
     },
   ]
 
@@ -115,6 +116,20 @@ export function AppPreview() {
                           >
                             <source src="/videos/03-add-arc-graph.mp4" type="video/mp4" />
                           </video>
+                        ) : feature.visual === 'bookends' ? (
+                          <Image
+                            src="/images/04-bookends.jpg"
+                            alt="Bookfelt bookends feature showing first impression and final thought"
+                            fill
+                            className="object-cover"
+                            onLoad={() =>
+                              trackEvent('image_loaded', {
+                                location: 'features',
+                                feature: feature.visual,
+                                numeral: feature.numeral,
+                              })
+                            }
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-accent/10">
                             <div className="text-center">

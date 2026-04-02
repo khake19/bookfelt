@@ -52,6 +52,7 @@ const BookEditScreen = () => {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isFirstImpressionFocusMode, setIsFirstImpressionFocusMode] = useState(false);
   const [isFinalThoughtFocusMode, setIsFinalThoughtFocusMode] = useState(false);
+  const [isSynopsisExpanded, setIsSynopsisExpanded] = useState(false);
   const description = watch("description");
   const firstImpression = watch("firstImpression");
   const finalThought = watch("finalThought");
@@ -147,59 +148,111 @@ const BookEditScreen = () => {
             )}
           />
         </View>
-        <View className="h-px bg-border" />
-        <Pressable onPress={() => setIsFocusMode(true)} className="py-3">
-          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
+        {/* Synopsis - Collapsible */}
+        <View className="py-3">
+          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-2">
             Synopsis
           </Text>
-          {description ? (
-            <RichTextPreview html={description} />
-          ) : (
-            <Text className="text-sm text-muted/60 italic">
-              Tap to write a synopsis..
-            </Text>
-          )}
-        </Pressable>
-        <View className="h-px bg-border" />
-        <Pressable onPress={() => setIsFirstImpressionFocusMode(true)} className="py-3">
-          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-            First Impression
-          </Text>
-          {firstImpression ? (
-            <RichTextPreview html={firstImpression} />
-          ) : (
-            <Text className="text-sm text-muted/60 italic">
-              What's your first impression?
-            </Text>
-          )}
-          {book.firstImpressionAudioUri && (
-            <View className="pt-2">
-              <AudioPlayer uri={book.firstImpressionAudioUri} />
-            </View>
-          )}
-        </Pressable>
-        {book.status === "finished" && (
-          <>
-            <View className="h-px bg-border" />
-            <Pressable onPress={() => setIsFinalThoughtFocusMode(true)} className="py-3">
-              <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-1.5">
-                Final Thought
+          <Pressable
+            onPress={() => setIsFocusMode(true)}
+            className="bg-card/50 rounded-xl p-3 border border-border"
+            style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2 }}
+          >
+            {description ? (
+              <View>
+                <View className={!isSynopsisExpanded ? "max-h-[80px] overflow-hidden" : ""}>
+                  <RichTextPreview html={description} />
+                </View>
+                {description.length > 200 && (
+                  <Pressable
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      setIsSynopsisExpanded(!isSynopsisExpanded);
+                    }}
+                    className="mt-2"
+                  >
+                    <Text className="text-xs text-primary font-medium">
+                      {isSynopsisExpanded ? "Show less" : "Read more"}
+                    </Text>
+                  </Pressable>
+                )}
+              </View>
+            ) : (
+              <Text className="text-sm text-muted/60 italic">
+                Tap to add synopsis
               </Text>
+            )}
+          </Pressable>
+        </View>
+
+        {/* Bookends Section */}
+        <View className="pt-4">
+          <Text className="text-xs font-medium uppercase tracking-widest text-muted mb-3">
+            Bookends
+          </Text>
+
+          {/* First Impression Card */}
+          <Pressable
+            onPress={() => setIsFirstImpressionFocusMode(true)}
+            className="bg-card rounded-xl p-4 border border-border mb-3"
+            style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2 }}
+          >
+            <View className="flex-row items-center justify-between mb-2.5">
+              <Text className="text-[11px] font-semibold uppercase tracking-wider text-foreground/80">
+                First Impression
+              </Text>
+              {book.firstImpressionAudioUri && (
+                <View className="w-2 h-2 rounded-full bg-primary" />
+              )}
+            </View>
+            {firstImpression ? (
+              <View>
+                <RichTextPreview html={firstImpression} />
+                {book.firstImpressionAudioUri && (
+                  <View className="pt-3">
+                    <AudioPlayer uri={book.firstImpressionAudioUri} />
+                  </View>
+                )}
+              </View>
+            ) : (
+              <Text className="text-sm text-muted/60 italic">
+                What's your first impression?
+              </Text>
+            )}
+          </Pressable>
+
+          {/* Final Thought Card */}
+          {book.status === "finished" && (
+            <Pressable
+              onPress={() => setIsFinalThoughtFocusMode(true)}
+              className="bg-card rounded-xl p-4 border border-border"
+              style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2 }}
+            >
+              <View className="flex-row items-center justify-between mb-2.5">
+                <Text className="text-[11px] font-semibold uppercase tracking-wider text-foreground/80">
+                  Final Thought
+                </Text>
+                {book.finalThoughtAudioUri && (
+                  <View className="w-2 h-2 rounded-full bg-primary" />
+                )}
+              </View>
               {finalThought ? (
-                <RichTextPreview html={finalThought} />
+                <View>
+                  <RichTextPreview html={finalThought} />
+                  {book.finalThoughtAudioUri && (
+                    <View className="pt-3">
+                      <AudioPlayer uri={book.finalThoughtAudioUri} />
+                    </View>
+                  )}
+                </View>
               ) : (
                 <Text className="text-sm text-muted/60 italic">
                   Any final thoughts?
                 </Text>
               )}
-              {book.finalThoughtAudioUri && (
-                <View className="pt-2">
-                  <AudioPlayer uri={book.finalThoughtAudioUri} />
-                </View>
-              )}
             </Pressable>
-          </>
-        )}
+          )}
+        </View>
       </ScrollView>
       {isFocusMode && (
         <FocusModeOverlay
