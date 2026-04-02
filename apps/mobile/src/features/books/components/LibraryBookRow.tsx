@@ -17,10 +17,13 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
 
   return (
     <Pressable onPress={onPress}>
+      {({ pressed }) => (
       <Animated.View
         exiting={FadeOut.duration(200)}
         layout={LinearTransition.duration(300)}
-        className={`flex-row gap-4 p-3 bg-card rounded-2xl${
+        className={`flex-row gap-4 p-3 rounded-2xl${
+          pressed ? " bg-primary/10" : " bg-card"
+        }${
           book.status === "paused" ? " opacity-80" : book.status === "dnf" ? " opacity-60" : ""
         }`}
       >
@@ -112,6 +115,7 @@ const LibraryBookRow = (props: LibraryBookRowProps) => {
           )}
         </View>
       </Animated.View>
+      )}
     </Pressable>
   );
 };

@@ -12,13 +12,23 @@ const PillButton = ({ label, icon, className, ...props }: PillButtonProps) => {
 
   return (
     <Pressable
-      className={`flex-row items-center gap-1 bg-foreground rounded-full pl-2 pr-3 py-1.5 ${className ?? ""}`}
+      className={`flex-row items-center gap-1 rounded-full pl-2 pr-3 py-1.5 ${className ?? ""}`}
       {...props}
     >
-      {icon === "plus" && (
-        <PlusIcon size={14} strokeWidth={2.5} color={background} />
+      {({ pressed }) => (
+        <>
+          <Pressable
+            className={`absolute inset-0 rounded-full ${
+              pressed ? "bg-primary" : "bg-foreground"
+            }`}
+            pointerEvents="none"
+          />
+          {icon === "plus" && (
+            <PlusIcon size={14} strokeWidth={2.5} color={background} />
+          )}
+          <Text className="text-background text-xs font-medium">{label}</Text>
+        </>
       )}
-      <Text className="text-background text-xs font-medium">{label}</Text>
     </Pressable>
   );
 };

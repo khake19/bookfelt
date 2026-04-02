@@ -21,31 +21,28 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Hero Image */}
-          <div className="relative animate-slide-up">
-            <div className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-2xl">
-              {/* Placeholder - user will provide real screenshot */}
-              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                <div className="text-center">
+          {/* Hero Video */}
+          <div className="relative animate-slide-up space-y-4">
+            <div className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-contain"
+              >
+                <source src="/videos/hero-demo.mp4" type="video/mp4" />
+                {/* Fallback for browsers that don't support video */}
+                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                   <p className="text-muted font-mono text-sm">
-                    Hero Screenshot
-                  </p>
-                  <p className="text-muted-foreground font-mono text-xs mt-2">
-                    (Placeholder)
+                    Your browser doesn't support video playback
                   </p>
                 </div>
-              </div>
-              {/*
-              When user provides screenshot, replace above with:
-              <Image
-                src="/images/screenshots/hero.png"
-                alt="Bookfelt app screenshot showing emotional journey"
-                fill
-                className="object-cover"
-                priority
-              />
-              */}
+              </video>
             </div>
+            <p className="text-center text-xl md:text-2xl font-serif font-semibold text-foreground">
+              One tap. That's the whole journal entry.
+            </p>
           </div>
         </div>
       </div>
