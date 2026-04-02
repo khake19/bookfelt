@@ -1,3 +1,5 @@
+'use client'
+
 import {
   HiPencilAlt,
   HiBookOpen,
@@ -7,6 +9,7 @@ import {
   HiShieldCheck,
 } from 'react-icons/hi'
 import { FeatureCard } from './FeatureCard'
+import { useSectionTracking } from '@/hooks/useSectionTracking'
 
 const features = [
   {
@@ -48,8 +51,10 @@ const features = [
 ]
 
 export function Features() {
+  const sectionRef = useSectionTracking('features')
+
   return (
-    <section className="py-20 bg-background">
+    <section ref={sectionRef} className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">

@@ -1,5 +1,8 @@
+'use client'
+
 // import Image from 'next/image' // Uncomment when adding real screenshots
 import { DownloadCTA } from './DownloadCTA'
+import { trackEvent } from '@/lib/posthog'
 
 export function Hero() {
   return (
@@ -40,6 +43,7 @@ export function Hero() {
                       muted
                       playsInline
                       className="w-full h-full object-cover"
+                      onPlay={() => trackEvent('video_played', { location: 'hero', video: 'hero-demo' })}
                     >
                       <source src="/videos/hero-demo.mp4" type="video/mp4" />
                       {/* Fallback for browsers that don't support video */}

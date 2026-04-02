@@ -1,4 +1,7 @@
+'use client'
+
 import { FaApple, FaGooglePlay } from 'react-icons/fa'
+import { trackEvent } from '@/lib/posthog'
 
 const APP_STORE_URL = process.env.NEXT_PUBLIC_APP_STORE_URL || '#waitlist'
 const PLAY_STORE_URL =
@@ -15,6 +18,7 @@ export function DownloadCTA({ variant = 'coming-soon' }: DownloadCTAProps) {
         {/* App Store Button - Coming Soon */}
         <a
           href="#waitlist"
+          onClick={() => trackEvent('download_cta_clicked', { platform: 'ios', variant: 'coming_soon' })}
           className="inline-flex items-center justify-center px-6 py-3 bg-foreground/10 text-foreground border-2 border-foreground/20 rounded-lg font-medium hover:bg-foreground/20 transition-all shadow-lg cursor-pointer"
         >
           <FaApple className="w-6 h-6 mr-3" />
@@ -27,6 +31,7 @@ export function DownloadCTA({ variant = 'coming-soon' }: DownloadCTAProps) {
         {/* Google Play Button - Join Beta */}
         <a
           href="#waitlist"
+          onClick={() => trackEvent('download_cta_clicked', { platform: 'android', variant: 'beta' })}
           className="inline-flex items-center justify-center px-6 py-3 bg-foreground/10 text-foreground border-2 border-foreground/20 rounded-lg font-medium hover:bg-foreground/20 transition-all shadow-lg cursor-pointer"
         >
           <FaGooglePlay className="w-5 h-5 mr-3" />

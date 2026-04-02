@@ -1,4 +1,10 @@
+'use client'
+
+import { trackEvent } from '@/lib/posthog'
+import { useSectionTracking } from '@/hooks/useSectionTracking'
+
 export function AppPreview() {
+  const sectionRef = useSectionTracking('app-preview')
   const features = [
     {
       numeral: 'i',
@@ -24,7 +30,7 @@ export function AppPreview() {
   ]
 
   return (
-    <section className="py-32 bg-background">
+    <section ref={sectionRef} className="py-32 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="max-w-3xl mb-24">
@@ -73,7 +79,7 @@ export function AppPreview() {
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-foreground/90 rounded-b-3xl z-10" />
 
                       {/* Video content */}
-                      <div className="relative aspect-[9/19.5] bg-background">
+                      <div className="relative aspect-[9/19.5] bg-background overflow-hidden">
                         {/* Feature video or placeholder */}
                         {feature.visual === 'emotion-voice' ? (
                           <video
@@ -81,7 +87,14 @@ export function AppPreview() {
                             loop
                             muted
                             playsInline
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-cover"
+                            onPlay={() =>
+                              trackEvent('video_played', {
+                                location: 'features',
+                                feature: feature.visual,
+                                numeral: feature.numeral,
+                              })
+                            }
                           >
                             <source src="/videos/02-add-audio-entry.mp4" type="video/mp4" />
                           </video>

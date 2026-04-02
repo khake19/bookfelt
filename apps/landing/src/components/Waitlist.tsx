@@ -2,8 +2,11 @@
 
 import { useState } from 'react'
 import { HiMail, HiCheckCircle } from 'react-icons/hi'
+import { trackEvent } from '@/lib/posthog'
+import { useSectionTracking } from '@/hooks/useSectionTracking'
 
 export function Waitlist() {
+  const sectionRef = useSectionTracking('waitlist')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>(
     'idle'
@@ -28,6 +31,9 @@ export function Waitlist() {
 
       await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call
 
+      // Track successful waitlist signup
+      trackEvent('waitlist_submitted', { email })
+
       setStatus('success')
       setMessage("You're on the list! We'll notify you when Bookfelt launches.")
       setEmail('')
@@ -48,7 +54,7 @@ export function Waitlist() {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-secondary/30">
+    <section id="waitlist" ref={sectionRef} className="py-20 bg-gradient-to-b from-background to-secondary/30">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center">
           <div className="inline-block px-4 py-2 mb-6 bg-primary/10 text-primary rounded-full text-sm font-semibold">

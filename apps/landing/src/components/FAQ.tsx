@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
+import { trackEvent } from '@/lib/posthog'
+import { useSectionTracking } from '@/hooks/useSectionTracking'
 
 const faqs = [
   {
@@ -37,14 +39,22 @@ const faqs = [
 ]
 
 export function FAQ() {
+  const sectionRef = useSectionTracking('faq')
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const toggleFAQ = (index: number) => {
+    const isOpening = openIndex !== index
+    if (isOpening) {
+      trackEvent('faq_item_clicked', {
+        question: faqs[index].question,
+        index,
+      })
+    }
     setOpenIndex(openIndex === index ? null : index)
   }
 
   return (
-    <section className="py-20 bg-background">
+    <section ref={sectionRef} className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">

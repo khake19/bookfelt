@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Lora, Source_Sans_3, Courier_Prime } from 'next/font/google'
+import { PostHogProvider } from '@/components/PostHogProvider'
 import './globals.css'
 
 const lora = Lora({
@@ -87,7 +88,9 @@ export default function RootLayout({
       lang="en"
       className={`${lora.variable} ${sourceSans.variable} ${courierPrime.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <PostHogProvider>{children}</PostHogProvider>
+      </body>
     </html>
   )
 }
