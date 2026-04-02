@@ -24,14 +24,14 @@ export function DownloadCTA({ variant = 'coming-soon' }: DownloadCTAProps) {
           </div>
         </a>
 
-        {/* Google Play Button - Closed Testing */}
+        {/* Google Play Button - Join Beta */}
         <a
           href="#waitlist"
           className="inline-flex items-center justify-center px-6 py-3 bg-foreground/10 text-foreground border-2 border-foreground/20 rounded-lg font-medium hover:bg-foreground/20 transition-all shadow-lg cursor-pointer"
         >
           <FaGooglePlay className="w-5 h-5 mr-3" />
           <div className="text-left">
-            <div className="text-xs">Closed Testing on</div>
+            <div className="text-xs">Join the Beta on</div>
             <div className="text-lg font-semibold">Google Play</div>
           </div>
         </a>
