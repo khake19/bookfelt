@@ -9,8 +9,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and Tagline */}
           <div>
-            <h3 className="text-2xl font-serif font-bold text-foreground mb-2">
-              Bookfelt
+            <h3 className="text-2xl font-serif font-bold mb-2">
+              <span className="text-accent">B</span>
+              <span className="text-foreground">ookfelt</span>
             </h3>
             <p className="text-muted text-sm">
               Capture your thoughts and feelings as you read.

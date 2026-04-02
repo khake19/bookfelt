@@ -27,8 +27,9 @@ export function Navigation() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-serif font-bold text-foreground">
-              Bookfelt
+            <span className="text-2xl font-serif font-bold">
+              <span className="text-accent">B</span>
+              <span className="text-foreground">ookfelt</span>
             </span>
           </Link>
 
