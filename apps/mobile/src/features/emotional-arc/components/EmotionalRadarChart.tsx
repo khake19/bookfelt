@@ -33,7 +33,7 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
   const size = Math.min(screenWidth - 64, 450);
   const centerX = size / 2;
   const centerY = size / 2;
-  const maxRadius = size * 0.28; // Maintains ~125/450 ratio
+  const maxRadius = size * 0.38; // Larger circle for better visibility
   const levels = 4;
 
   // Calculate average intensity per category
@@ -104,6 +104,70 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
   }, [categoryData]);
 
   const polygonPoints = radarPoints.map((p) => `${p.x},${p.y}`).join(' ');
+
+  // Get top 3 emotions from the dominant category
+  const topEmotions = useMemo(() => {
+    // Find dominant category first
+    const dominant = categoryData.reduce((max, cat) =>
+      cat.intensity > max.intensity ? cat : max
+    );
+
+    const emotionCounts = new Map<string, { label: string; count: number; color: string; category: string }>();
+
+    data.forEach((point) => {
+      const emotion = Array.from(emotionMap.values()).find(
+        (e) => e.label.toLowerCase() === point.label.toLowerCase()
+      );
+
+      if (emotion) {
+        const existing = emotionCounts.get(emotion.label);
+        const count = point.entryCount || 1;
+
+        if (existing) {
+          existing.count += count;
+        } else {
+          emotionCounts.set(emotion.label, {
+            label: emotion.label,
+            count,
+            color: emotion.color,
+            category: emotion.category,
+          });
+        }
+      }
+    });
+
+    // Filter to only emotions from dominant category, then sort by count
+    return Array.from(emotionCounts.values())
+      .filter((e) => e.category === dominant.category)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 3);
+  }, [data, emotionMap, categoryData]);
+
+  // Generate insight text based on intensity (not frequency)
+  const insight = useMemo(() => {
+    // Use category intensity as the primary signal
+    const dominant = categoryData.reduce((max, cat) =>
+      cat.intensity > max.intensity ? cat : max
+    );
+
+    // Check if there's a clear winner (>10% difference)
+    const sorted = [...categoryData].sort((a, b) => b.intensity - a.intensity);
+    const intensityGap = sorted[0].intensity - sorted[1].intensity;
+
+    const messages: Record<string, string> = {
+      positive: 'An uplifting journey through this book',
+      heavy: 'Heavy emotions shaped this read',
+      reflective: 'A contemplative reading experience',
+      neutral: 'A balanced emotional journey',
+    };
+
+    // If it's very close (<5% difference), call it balanced
+    if (intensityGap < 0.05) {
+      return 'A balanced emotional journey';
+    }
+
+    return messages[dominant.category] || messages.neutral;
+  }, [categoryData]);
 
   if (data.length === 0) {
     return null;
@@ -196,34 +260,15 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
             />
           </G>
         ))}
-
-        {/* Category labels */}
-        {radarPoints.map((point, index) => {
-          const isTop = index === 0;
-          const isBottom = index === 2;
-          const isRight = index === 1;
-
-          return (
-            <G key={`label-${index}`}>
-              <SvgText
-                x={point.labelX}
-                y={point.labelY}
-                fontSize="11"
-                fontWeight="600"
-                fill={point.color}
-                textAnchor={isRight ? 'start' : isTop || isBottom ? 'middle' : 'end'}
-                alignmentBaseline={isTop ? 'baseline' : isBottom ? 'hanging' : 'middle'}
-                opacity={0.9}
-              >
-                {point.label}
-              </SvgText>
-            </G>
-          );
-        })}
       </Svg>
 
+      {/* Insight text */}
+      <Text className="text-sm text-muted italic mt-3 mb-2 text-center">
+        {insight}
+      </Text>
+
       {/* Stats below */}
-      <View className="mt-4 flex-row flex-wrap gap-x-4 gap-y-2 px-4">
+      <View className="flex-row flex-wrap gap-x-4 gap-y-2 px-4 mb-4">
         {categoryData
           .filter((cat) => cat.count > 0)
           .map((category) => (
@@ -241,6 +286,43 @@ export function EmotionalRadarChart({ data, emotionMap }: EmotionalRadarChartPro
             </View>
           ))}
       </View>
+
+      {/* Top emotions as chips */}
+      {topEmotions.length > 0 && (() => {
+        const maxCount = Math.max(...topEmotions.map((e) => e.count));
+        const showCounts = maxCount > 1;
+        const heading = showCounts ? 'Most Felt' : 'Emotions from this read';
+
+        return (
+          <View className="pt-3 border-t border-border/50">
+            <Text className="text-xs font-medium uppercase tracking-widest text-muted/70 mb-3 text-center">
+              {heading}
+            </Text>
+            <View className="flex-row justify-center gap-2 flex-wrap px-4">
+              {topEmotions.map((emotion) => (
+                <View
+                  key={emotion.label}
+                  className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-full"
+                  style={{ backgroundColor: `${emotion.color}20` }}
+                >
+                  <View
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: emotion.color }}
+                  />
+                  <Text className="text-sm font-medium" style={{ color: emotion.color }}>
+                    {emotion.label}
+                  </Text>
+                  {showCounts && (
+                    <Text className="text-xs text-muted/60">
+                      {emotion.count}
+                    </Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          </View>
+        );
+      })()}
     </View>
   );
 }

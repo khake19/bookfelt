@@ -36,8 +36,12 @@ export function useAnalytics() {
       analyticsService.track(AnalyticsEvents.emotionalArcViewed(bookId, bookTitle, dataPoints));
     },
 
-    emotionalArcShared: (method: 'share_sheet' | 'save_to_photos', bookTitle?: string) => {
-      analyticsService.track(AnalyticsEvents.emotionalArcShared(method, bookTitle));
+    emotionalArcTabSwitched: (bookId: string, bookTitle: string, tab: 'arc' | 'radar') => {
+      analyticsService.track(AnalyticsEvents.emotionalArcTabSwitched(bookId, bookTitle, tab));
+    },
+
+    emotionalArcShared: (bookId: string, bookTitle: string, activeTab: 'arc' | 'radar') => {
+      analyticsService.track(AnalyticsEvents.emotionalArcShared(bookId, bookTitle, activeTab));
     },
 
     emotionalArcShareFailed: (method: 'share_sheet' | 'save_to_photos', error: string, bookTitle?: string) => {

@@ -98,6 +98,23 @@ export function AppPreview() {
                           >
                             <source src="/videos/02-add-audio-entry.mp4" type="video/mp4" />
                           </video>
+                        ) : feature.visual === 'emotional-arc' ? (
+                          <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover"
+                            onPlay={() =>
+                              trackEvent('video_played', {
+                                location: 'features',
+                                feature: feature.visual,
+                                numeral: feature.numeral,
+                              })
+                            }
+                          >
+                            <source src="/videos/03-add-arc-graph.mp4" type="video/mp4" />
+                          </video>
                         ) : (
                           <div className="w-full h-full flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-accent/10">
                             <div className="text-center">

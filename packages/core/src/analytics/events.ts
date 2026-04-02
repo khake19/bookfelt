@@ -118,9 +118,14 @@ export const AnalyticsEvents = {
     properties: { bookId, bookTitle, dataPoints },
   }),
 
-  emotionalArcShared: (method: 'share_sheet' | 'save_to_photos', bookTitle?: string): AnalyticsEvent => ({
+  emotionalArcTabSwitched: (bookId: string, bookTitle: string, tab: 'arc' | 'radar'): AnalyticsEvent => ({
+    name: 'emotional_arc_tab_switched',
+    properties: { bookId, bookTitle, tab },
+  }),
+
+  emotionalArcShared: (bookId: string, bookTitle: string, activeTab: 'arc' | 'radar'): AnalyticsEvent => ({
     name: 'emotional_arc_shared',
-    properties: { method, bookTitle },
+    properties: { bookId, bookTitle, activeTab },
   }),
 
   emotionalArcShareFailed: (
