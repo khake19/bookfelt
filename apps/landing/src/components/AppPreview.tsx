@@ -1,69 +1,110 @@
-// import Image from 'next/image' // Uncomment when adding real screenshots
-
-const screenshots = [
-  {
-    src: '/images/screenshots/feature-1.png',
-    alt: 'Bookfelt app showing entry creation',
-    caption: 'Capture thoughts with voice or text',
-  },
-  {
-    src: '/images/screenshots/feature-2.png',
-    alt: 'Bookfelt app showing emotional arc visualization',
-    caption: 'Track your emotional journey',
-  },
-  {
-    src: '/images/screenshots/feature-3.png',
-    alt: 'Bookfelt app showing bookends feature',
-    caption: 'First impressions and final thoughts',
-  },
-]
-
 export function AppPreview() {
+  const features = [
+    {
+      numeral: 'i',
+      headline: 'Capture the moment, your way',
+      description:
+        'Tap an emotion. Record your voice. Watch the waveform dance as you speak—then let AI turn it into text. Or just type. Your thoughts, your choice.',
+      visual: 'emotion-voice', // Placeholder for emotion chips + waveform animation
+    },
+    {
+      numeral: 'ii',
+      headline: 'See how the story made you feel',
+      description:
+        'Every entry maps to your emotional arc. Watch your journey from enchanted to bittersweet to content—a visual story of how this book changed you.',
+      visual: 'emotional-arc', // Placeholder for arc chart with real emotions
+    },
+    {
+      numeral: 'iii',
+      headline: 'First page. Last page. Everything between.',
+      description:
+        "Bookends capture what you felt when you started versus when you finished. Your \"this sounds amazing\" becomes \"I'll never forget this.\" That's the magic.",
+      visual: 'bookends', // Placeholder for bookends comparison
+    },
+  ]
+
   return (
-    <section className="py-20 bg-secondary/30">
+    <section className="py-32 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            See Bookfelt in action
+        {/* Section Header */}
+        <div className="max-w-3xl mb-24">
+          <h2 className="text-5xl md:text-6xl font-bold text-foreground font-serif mb-6 leading-tight">
+            More than a reading log.
           </h2>
-          <p className="text-xl text-muted max-w-2xl mx-auto">
-            A glimpse into how Bookfelt helps you capture and explore your
-            reading experience.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {screenshots.map((screenshot, index) => (
+        {/* Alternating Feature Layout */}
+        <div className="space-y-32">
+          {features.map((feature, index) => (
             <div
               key={index}
-              className="flex flex-col items-center space-y-4 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className={`grid md:grid-cols-2 gap-12 lg:gap-20 items-center ${
+                index % 2 === 1 ? 'md:flex-row-reverse' : ''
+              }`}
             >
-              <div className="relative w-full h-[500px] rounded-lg overflow-hidden shadow-xl">
-                {/* Placeholder - user will provide real screenshots */}
-                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                  <div className="text-center p-4">
-                    <p className="text-muted font-mono text-sm">
-                      Screenshot {index + 1}
-                    </p>
-                    <p className="text-muted-foreground font-mono text-xs mt-2">
-                      (Placeholder)
-                    </p>
-                  </div>
+              {/* Content */}
+              <div
+                className={`space-y-6 ${index % 2 === 1 ? 'md:order-2' : ''}`}
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="text-6xl font-serif text-accent/40 font-light">
+                    {feature.numeral}
+                  </span>
+                  <h3 className="text-3xl md:text-4xl font-serif font-bold text-foreground leading-tight">
+                    {feature.headline}
+                  </h3>
                 </div>
-                {/*
-                When user provides screenshots, replace above with:
-                <Image
-                  src={screenshot.src}
-                  alt={screenshot.alt}
-                  fill
-                  className="object-cover"
-                />
-                */}
+                <p className="text-lg md:text-xl text-muted leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
-              <p className="text-center text-muted font-medium">
-                {screenshot.caption}
-              </p>
+
+              {/* Visual */}
+              <div
+                className={`relative ${index % 2 === 1 ? 'md:order-1' : ''}`}
+              >
+                {/* Device Frame */}
+                <div className="relative max-w-sm mx-auto">
+                  {/* Phone bezel/frame */}
+                  <div className="relative bg-gradient-to-b from-foreground/90 to-foreground rounded-[3rem] p-3 shadow-2xl">
+                    {/* Screen */}
+                    <div className="relative bg-background rounded-[2.5rem] overflow-hidden">
+                      {/* Notch */}
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-foreground/90 rounded-b-3xl z-10" />
+
+                      {/* Video content */}
+                      <div className="relative aspect-[9/19.5] bg-background">
+                        {/* Feature video or placeholder */}
+                        {feature.visual === 'emotion-voice' ? (
+                          <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-contain"
+                          >
+                            <source src="/videos/02-add-audio-entry.mp4" type="video/mp4" />
+                          </video>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-accent/10">
+                            <div className="text-center">
+                              <p className="text-muted font-mono text-sm mb-2">
+                                {feature.visual}
+                              </p>
+                              <p className="text-muted/60 font-mono text-xs">
+                                (Screenshot or animation placeholder)
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Reflection effect */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-background/5 to-background/10 rounded-[3rem] pointer-events-none" />
+                </div>
+              </div>
             </div>
           ))}
         </div>

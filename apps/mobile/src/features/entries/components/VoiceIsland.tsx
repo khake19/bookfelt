@@ -274,9 +274,14 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, maxDurationS = DEFAU
             {/* Stop button */}
             <Pressable
               onPress={stopRecording}
-              className="w-9 h-9 rounded-full bg-primary items-center justify-center"
+              className="w-9 h-9 rounded-full items-center justify-center"
             >
-              <StopIcon size={14} color="white" />
+              {({ pressed }) => (
+                <>
+                  <View className={`absolute inset-0 rounded-full ${pressed ? "bg-primary/80" : "bg-primary"}`} />
+                  <StopIcon size={14} color="white" />
+                </>
+              )}
             </Pressable>
           </View>
         )}
@@ -323,15 +328,22 @@ const VoiceIsland = ({ bookCoverUrl, bookTitle, bookAuthor, maxDurationS = DEFAU
             </Text>
             <View className="flex-1" />
             <Pressable onPress={onClose} hitSlop={8} className="py-2 px-3">
-              <Text className="text-white/40 text-sm">Discard</Text>
+              {({ pressed }) => (
+                <Text className={`text-sm ${pressed ? "text-white/60" : "text-white/40"}`}>Discard</Text>
+              )}
             </Pressable>
             <Pressable
               onPress={handleConfirm}
-              className="bg-white/15 rounded-full py-1.5 px-4"
+              className="rounded-full py-1.5 px-4"
             >
-              <Text className="text-white text-sm font-medium">
-                Confirm
-              </Text>
+              {({ pressed }) => (
+                <>
+                  <View className={`absolute inset-0 rounded-full ${pressed ? "bg-white/25" : "bg-white/15"}`} />
+                  <Text className="text-white text-sm font-medium">
+                    Confirm
+                  </Text>
+                </>
+              )}
             </Pressable>
           </View>
         )}

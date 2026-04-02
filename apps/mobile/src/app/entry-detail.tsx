@@ -295,10 +295,12 @@ const EntryDetailScreen = () => {
               hitSlop={8}
               className="p-1"
             >
-              <BookOpenIcon
-                size={18}
-                color={mutedForeground}
-              />
+              {({ pressed }) => (
+                <BookOpenIcon
+                  size={18}
+                  color={pressed ? primary : mutedForeground}
+                />
+              )}
             </Pressable>
           </View>
           <View className="flex-row items-center">
@@ -374,7 +376,9 @@ const EntryDetailScreen = () => {
               hitSlop={8}
               className="p-1"
             >
-              <CameraIcon size={18} color={mutedForeground} />
+              {({ pressed }) => (
+                <CameraIcon size={18} color={pressed ? primary : mutedForeground} />
+              )}
             </Pressable>
           </View>
           <Pressable onPress={() => setFocusTarget("snippet")}>
@@ -478,7 +482,9 @@ const EntryDetailScreen = () => {
               hitSlop={8}
               className="p-1"
             >
-              <MicrophoneIcon size={18} color={mutedForeground} />
+              {({ pressed }) => (
+                <MicrophoneIcon size={18} color={pressed ? primary : mutedForeground} />
+              )}
             </Pressable>
           </View>
           <Pressable onPress={() => setFocusTarget("reflection")}>

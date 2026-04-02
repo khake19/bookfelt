@@ -46,6 +46,7 @@ type FabOptionProps = {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 function FabOption({ icon: Icon, index, progress, foreground, card, border, onPress, isOpen, disabled }: FabOptionProps) {
+  const { primary } = useThemeColors();
   const animatedStyle = useAnimatedStyle(() => {
     const staggeredProgress = interpolate(
       progress.value,
@@ -64,11 +65,16 @@ function FabOption({ icon: Icon, index, progress, foreground, card, border, onPr
 
   return (
     <AnimatedPressable
-      style={[styles.optionCircle, { backgroundColor: card, borderColor: border, opacity: disabled ? 0.35 : 1, bottom: (index + 1) * OPTION_SPACING }, animatedStyle]}
+      style={[styles.optionCircle, { borderColor: border, opacity: disabled ? 0.35 : 1, bottom: (index + 1) * OPTION_SPACING }, animatedStyle]}
       pointerEvents={isOpen ? 'auto' : 'none'}
       onPress={disabled ? undefined : onPress}
     >
-      <Icon size={22} color={foreground} />
+      {({ pressed }) => (
+        <>
+          <View style={[StyleSheet.absoluteFill, { borderRadius: OPTION_SIZE / 2, backgroundColor: pressed ? primary : card }]} />
+          <Icon size={22} color={pressed ? '#fff' : foreground} />
+        </>
+      )}
     </AnimatedPressable>
   );
 }

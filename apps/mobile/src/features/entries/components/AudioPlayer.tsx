@@ -186,12 +186,17 @@ const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
       <Pressable
         onPress={togglePlay}
         hitSlop={8}
-        className="w-8 h-8 rounded-full bg-primary/15 items-center justify-center"
+        className="w-8 h-8 rounded-full items-center justify-center"
       >
-        {isPlaying ? (
-          <PauseIcon size={14} color={primary} />
-        ) : (
-          <PlayIcon size={14} color={primary} style={{ marginLeft: 1 }} />
+        {({ pressed }) => (
+          <>
+            <View className={`absolute inset-0 rounded-full ${pressed ? "bg-primary/25" : "bg-primary/15"}`} />
+            {isPlaying ? (
+              <PauseIcon size={14} color={primary} />
+            ) : (
+              <PlayIcon size={14} color={primary} style={{ marginLeft: 1 }} />
+            )}
+          </>
         )}
       </Pressable>
 
@@ -221,7 +226,12 @@ const AudioPlayer = ({ uri, onDelete }: AudioPlayerProps) => {
           hitSlop={8}
           className="w-8 h-8 rounded-full items-center justify-center"
         >
-          <TrashIcon size={16} color={destructive} />
+          {({ pressed }) => (
+            <>
+              <View className={`absolute inset-0 rounded-full ${pressed ? "bg-destructive/15" : "bg-transparent"}`} />
+              <TrashIcon size={16} color={destructive} />
+            </>
+          )}
         </Pressable>
       )}
     </View>
