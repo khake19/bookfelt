@@ -237,8 +237,8 @@ export async function updateBook(
             record.id,
             record.title,
             "first_impression",
-            !!(updates.firstImpressionAudioUri || rec.firstImpressionAudioUri),
-            !!(updates.firstImpression || rec.firstImpression)
+            !!(updates.firstImpressionAudioUri || record.firstImpressionAudioUri),
+            !!(updates.firstImpression || record.firstImpression)
           )
         );
       }
@@ -248,8 +248,8 @@ export async function updateBook(
             record.id,
             record.title,
             "final_thought",
-            !!(updates.finalThoughtAudioUri || rec.finalThoughtAudioUri),
-            !!(updates.finalThought || rec.finalThought)
+            !!(updates.finalThoughtAudioUri || record.finalThoughtAudioUri),
+            !!(updates.finalThought || record.finalThought)
           )
         );
       }
@@ -259,8 +259,8 @@ export async function updateBook(
             record.id,
             record.title,
             "exit_note",
-            !!(updates.exitNoteAudioUri || rec.exitNoteAudioUri),
-            !!(updates.exitNote || rec.exitNote)
+            !!(updates.exitNoteAudioUri || record.exitNoteAudioUri),
+            !!(updates.exitNote || record.exitNote)
           )
         );
       }
