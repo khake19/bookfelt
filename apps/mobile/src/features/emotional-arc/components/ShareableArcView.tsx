@@ -7,14 +7,17 @@ import { EmotionalArcLegend } from './EmotionalArcLegend';
 import { EmotionalArcGraph } from './EmotionalArcGraph';
 import { EmotionalRadarChart } from './EmotionalRadarChart';
 
+type ChartType = 'arc' | 'radar';
+
 interface ShareableArcViewProps {
   data: ArcDataPoint[];
   emotionMap: Map<string, EmotionRecord>;
   bookTitle?: string;
+  activeChart?: ChartType;
 }
 
 export const ShareableArcView = forwardRef<View, ShareableArcViewProps>(
-  ({ data, emotionMap, bookTitle }, ref) => {
+  ({ data, emotionMap, bookTitle, activeChart = 'arc' }, ref) => {
     const theme = useThemeColors();
 
     return (
@@ -30,11 +33,12 @@ export const ShareableArcView = forwardRef<View, ShareableArcViewProps>(
         {/* Legend with book title and date range */}
         <EmotionalArcLegend data={data} bookTitle={bookTitle} />
 
-        {/* Emotional Journey Graph */}
-        <EmotionalArcGraph data={data} />
-
-        {/* Emotional Balance Radar Chart */}
-        <EmotionalRadarChart data={data} emotionMap={emotionMap} />
+        {/* Render active chart only */}
+        {activeChart === 'arc' ? (
+          <EmotionalArcGraph data={data} />
+        ) : (
+          <EmotionalRadarChart data={data} emotionMap={emotionMap} />
+        )}
 
         {/* Branding footer */}
         <View

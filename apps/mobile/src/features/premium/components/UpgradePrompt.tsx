@@ -69,4 +69,13 @@ export const UpgradePrompts = {
       onUpgrade,
       limitType: "bookend",
     }),
+
+  distributionChart: (onUpgrade: () => void) =>
+    showUpgradePrompt({
+      title: "Premium Feature",
+      message:
+        "The Distribution view provides advanced emotional analytics. Upgrade to Premium to unlock deeper insights into your reading journey!",
+      onUpgrade,
+      limitType: "distribution_chart",
+    }),
 };

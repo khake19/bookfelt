@@ -15,6 +15,9 @@ import {
 } from '@/features/emotional-arc';
 import { useEmotionMap } from '@/features/entries';
 import { useAnalytics } from '@/hooks/use-analytics';
+import { usePremiumStatus } from '@/features/premium/hooks/use-premium-status';
+import { UpgradePrompts } from '@/features/premium/components/UpgradePrompt';
+import { CustomPaywall } from '@/features/premium';
 
 type ChartType = 'arc' | 'radar';
 
@@ -26,7 +29,9 @@ export default function EmotionalArcScreen() {
   const shareableRef = useRef<View>(null);
   const { share, isCapturing } = useShareEmotionalArc();
   const analytics = useAnalytics();
+  const { isPremium } = usePremiumStatus();
   const [activeChart, setActiveChart] = useState<ChartType>('arc');
+  const [showPaywall, setShowPaywall] = useState(false);
 
   // Track emotional arc view
   useEffect(() => {
@@ -43,15 +48,32 @@ export default function EmotionalArcScreen() {
     if (arcData.length === 0) {
       return;
     }
+
+    // Prevent sharing Distribution chart for free users
+    if (activeChart === 'radar' && !isPremium) {
+      UpgradePrompts.distributionChart(() => {
+        setShowPaywall(true);
+      });
+      return;
+    }
+
     analytics.emotionalArcShared(
       bookId || '',
       bookTitle || 'Unknown',
       activeChart
     );
-    share(shareableRef, bookTitle);
+    share(shareableRef, bookTitle, activeChart);
   };
 
   const handleTabSwitch = (chart: ChartType) => {
+    // Check premium status for Distribution tab
+    if (chart === 'radar' && !isPremium) {
+      UpgradePrompts.distributionChart(() => {
+        setShowPaywall(true);
+      });
+      return;
+    }
+
     setActiveChart(chart);
     analytics.emotionalArcTabSwitched(
       bookId || '',
@@ -165,9 +187,17 @@ export default function EmotionalArcScreen() {
             data={arcData}
             emotionMap={emotionMap}
             bookTitle={bookTitle}
+            activeChart={activeChart}
           />
         </View>
       )}
+
+      {/* Premium Paywall */}
+      <CustomPaywall
+        visible={showPaywall}
+        onDismiss={() => setShowPaywall(false)}
+        onPurchaseSuccess={() => setShowPaywall(false)}
+      />
     </ScreenWrapper>
   );
 }

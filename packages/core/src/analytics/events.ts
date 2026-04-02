@@ -164,7 +164,7 @@ export const AnalyticsEvents = {
     properties: { success, error },
   }),
 
-  freeTierLimitReached: (limitType: 'audio_transcription' | 'summary' | 'bookend', title: string): AnalyticsEvent => ({
+  freeTierLimitReached: (limitType: 'audio_transcription' | 'summary' | 'bookend' | 'distribution_chart', title: string): AnalyticsEvent => ({
     name: 'free_tier_limit_reached',
     properties: { limitType, title },
   }),
