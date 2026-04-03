@@ -38,6 +38,7 @@ interface GoogleBook {
 interface RequestBody {
   query?: string;
   isbn?: string;
+  orderBy?: "relevance" | "newest";
 }
 
 // --- Converter ---
@@ -170,6 +171,9 @@ Deno.serve(async (req) => {
     url.searchParams.set("q", trimmed);
     url.searchParams.set("maxResults", MAX_RESULTS.toString());
     url.searchParams.set("printType", "books");
+    if (body.orderBy) {
+      url.searchParams.set("orderBy", body.orderBy);
+    }
     url.searchParams.set("key", apiKey);
 
     const response = await fetch(url.toString());

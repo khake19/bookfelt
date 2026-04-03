@@ -12,6 +12,7 @@ interface BookSearchInputProps {
   onChangeText: (text: string) => void;
   onClear: () => void;
   onScanPress?: () => void;
+  autoFocus?: boolean;
 }
 
 const BookSearchInput = ({
@@ -19,6 +20,7 @@ const BookSearchInput = ({
   onChangeText,
   onClear,
   onScanPress,
+  autoFocus,
 }: BookSearchInputProps) => {
   const { muted, primary } = useThemeColors();
 
@@ -33,6 +35,7 @@ const BookSearchInput = ({
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
+        autoFocus={autoFocus}
       />
       {value.length > 0 && (
         <Pressable onPress={onClear} hitSlop={8}>

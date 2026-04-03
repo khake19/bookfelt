@@ -5,7 +5,7 @@ import { Features } from '@/components/Features'
 import { Differentiation } from '@/components/Differentiation'
 import { Pricing } from '@/components/Pricing'
 import { FAQ } from '@/components/FAQ'
-import { Waitlist } from '@/components/Waitlist'
+import { DownloadCTA } from '@/components/DownloadCTA'
 import { Footer } from '@/components/Footer'
 
 const structuredData = {
@@ -43,7 +43,21 @@ export default function HomePage() {
         <Differentiation />
         <Pricing />
         <FAQ />
-        <Waitlist />
+
+        {/* Final CTA */}
+        <section className="py-24 bg-gradient-to-b from-background to-secondary">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground font-serif mb-6">
+              Start capturing your reading journey today
+            </h2>
+            <p className="text-xl text-muted mb-10 max-w-2xl mx-auto">
+              Join readers who are discovering deeper connections with every book they read.
+            </p>
+            <div className="flex justify-center">
+              <DownloadCTA variant="beta" />
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

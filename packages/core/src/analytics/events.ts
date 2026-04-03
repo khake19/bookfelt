@@ -200,4 +200,9 @@ export const AnalyticsEvents = {
     name: 'first_impression_added_onboarding',
     properties: { bookId, bookTitle, hasAudio, hasText },
   }),
+
+  onboardingMethodSelected: (method: 'search' | 'scan' | 'manual'): AnalyticsEvent => ({
+    name: 'onboarding_method_selected',
+    properties: { method },
+  }),
 } as const;

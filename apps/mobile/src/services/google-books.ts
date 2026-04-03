@@ -16,12 +16,15 @@ export interface GoogleBook {
 
 // --- API ---
 
-export async function searchGoogleBooks(query: string): Promise<GoogleBook[]> {
+export async function searchGoogleBooks(
+  query: string,
+  orderBy?: "relevance" | "newest"
+): Promise<GoogleBook[]> {
   if (!query.trim()) return [];
 
   return callEdgeFunction<GoogleBook[]>({
     functionName: "google-books",
-    body: { query },
+    body: { query, orderBy },
   });
 }
 

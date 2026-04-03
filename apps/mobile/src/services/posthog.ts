@@ -47,6 +47,26 @@ class PostHogAdapter implements AnalyticsClient {
 let analyticsService: AnalyticsService | null = null;
 
 /**
+ * No-op analytics client used before initialization
+ */
+class NoOpAnalyticsClient implements AnalyticsClient {
+  track(): void {
+    // No-op: silently ignore until PostHog is ready
+  }
+  identify(): void {
+    // No-op: silently ignore until PostHog is ready
+  }
+  reset(): void {
+    // No-op: silently ignore until PostHog is ready
+  }
+}
+
+/**
+ * Fallback analytics service (used before PostHog is ready)
+ */
+const fallbackAnalytics = new AnalyticsService(new NoOpAnalyticsClient());
+
+/**
  * Initialize PostHog and create analytics service
  * Call this once when the app starts
  */
@@ -77,10 +97,14 @@ export async function initializePostHog(): Promise<PostHog> {
 
 /**
  * Get analytics service instance
+ * Returns a no-op client if PostHog hasn't initialized yet (safe to call anytime)
  */
 export function getAnalytics(): AnalyticsService {
   if (!analyticsService) {
-    throw new Error('[Analytics] Not initialized. Call initializePostHog() first.');
+    if (__DEV__) {
+      console.warn('[Analytics] Not initialized yet, using fallback (events will be ignored)');
+    }
+    return fallbackAnalytics;
   }
   return analyticsService;
 }

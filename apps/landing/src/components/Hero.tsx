@@ -20,7 +20,7 @@ export function Hero() {
               automatically when online.
             </p>
             <div className="pt-4">
-              <DownloadCTA />
+              <DownloadCTA variant="beta" />
             </div>
           </div>
 

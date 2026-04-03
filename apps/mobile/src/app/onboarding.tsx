@@ -3,7 +3,7 @@ import { Button, Input } from "@bookfelt/ui";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Image, Keyboard, Pressable, ScrollView, Text, View } from "react-native";
-import { MicrophoneIcon, PencilIcon } from "react-native-heroicons/outline";
+import { MagnifyingGlassIcon, MicrophoneIcon, PencilIcon, ViewfinderCircleIcon } from "react-native-heroicons/outline";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import BookSearchInput from "@/features/books/components/BookSearchInput";
 import BookSearchResults from "@/features/books/components/BookSearchResults";
@@ -115,11 +115,15 @@ function AddBookStep({ onBookAdded }: { onBookAdded: () => void }) {
   const { addBook, isInLibrary } = useLibrary();
   const { primary } = useThemeColors();
 
-  const [mode, setMode] = useState<"search" | "manual">("search");
+  const [mode, setMode] = useState<"choose" | "search" | "manual">("choose");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { data: searchResults = [], isLoading, error } = useSearchBooks(debouncedQuery);
+  const { data: suggestedBooks = [], isLoading: isLoadingSuggestions } = useSearchBooks(
+    mode === "search" && !debouncedQuery ? "subject:fiction" : "",
+    "relevance"
+  );
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const isbnLookup = useIsbnLookup();
 
@@ -227,47 +231,132 @@ function AddBookStep({ onBookAdded }: { onBookAdded: () => void }) {
         <Text className="text-muted text-sm mt-1">What are you currently reading?</Text>
       </Animated.View>
 
+      {/* Initial choice view - 3 option cards */}
+      {mode === "choose" && (
+        <View className="flex-1 justify-center pb-12 px-4">
+          <Animated.View entering={FadeInDown.duration(400).delay(200)} className="items-center mb-8">
+            <Text className="text-foreground text-lg font-serif-italic italic text-center">
+              How would you like to add it?
+            </Text>
+          </Animated.View>
+
+          <View className="gap-3">
+            <Animated.View entering={FadeInDown.duration(400).delay(300)}>
+              <Pressable
+                onPress={() => {
+                  try {
+                    getAnalytics().track(AnalyticsEvents.onboardingMethodSelected('search'));
+                  } catch (error) {
+                    console.error('[Onboarding] Failed to track method selected:', error);
+                  }
+                  setMode("search");
+                }}
+                className="bg-card border border-primary/30 rounded-2xl p-4 flex-row items-center gap-4"
+              >
+                <View className="bg-primary/10 rounded-full p-3">
+                  <MagnifyingGlassIcon size={24} color={primary} />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-foreground font-medium text-base mb-0.5">
+                    Search for a book
+                  </Text>
+                  <Text className="text-muted text-sm">
+                    Find by title or author
+                  </Text>
+                </View>
+              </Pressable>
+            </Animated.View>
+
+            <Animated.View entering={FadeInDown.duration(400).delay(400)}>
+              <Pressable
+                onPress={() => {
+                  try {
+                    getAnalytics().track(AnalyticsEvents.onboardingMethodSelected('scan'));
+                  } catch (error) {
+                    console.error('[Onboarding] Failed to track method selected:', error);
+                  }
+                  setIsScannerOpen(true);
+                }}
+                className="bg-card border border-border rounded-2xl p-4 flex-row items-center gap-4"
+              >
+                <View className="bg-card-foreground/10 rounded-full p-3">
+                  <ViewfinderCircleIcon size={24} color={primary} />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-foreground font-medium text-base mb-0.5">
+                    Scan barcode
+                  </Text>
+                  <Text className="text-muted text-sm">
+                    Use your camera to scan ISBN
+                  </Text>
+                </View>
+              </Pressable>
+            </Animated.View>
+
+            <Animated.View entering={FadeInDown.duration(400).delay(500)}>
+              <Pressable
+                onPress={() => {
+                  try {
+                    getAnalytics().track(AnalyticsEvents.onboardingMethodSelected('manual'));
+                  } catch (error) {
+                    console.error('[Onboarding] Failed to track method selected:', error);
+                  }
+                  setMode("manual");
+                }}
+                className="bg-card border border-border rounded-2xl p-4 flex-row items-center gap-4"
+              >
+                <View className="bg-card-foreground/10 rounded-full p-3">
+                  <PencilIcon size={24} color={primary} />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-foreground font-medium text-base mb-0.5">
+                    Enter manually
+                  </Text>
+                  <Text className="text-muted text-sm">
+                    Type in title and author
+                  </Text>
+                </View>
+              </Pressable>
+            </Animated.View>
+          </View>
+        </View>
+      )}
+
+      {/* Search mode - show search input and results */}
       {mode === "search" && (
         <>
-          <Animated.View entering={FadeInDown.duration(500).delay(100)} className="mb-3">
+          <Animated.View entering={FadeInDown.duration(300)} className="mb-3">
             <BookSearchInput
               value={query}
               onChangeText={setQuery}
               onClear={() => setQuery("")}
               onScanPress={() => setIsScannerOpen(true)}
+              autoFocus={true}
             />
           </Animated.View>
 
-          {debouncedQuery.trim().length > 0 ? (
-            <View className="flex-1">
-              <BookSearchResults
-                results={searchResults}
-                isLoading={isLoading}
-                error={error ? error.message : null}
-                query={debouncedQuery}
-                isInLibrary={isInLibrary}
-                onSelectBook={handleSelectBook}
-                onManualCreate={() => setMode("manual")}
-              />
-            </View>
-          ) : (
-            <View className="flex-1 items-center justify-center pb-20">
-              <Animated.View entering={FadeInDown.duration(400).delay(200)} className="items-center">
-                <Text className="text-muted text-sm text-center leading-relaxed">
-                  Search for the book you're reading
-                </Text>
-              </Animated.View>
-              <Animated.View entering={FadeInDown.duration(400).delay(300)} className="items-center mt-4">
-                <Pressable
-                  onPress={() => setMode("manual")}
-                  className="flex-row items-center gap-2 bg-primary/10 rounded-full px-4 py-2"
-                >
-                  <PencilIcon size={14} color={primary} />
-                  <Text className="text-primary text-sm font-medium">Add manually</Text>
-                </Pressable>
-              </Animated.View>
-            </View>
-          )}
+          <View className="flex-1">
+            <BookSearchResults
+              results={debouncedQuery ? searchResults : suggestedBooks}
+              isLoading={debouncedQuery ? isLoading : isLoadingSuggestions}
+              error={error ? error.message : null}
+              query={debouncedQuery}
+              isInLibrary={isInLibrary}
+              onSelectBook={handleSelectBook}
+              onManualCreate={() => setMode("manual")}
+              showAsSuggestions={!debouncedQuery}
+            />
+          </View>
+
+          <Pressable
+            onPress={() => {
+              setQuery("");
+              setMode("choose");
+            }}
+            className="items-center py-4"
+          >
+            <Text className="text-muted text-sm">← Back to options</Text>
+          </Pressable>
         </>
       )}
 
@@ -311,8 +400,15 @@ function AddBookStep({ onBookAdded }: { onBookAdded: () => void }) {
               <Text className="text-background text-center font-medium">Add to Library</Text>
             </Button>
 
-            <Pressable onPress={() => setMode("search")} className="items-center py-2">
-              <Text className="text-muted text-sm">Back to search</Text>
+            <Pressable
+              onPress={() => {
+                setManualTitle("");
+                setManualAuthor("");
+                setMode("choose");
+              }}
+              className="items-center py-2"
+            >
+              <Text className="text-muted text-sm">← Back to options</Text>
             </Pressable>
           </Animated.View>
         </ScrollView>

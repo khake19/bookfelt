@@ -15,10 +15,11 @@ interface BookSearchResultsProps {
   isInLibrary: (bookId: string) => boolean;
   onSelectBook: (book: GoogleBook) => void;
   onManualCreate: () => void;
+  showAsSuggestions?: boolean;
 }
 
 const BookSearchResults = (props: BookSearchResultsProps) => {
-  const { results, query, isInLibrary, onSelectBook, onManualCreate } = props;
+  const { results, query, isInLibrary, onSelectBook, onManualCreate, showAsSuggestions } = props;
   const { primary } = useThemeColors();
 
   return (
@@ -38,31 +39,45 @@ const BookSearchResults = (props: BookSearchResultsProps) => {
       ItemSeparatorComponent={() => <View className="h-px bg-border mx-1" />}
       showsVerticalScrollIndicator={false}
       contentContainerClassName="pb-4"
+      ListHeaderComponent={
+        showAsSuggestions && results.length > 0 ? (
+          <Animated.View entering={FadeInDown.duration(300)} className="pb-3 pt-1">
+            <View className="flex-row items-center gap-2 px-1">
+              <BookOpenIcon size={16} color={primary} />
+              <Text className="text-foreground font-medium text-sm">
+                Popular books to get you started
+              </Text>
+            </View>
+          </Animated.View>
+        ) : null
+      }
       ListEmptyComponent={
-      <Animated.View
-        entering={FadeIn.duration(300)}
-        className="flex-1 items-center justify-center pb-20"
-      >
-        <LottieView
-          source={require("../../../assets/book.lottie")}
-          autoPlay
-          loop
-          renderMode="SOFTWARE"
-          style={{ width: 120, height: 120, backgroundColor: "transparent" }}
-        />
-        <Text className="text-muted text-sm mt-4 text-center leading-relaxed">
-          No books found for "{query}".{"\n"}Try a different search.
-        </Text>
-        <Pressable
-          onPress={onManualCreate}
-          className="flex-row items-center gap-2 mt-4 bg-primary/10 rounded-full px-4 py-2"
-        >
-          <PencilIcon size={14} color={primary} />
-          <Text className="text-primary text-sm font-medium">
-            Add it manually
-          </Text>
-        </Pressable>
-      </Animated.View>
+        !showAsSuggestions ? (
+          <Animated.View
+            entering={FadeIn.duration(300)}
+            className="flex-1 items-center justify-center pb-20"
+          >
+            <LottieView
+              source={require("../../../assets/book.lottie")}
+              autoPlay
+              loop
+              renderMode="SOFTWARE"
+              style={{ width: 120, height: 120, backgroundColor: "transparent" }}
+            />
+            <Text className="text-muted text-sm mt-4 text-center leading-relaxed">
+              No books found for "{query}".{"\n"}Try a different search.
+            </Text>
+            <Pressable
+              onPress={onManualCreate}
+              className="flex-row items-center gap-2 mt-4 bg-primary/10 rounded-full px-4 py-2"
+            >
+              <PencilIcon size={14} color={primary} />
+              <Text className="text-primary text-sm font-medium">
+                Add it manually
+              </Text>
+            </Pressable>
+          </Animated.View>
+        ) : null
       }
       ListFooterComponent={
         results.length > 0 ? (
