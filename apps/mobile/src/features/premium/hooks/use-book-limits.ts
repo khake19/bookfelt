@@ -1,6 +1,6 @@
-import { usePremiumStatus } from "./use-premium-status";
 import { useLibrary } from "@/features/books/hooks/use-library";
 import { useEntries } from "@/features/entries";
+import { usePremiumStatus } from "./use-premium-status";
 
 /**
  * Free Tier Limits
@@ -28,12 +28,9 @@ export function useBookLimits(bookId?: string) {
   // Get ALL entries across all books for global audio count
   const { entries: allEntries } = useEntries(); // No bookId = all entries
 
-  // Get current book's entries for summary check
-  const { entries: bookEntries } = useEntries(bookId);
-
   // Count TOTAL audio transcriptions across ALL books (global limit)
   const totalAudioUsed = allEntries.filter(
-    (entry) => entry.reflectionUri != null
+    (entry) => entry.reflectionUri != null,
   ).length;
 
   // Calculate global audio limit
@@ -74,7 +71,9 @@ export function useBookLimits(bookId?: string) {
     limits: {
       audioTranscriptions: {
         used: totalAudioUsed,
-        limit: isPremium ? Infinity : FREE_TIER_LIMITS.TOTAL_AUDIO_TRANSCRIPTIONS,
+        limit: isPremium
+          ? Infinity
+          : FREE_TIER_LIMITS.TOTAL_AUDIO_TRANSCRIPTIONS,
         remaining: audioTranscriptionsRemaining,
         canUse: canTranscribeAudio,
       },
@@ -107,7 +106,7 @@ export function useBookLimits(bookId?: string) {
  * Get upgrade message based on limit type
  */
 export function getUpgradeMessage(
-  limitType: "audio" | "audioPlayback" | "summary"
+  limitType: "audio" | "audioPlayback" | "summary",
 ): string {
   const messages = {
     audio: `You've used all ${FREE_TIER_LIMITS.TOTAL_AUDIO_TRANSCRIPTIONS} free audio transcriptions. Upgrade to Premium for unlimited transcriptions!`,

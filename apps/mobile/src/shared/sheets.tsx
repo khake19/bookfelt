@@ -5,6 +5,7 @@ import BookOptionsSheet from "@/features/books/components/BookOptionsSheet";
 import ChangeStatusSheet from "@/features/books/components/ChangeStatusSheet";
 import ProfileSheet from "./components/ProfileSheet";
 import SettingSheet from "@/features/entries/components/SettingSheet";
+import EntryDetailSheet from "@/features/emotional-arc/components/EntryDetailSheet";
 import { SHEET_IDS } from "./constants/sheet-ids";
 
 registerSheet(SHEET_IDS.DELETE_ENTRY, DeleteConfirmSheet);
@@ -12,6 +13,7 @@ registerSheet(SHEET_IDS.ENTRY_OPTIONS, BookOptionsSheet);
 registerSheet(SHEET_IDS.CHANGE_STATUS, ChangeStatusSheet);
 registerSheet(SHEET_IDS.PROFILE, ProfileSheet);
 registerSheet(SHEET_IDS.SETTING, SettingSheet);
+registerSheet(SHEET_IDS.ENTRY_DETAIL, EntryDetailSheet);
 
 declare module "react-native-actions-sheet" {
   interface Sheets {
@@ -41,6 +43,12 @@ declare module "react-native-actions-sheet" {
       payload: {
         current?: string;
         onSelect: (setting: string) => void;
+      };
+    }>;
+    "entry-detail-sheet": SheetDefinition<{
+      payload: {
+        entryId?: string; // For single entry
+        entryIds?: string[]; // For multiple entries (grouped weeks)
       };
     }>;
   }

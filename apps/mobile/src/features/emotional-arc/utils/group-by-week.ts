@@ -9,6 +9,8 @@ export interface ArcDataPoint {
   date: number;
   label: string;
   category: 'positive' | 'heavy' | 'reflective' | 'neutral';
+  entryId?: string; // For single entry points
+  entryIds?: string[]; // For grouped week points
   entryCount?: number; // For grouped points
   startDate?: number; // For grouped points - start of week
   endDate?: number; // For grouped points - end of week
@@ -69,6 +71,7 @@ export function groupEntriesByWeek(
       date: entry.date,
       label: emotion.label,
       category: emotion.category,
+      entryId: entry.id,
     }));
   }
 
@@ -129,6 +132,7 @@ export function groupEntriesByWeek(
       date: middleEntry.date,
       label: mostFrequentEmotion.label,
       category: mostFrequentEmotion.category,
+      entryIds: bucket.entries.map(({ entry }) => entry.id),
       entryCount: bucket.entries.length,
       startDate: weekStartDate,
       endDate: weekEndDate,

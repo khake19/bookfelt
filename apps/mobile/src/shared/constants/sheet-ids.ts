@@ -4,4 +4,5 @@ export const SHEET_IDS = {
   CHANGE_STATUS: "change-status-sheet",
   PROFILE: "profile-sheet",
   SETTING: "setting-sheet",
+  ENTRY_DETAIL: "entry-detail-sheet",
 } as const;

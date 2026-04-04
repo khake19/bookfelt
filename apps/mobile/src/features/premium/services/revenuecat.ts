@@ -6,6 +6,7 @@ import Purchases, {
 } from "react-native-purchases";
 import { Platform } from "react-native";
 import Constants from "expo-constants";
+import { supabase } from "@/lib/supabase";
 
 /**
  * RevenueCat Configuration
@@ -62,13 +63,53 @@ export async function getCustomerInfo(): Promise<CustomerInfo> {
 
 /**
  * Check if user has premium entitlement
+ * Checks both RevenueCat (production) and Supabase profiles table (manual grants/testing)
  */
 export async function isPremiumUser(): Promise<boolean> {
   try {
+    // 1. Check RevenueCat entitlement (production flow)
     const customerInfo = await getCustomerInfo();
-    const hasEntitlement =
+    const hasRevenueCatEntitlement =
       customerInfo.entitlements.active[ENTITLEMENT_ID] !== undefined;
-    return hasEntitlement;
+
+    if (hasRevenueCatEntitlement) {
+      console.log("[Premium] User has RevenueCat entitlement");
+      return true;
+    }
+
+    // 2. Fallback: Check Supabase profiles table (manual grants/testing)
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      console.log("[Premium] No authenticated user");
+      return false;
+    }
+
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('is_premium, premium_expires_at')
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      console.error("[Premium] Failed to check profiles table:", error);
+      return false;
+    }
+
+    if (profile?.is_premium) {
+      // Check if premium hasn't expired
+      if (profile.premium_expires_at) {
+        const expiresAt = new Date(profile.premium_expires_at);
+        const isExpired = expiresAt < new Date();
+        if (isExpired) {
+          console.log("[Premium] Premium access expired");
+          return false;
+        }
+      }
+      console.log("[Premium] User has manual premium grant in profiles table");
+      return true;
+    }
+
+    return false;
   } catch (error) {
     console.error("[RevenueCat] Failed to check premium status:", error);
     return false;
