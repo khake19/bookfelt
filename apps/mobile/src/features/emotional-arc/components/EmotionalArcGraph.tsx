@@ -60,24 +60,17 @@ export function EmotionalArcGraph({ data }: EmotionalArcGraphProps) {
     return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
   };
 
-  // Calculate label interval based on data density
-  const labelInterval = data.length <= 5 ? 1
-    : data.length <= 10 ? 2
-    : Math.ceil(data.length / 6);
-
+  // Show all date labels with alternating top/bottom positioning
   const dateLabels = svgPoints.map((point, index) => {
     // For grouped points (with startDate/endDate), show date range
     const dateLabel = point.startDate && point.endDate
       ? formatDateRange(point.startDate, point.endDate)
       : formatDate(point.date);
 
-    // Show label if: on interval OR is the last point
-    const shouldShow = index % labelInterval === 0 || index === data.length - 1;
-
     return {
       ...point,
       dateLabel,
-      shouldShow,
+      shouldShow: true, // Show all labels
       isAlternate: index % 2 === 1, // Alternate positioning
     };
   });
